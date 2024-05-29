@@ -1,10 +1,10 @@
 import { getUserTeams } from '@/data/teams';
-import { getSessionUser } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 
 export const GET = async () => {
-  const user = await getSessionUser();
+  const user = await getUser();
 
-  if (!user || !user.id) {
+  if (!user) {
     return Response.json(
       {
         message: 'Unauthorized',
@@ -16,5 +16,5 @@ export const GET = async () => {
 
   const userTeams = await getUserTeams(user.id);
 
-  return Response.json({ data: userTeams || [] });
+  return Response.json({ data: userTeams });
 };

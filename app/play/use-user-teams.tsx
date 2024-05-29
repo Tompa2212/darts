@@ -13,11 +13,12 @@ const fetchFn = async (userId?: string | null) => {
 export const useUserTeams = () => {
   const user = useUser();
 
-  const { data, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['teams', user?.id],
+    enabled: !!user,
     initialData: [],
     queryFn: () => fetchFn(user?.id)
   });
 
-  return data;
+  return data || [];
 };

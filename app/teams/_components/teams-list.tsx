@@ -1,5 +1,5 @@
 import { deleteTeam } from '@/actions/teams/delete-team';
-import { Badge } from '@/components/ui/badge';
+import PlayerBadge from '@/components/player-badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,18 +7,24 @@ import {
   CardFooter,
   CardHeader
 } from '@/components/ui/card';
+import { Heading } from '@/components/ui/heading';
 import { Icon } from '@/components/ui/icon';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getUserTeams } from '@/data/teams';
+import { getUser } from '@/lib/auth';
 import React from 'react';
 
-type TeamsListProps = {
-  teams: Awaited<ReturnType<typeof getUserTeams>>;
-};
+type TeamsListProps = {};
 
-export const TeamsList = ({ teams }: TeamsListProps) => {
+export async function TeamsList({}: TeamsListProps) {
+  const user = await getUser();
+  const teams = await getUserTeams(user?.id);
+
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">Teams</h3>
+      <Heading Type="h3" className="mb-2">
+        Teams
+      </Heading>
       <div className="flex flex-wrap gap-6">
         {teams.map((team) => (
           <Card
@@ -27,15 +33,14 @@ export const TeamsList = ({ teams }: TeamsListProps) => {
           >
             <CardHeader className="pt-2 pb-2 flex flex-row items-center justify-between">
               <h2 className="text-lg font-bold">{team.name}</h2>
-              <form action={deleteTeam}>
+              <form action={deleteTeam.bind(null, team.id)}>
                 <Button
+                  type="submit"
                   variant="ghost"
                   size="icon"
-                  aria-label={`delete team ${team.name}`}
                   title={`delete team ${team.name}`}
-                  name="teamId"
-                  value={team.id}
                 >
+                  <span className="sr-only">delete team ${team.name}</span>
                   <Icon name="X" className="stroke-red-500" />
                 </Button>
               </form>
@@ -43,9 +48,7 @@ export const TeamsList = ({ teams }: TeamsListProps) => {
             <CardContent className="pt-0 pb-2 flex-1">
               <div className="flex flex-wrap gap-2">
                 {team.players.map((p) => (
-                  <Badge variant="secondary" key={p.name}>
-                    {p.name} {p.user ? `(${p.user.email})` : null}
-                  </Badge>
+                  <PlayerBadge key={p.userId || p.name} player={p} />
                 ))}
               </div>
             </CardContent>
@@ -59,6 +62,26 @@ export const TeamsList = ({ teams }: TeamsListProps) => {
       </div>
     </div>
   );
-};
+}
 
-export default TeamsList;
+export function TeamsListSkeleton() {
+  return (
+    <>
+      <Heading Type="h3">Teams</Heading>
+      <div className="flex flex-wrap gap-6">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className="flex-1 basis-[350px] flex flex-col space-y-3 md:max-w-md"
+          >
+            <Skeleton className="h-[155px] w-full rounded-xl" />
+            <div className="space-y-2 w-full">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}

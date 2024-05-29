@@ -4,6 +4,7 @@ export type BasePlayer = {
 };
 
 export type Team = {
+  id: string;
   name: string;
   players: BasePlayer[];
 };
@@ -15,16 +16,23 @@ type TeamWithScore = Team & {
   points: number;
 };
 
+export type ThrownNumber = {
+  number: number;
+  multiplier: number;
+};
+
 export type Game = {
+  id: string;
   teams: TeamWithScore[];
   numbers: number[];
   currentPlayer: BasePlayer | null;
   currentTeam: number;
   currentRound: number;
+  currentTurnPoints: number;
   isFinished: boolean;
   isRandomNumbers: boolean;
   maxRounds: number;
   winner: Team | null;
-  disabledNumbers: Set<number>;
-  thrownDarts: number[];
+  closedNumbers: Set<number>;
+  thrownDarts: ThrownNumber[];
 };

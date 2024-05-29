@@ -9,6 +9,7 @@ export const cricketConfigSchema = z
     teams: z
       .array(
         z.object({
+          id: z.string(),
           name: z.string({ required_error: 'Please enter a team name' }),
           players: z.array(
             z.object({

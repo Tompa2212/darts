@@ -17,7 +17,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cricketConfigSchema } from '@/schema/cricket-config.schema';
 import { Heading } from '@/components/ui/heading';
 import { MultiSelect } from '@/components/ui/multiselect';
-import { useUserTeams } from '../../_hooks/use-user-teams';
+import { useUserTeams } from '../../use-user-teams';
 import Link from 'next/link';
 import { allNums } from '@/packages/cricket-game/helpers';
 
@@ -49,7 +49,7 @@ export const CricketGameConfig = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-lg space-y-6"
+          className="max-w-lg space-y-6 w-full"
         >
           <FormField
             control={form.control}
@@ -68,12 +68,7 @@ export const CricketGameConfig = ({
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem
-                          onChange={(e) => {
-                            console.log(e);
-                          }}
-                          value="standard"
-                        />
+                        <RadioGroupItem value="standard" />
                       </FormControl>
                       <FormLabel className="font-normal">Standard</FormLabel>
                     </FormItem>

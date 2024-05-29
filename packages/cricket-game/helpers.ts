@@ -23,7 +23,7 @@ export function createScores(nums: number[]) {
 }
 
 export function checkIsFinished(game: Game) {
-  if (game.currentRound > game.maxRounds) {
+  if (game.currentRound > game.maxRounds && game.maxRounds !== null) {
     return true;
   }
 

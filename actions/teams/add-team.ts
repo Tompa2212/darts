@@ -24,8 +24,6 @@ export async function addTeam({
 
   const { name, players } = validatedFields.data;
 
-  revalidatePath('/teams');
-
   const existingTeam = await db.query.teams.findFirst({
     where: (team, { eq, and }) =>
       and(eq(team.userId, userId), eq(team.name, name))
@@ -38,10 +36,12 @@ export async function addTeam({
   }
 
   const created = await db.transaction(async (tx) => {
-    const team = await tx.insert(teams).values({ name, userId }).returning();
-    const added = team[0];
+    const added = (
+      await tx.insert(teams).values({ name, userId }).returning()
+    ).at(0);
+
     if (added === undefined) {
-      await tx.rollback();
+      tx.rollback();
       return null;
     }
 
@@ -64,6 +64,9 @@ export async function addTeam({
 
     return added;
   });
+
+  revalidatePath('/teams');
+  revalidatePath('/play');
 
   return created || { error: 'Failed to create team!' };
 }

@@ -1,8 +1,26 @@
 'use client';
-import { useSession } from 'next-auth/react';
+
+import { SessionUser } from '@/auth';
+import { useQuery } from '@tanstack/react-query';
 
 export const useUser = () => {
-  const session = useSession();
+  const { data, error } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const response = await fetch('/api/auth/session');
+      const json = await response.json();
 
-  return session.data?.user || null;
+      if (!response.ok) {
+        throw new Error(json.message);
+      }
+
+      return json.data.user as SessionUser;
+    }
+  });
+
+  if (error) {
+    return null;
+  }
+
+  return data;
 };

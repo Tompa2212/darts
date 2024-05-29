@@ -1,92 +1,48 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useCricketGame } from '../_hooks/use-cricket-game';
+
+import React from 'react';
+import { useCricketGame } from '../use-cricket-game';
 import { ScoresTable } from './scores-table';
 import PlayControls from './play-controls';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
-import {
-  DialogResponsiveContent,
-  DialogResponsiveFooter,
-  DialogResponsiveHeader,
-  DialogResponsive
-} from '@/components/ui/dialog-responsive';
-import { Team } from '@/packages/cricket-game';
+import { CricketGameInit } from '@/types/client/cricket';
+import FinishedGameDialog from './finished-game-dialog';
 
-type CricketGameProps = {
-  randomNums: boolean;
-  teams: Team[];
-  numbers?: number[];
-};
+type CricketGameProps = CricketGameInit;
 
-export const CricketGame = ({
-  randomNums,
-  numbers,
-  teams
-}: CricketGameProps) => {
-  const {
-    game,
-    canRedo,
-    canUndo,
-    currentTeam,
-    finishTurn,
-    throwDart,
-    undoThrow,
-    undoTurn,
-    redoTurn,
-    replayGame
-  } = useCricketGame({
-    useRandomNums: randomNums,
-    numbers,
-    teams
-  });
-
-  const [showReplay, setShowReplay] = React.useState(false);
-
-  useEffect(() => {
-    if (game.isFinished) {
-      setShowReplay(true);
-    } else {
-      setShowReplay(false);
-    }
-  }, [game]);
+export const CricketGame = (props: CricketGameProps) => {
+  const { game, canRedo, canUndo, currentTeam, dispatcher } =
+    useCricketGame(props);
 
   return (
     <>
-      <DialogResponsive open={showReplay} onOpenChange={(open) => {}}>
-        <DialogResponsiveContent>
-          <DialogResponsiveHeader>
-            <h2 className="text-2xl">Game finished!</h2>
-          </DialogResponsiveHeader>
-          <div>
-            <p className="mb-4">{game.winner?.name} won the game!</p>
-          </div>
-          <DialogResponsiveFooter>
-            <Button className="w-full" onClick={replayGame}>
-              Replay
-            </Button>
-          </DialogResponsiveFooter>
-        </DialogResponsiveContent>
-      </DialogResponsive>
+      <FinishedGameDialog
+        game={game}
+        onReplayGame={() => dispatcher({ type: 'REPLAY_GAME' })}
+      />
       <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:p-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-lg font-semibold">
-              {currentTeam.name}s turn:{' '}
-              <span className="text-zinc-500">{game.currentPlayer?.name}</span>
+            <p className="text-lg">
+              Playing: <span className="font-semibold">{currentTeam.name}</span>
+              ,{' '}
+              <span className="text-zinc-500 font-semibold">
+                {game.currentPlayer?.name}
+              </span>
             </p>
           </div>
           <div className="flex gap-1">
             <Button
               variant="ghost"
               size="icon"
-              onClick={undoTurn}
+              onClick={() => dispatcher({ type: 'UNDO_TURN' })}
               disabled={!canUndo}
             >
               <Icon name="Undo" className="h-6 w-6" />
             </Button>
             <Button
-              onClick={redoTurn}
+              onClick={() => dispatcher({ type: 'REDO_TURN' })}
               variant="ghost"
               size="icon"
               disabled={!canRedo}
@@ -95,14 +51,32 @@ export const CricketGame = ({
             </Button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between space-y-4 sm:block">
+        <div className="flex flex-1 flex-col justify-between space-y-4">
           <ScoresTable game={game} />
-          <PlayControls
-            game={game}
-            onThrowDart={throwDart}
-            onFinishTurn={finishTurn}
-            onUndoThrow={undoThrow}
-          />
+          <div>
+            <div className="flex items-center gap-4">
+              <div className="mb-4 border-b rounded-md w-fit p-2">
+                <p className="text-sm font-semibold">
+                  Thrown Darts: <span>{game.thrownDarts.length}</span>
+                </p>
+              </div>
+              <div className="mb-4 border-b rounded-md w-fit p-2">
+                <p className="text-sm font-semibold">
+                  Points: <span>{game.currentTurnPoints}</span>
+                </p>
+              </div>
+            </div>
+            <PlayControls
+              game={game}
+              onThrowDart={(thrownDart) => {
+                dispatcher({ type: 'THROW_DART', payload: thrownDart });
+              }}
+              onFinishTurn={() => {
+                dispatcher({ type: 'FINISH_TURN' });
+              }}
+              onUndoThrow={() => dispatcher({ type: 'UNDO_THROW' })}
+            />
+          </div>
         </div>
       </div>
     </>

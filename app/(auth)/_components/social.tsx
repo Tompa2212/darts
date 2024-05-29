@@ -1,21 +1,18 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
-
 import { useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
+import { useRouter } from 'next/navigation';
 
 export const Social = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
+  const router = useRouter();
 
   const onClick = (provider: 'google' | 'github') => {
-    signIn(provider, {
-      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT
-    });
+    router.push('/api/auth/google/signin');
   };
 
   return (

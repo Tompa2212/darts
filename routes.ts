@@ -1,11 +1,11 @@
 export const privateRoutes = ['/settings', '/teams'];
 
 export const authRoutes = [
-  '/auth/login',
-  '/auth/register',
-  '/auth/error',
-  '/auth/reset',
-  '/auth/new-password'
+  '/login',
+  '/register',
+  '/error',
+  '/reset',
+  '/new-password'
 ];
 
 export const apiAuthPrefix = '/api/auth';

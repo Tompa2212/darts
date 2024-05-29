@@ -4,16 +4,14 @@ import db from '@/db/drizzle';
 import { teams } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function deleteTeam(data: FormData) {
+export async function deleteTeam(id: string) {
   try {
-    const teamId = data.get('teamId') as string;
-    await db.delete(teams).where(eq(teams.id, teamId));
-
-    revalidatePath('/teams');
+    await db.delete(teams).where(eq(teams.id, id));
   } catch (error) {
     console.error('Error deleting team', error);
     return {
       error: 'Unable to delete team'
     };
   }
+  revalidatePath('/teams');
 }

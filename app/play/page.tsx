@@ -1,5 +1,5 @@
-import { Heading } from "@/components/ui/heading";
-import { GameSelector } from "./_components/game-selector";
+import { Heading } from '@/components/ui/heading';
+import { GameSelector } from './game-selector';
 
 const PlayPage = () => {
   return (

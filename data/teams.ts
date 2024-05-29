@@ -1,4 +1,5 @@
 'use server';
+
 import db from '@/db/drizzle';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -16,7 +17,6 @@ export const getUserTeams = async (userId: string | null | undefined) => {
         with: {
           user: {
             columns: {
-              password: false,
               emailVerified: false
             }
           }

@@ -1,25 +1,24 @@
-import NextAuth from 'next-auth';
-
-import authConfig from '@/auth.config';
 import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
   privateRoutes
 } from '@/routes';
+import { NextRequest, NextResponse } from 'next/server';
+import { validateRequest } from './lib/validate-request';
+import { verifyRequestOrigin } from 'lucia';
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
+export default async function middleware(req: NextRequest) {
+  const { session } = await validateRequest();
+  const isLoggedIn = !!session;
   const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
-    return;
+    return NextResponse.next();
   }
 
   if (isAuthRoute) {
@@ -27,7 +26,7 @@ export default auth((req) => {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
-    return;
+    return NextResponse.next();
   }
 
   if (!isLoggedIn && isPrivateRoute) {
@@ -39,12 +38,29 @@ export default auth((req) => {
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
     return Response.redirect(
-      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+      new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
 
-  return;
-});
+  if (req.method === 'GET') {
+    return NextResponse.next();
+  }
+
+  const originHeader = req.headers.get('Origin');
+  // NOTE: You may need to use `X-Forwarded-Host` instead
+  const hostHeader = req.headers.get('Host');
+  if (
+    !originHeader ||
+    !hostHeader ||
+    !verifyRequestOrigin(originHeader, [hostHeader])
+  ) {
+    return new NextResponse(null, {
+      status: 403
+    });
+  }
+
+  return NextResponse.next();
+}
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {

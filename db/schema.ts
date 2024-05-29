@@ -2,15 +2,15 @@ import {
   timestamp,
   pgTable,
   text,
-  primaryKey,
   integer,
   index,
   uuid,
   varchar,
   pgEnum,
-  uniqueIndex
+  uniqueIndex,
+  jsonb,
+  doublePrecision
 } from 'drizzle-orm/pg-core';
-import type { AdapterAccount } from '@auth/core/adapters';
 import { relations } from 'drizzle-orm';
 
 export const users = pgTable(
@@ -19,51 +19,27 @@ export const users = pgTable(
     id: uuid('id').notNull().primaryKey().defaultRandom(),
     name: text('name'),
     username: text('username').notNull().unique(),
-    password: text('password').notNull(),
     email: text('email').notNull(),
     emailVerified: timestamp('emailVerified', { mode: 'date' }),
-    image: text('image')
+    image: text('image'),
+    auth0Id: text('auth0_id')
   },
   (user) => ({
-    usernameIdx: index('users_username_idx').on(user.username)
+    usernameIdx: index('users_username_idx').on(user.username),
+    auth0IdIdx: index('users_auth0_id_idx').on(user.auth0Id)
   })
 );
 
-export const accounts = pgTable(
-  'account',
-  {
-    userId: uuid('userId')
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    type: text('type').$type<AdapterAccount['type']>().notNull(),
-    provider: text('provider').notNull(),
-    providerAccountId: text('providerAccountId').notNull(),
-    refresh_token: text('refresh_token'),
-    access_token: text('access_token'),
-    expires_at: integer('expires_at'),
-    token_type: text('token_type'),
-    scope: text('scope'),
-    id_token: text('id_token'),
-    session_state: text('session_state')
-  },
-  (account) => ({
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId]
-    })
-  })
-);
-
-export const verificationTokens = pgTable(
-  'verificationToken',
-  {
-    identifier: text('identifier').notNull(),
-    token: text('token').notNull(),
-    expires: timestamp('expires', { mode: 'date' }).notNull()
-  },
-  (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
-  })
-);
+export const sessions = pgTable('session', {
+  id: text('id').primaryKey(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp('expires_at', {
+    withTimezone: true,
+    mode: 'date'
+  }).notNull()
+});
 
 export const teams = pgTable('team', {
   id: uuid('id').notNull().primaryKey().defaultRandom(),
@@ -94,7 +70,6 @@ export const players = pgTable(
   })
 );
 
-// Relations
 export const userRelations = relations(users, ({ many }) => ({
   teams: many(teams)
 }));
@@ -137,17 +112,33 @@ export const game_teams = pgTable('game_teams', {
   teamId: uuid('team_id')
     .notNull()
     .references(() => teams.id, { onDelete: 'cascade' }),
-  score: integer('score').notNull()
+  score: integer('score').notNull(),
+  pointsPerRound: doublePrecision('points_per_round').notNull()
 });
 
-export const game_player_stats = pgTable('game_player_stats', {
-  gameId: uuid('game_id')
-    .notNull()
-    .references(() => game.id, { onDelete: 'cascade' }),
-  teamId: uuid('team_id').references(() => teams.id, { onDelete: 'cascade' }),
-  playerId: uuid('player_id')
-    .notNull()
-    .references(() => players.userId, { onDelete: 'cascade' }),
-  doubles: integer('doubles').default(0).notNull(),
-  triples: integer('triples').default(0).notNull()
-});
+export const game_player_stats = pgTable(
+  'game_player_stats',
+  {
+    gameId: uuid('game_id')
+      .notNull()
+      .references(() => game.id, { onDelete: 'cascade' }),
+    teamId: uuid('team_id').references(() => teams.id, {
+      onDelete: 'set null'
+    }),
+    // no foreign key to player_id because players can be withoud user id (anonymous player),
+    // so we can't enforce a foreign key constraint.
+    // We can enforce it in the application layer. Stats wont be calculated for anonymous players.
+    playerId: uuid('player_id').notNull(),
+    doubles: integer('doubles').default(0).notNull(),
+    triples: integer('triples').default(0).notNull(),
+    pointsPerRound: doublePrecision('points_per_round').notNull(),
+    thrownDarts: jsonb('thrown_darts').array().notNull()
+  },
+  (stats) => ({
+    gamePlayerTeamIdx: uniqueIndex('game_player_team_idx').on(
+      stats.teamId,
+      stats.playerId,
+      stats.gameId
+    )
+  })
+);

@@ -9,9 +9,9 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Icon } from '@/components/ui/icon';
-import { Game } from '@/packages/cricket-game';
 import { CrossedIcon } from '@/components/ui/icons/CrossedIcon';
 import { cn } from '@/lib/utils';
+import { CricketGameType } from '@/packages/cricket-game';
 
 const getHitCountIcon = (count: number) => {
   if (count === 0) {
@@ -29,7 +29,11 @@ const getHitCountIcon = (count: number) => {
   return <Icon name="LocateFixed" className="h-6 w-6 stroke-red-600" />;
 };
 
-const getDiffToTeamWithMaxPoints = (game: Game) => {
+const getDiffToTeamWithMaxPoints = (game: CricketGameType) => {
+  if (game.teams.length === 1) {
+    return game.teams[0].points;
+  }
+
   const teamsPointsSorted = game.teams.toSorted((a, b) => b.points - a.points);
   const currTeamPoints = game.teams[game.currentTeam].points;
   const winningTeamPoints = teamsPointsSorted[0].points;
@@ -43,7 +47,7 @@ const getDiffToTeamWithMaxPoints = (game: Game) => {
 };
 
 type ScoresTableProps = {
-  game: Game;
+  game: CricketGameType;
 };
 
 export const ScoresTable = ({ game }: ScoresTableProps) => {

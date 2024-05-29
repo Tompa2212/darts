@@ -15,9 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { addTeam } from '@/actions/teams/add-team';
-import { useUser } from '@/hooks/use-user';
 import { addTeamSchema } from '@/schema/team.schema';
-import { User } from '@/types/user';
 import { AddPlayersSelect } from './add-players-select';
 import {
   Sheet,
@@ -29,6 +27,8 @@ import {
 } from '@/components/ui/sheet';
 import { useUserSearch } from '@/hooks/use-user-search';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { User } from 'lucia';
+import { SessionUser } from '@/auth';
 
 const getUsersOptions = (users: Array<User | { name: string }>) =>
   users.map((user) => {
@@ -43,8 +43,7 @@ const getUsersOptions = (users: Array<User | { name: string }>) =>
     };
   });
 
-export const AddTeamForm = () => {
-  const user = useUser();
+export const AddTeamForm = ({ user }: { user: SessionUser | null }) => {
   const isDesktop = useIsDesktop();
 
   const [inputValue, setInputValue] = useState('');

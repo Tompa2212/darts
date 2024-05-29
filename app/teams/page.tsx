@@ -1,14 +1,11 @@
-import { getUserTeams } from '@/data/teams';
-import { getSessionUser } from '@/lib/auth';
-import React from 'react';
-import { EmptyTeamsView } from './_components/empty-teams-view';
-import TeamsList from './_components/teams-list';
+import React, { Suspense } from 'react';
+import { TeamsList, TeamsListSkeleton } from './_components/teams-list';
 import { AddTeamForm } from './_components/add-team-form';
 import { BackButton } from '@/components/back-button';
+import { getUser } from '@/lib/auth';
 
-const ManageTeamsPage = async () => {
-  const user = await getSessionUser();
-  const userTeams = await getUserTeams(user?.id);
+export default async function ManageTeamsPage() {
+  const user = await getUser();
 
   return (
     <div>
@@ -17,11 +14,11 @@ const ManageTeamsPage = async () => {
         <BackButton />
       </div>
       <div className="mx-auto space-y-6">
-        <AddTeamForm />
-        {userTeams ? <TeamsList teams={userTeams} /> : <EmptyTeamsView />}
+        <AddTeamForm user={user} />
+        <Suspense fallback={<TeamsListSkeleton />}>
+          <TeamsList />
+        </Suspense>
       </div>
     </div>
   );
-};
-
-export default ManageTeamsPage;
+}

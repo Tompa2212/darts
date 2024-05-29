@@ -21,6 +21,14 @@ export const getUserById = async (id: string) => {
   }
 };
 
+export async function getUserByAuth0Id(auth0Id: string) {
+  return (
+    (await db.query.users.findFirst({
+      where: (users, { eq }) => eq(users.auth0Id, auth0Id)
+    })) || null
+  );
+}
+
 export async function getUserByUsername(username: string) {
   try {
     return await db.query.users.findFirst({
@@ -36,7 +44,6 @@ export async function searchUsersByUsername(search: string) {
     return await db.query.users.findMany({
       where: (users, { like }) => like(users.username, search + '%'),
       columns: {
-        password: false,
         emailVerified: false
       }
     });

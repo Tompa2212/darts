@@ -2,14 +2,14 @@
 import React from 'react';
 import { DropdownMenuItem } from './ui/dropdown-menu';
 import { Icon } from './ui/icon';
-import { signOut } from 'next-auth/react';
+import { signout } from '@/actions/signout';
 
 export const SignOutMenuItem = () => {
   return (
     <DropdownMenuItem
       onSelect={(e) => {
         e.preventDefault();
-        signOut();
+        signout();
       }}
       className="cursor-pointer"
     >
