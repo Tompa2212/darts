@@ -38,7 +38,7 @@ const getUsersOptions = (users: Array<User | { name: string }>) =>
 
     user.name = user.username;
     return {
-      label: `${user.username} (${user.email})`,
+      label: `${user.username}`,
       value: JSON.stringify(user)
     };
   });

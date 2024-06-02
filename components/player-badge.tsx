@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge, BadgeProps } from './ui/badge';
 import { UserPlayer } from '@/types/player';
 import { BasePlayer } from '@/packages/cricket-game/types';
+import { Icon } from './ui/icon';
 
 type PlayerBadgeProps = {
   player: BasePlayer | UserPlayer;
@@ -19,8 +20,9 @@ const PlayerBadge = ({
   }
 
   return (
-    <Badge variant={variant} {...badgeProps}>
-      {player.name} {user ? `(${user.email})` : null}
+    <Badge variant={variant} {...badgeProps} className="flex items-center">
+      {player.name}{' '}
+      {user ? <Icon name="BadgeCheck" className="h-4 w-4 ml-2" /> : null}
     </Badge>
   );
 };
