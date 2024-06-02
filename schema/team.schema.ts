@@ -9,7 +9,6 @@ export const addTeamSchema = z.object({
       z
         .object({
           id: z.string(),
-          name: z.string(),
           username: z.string(),
           email: z.string().email()
         })

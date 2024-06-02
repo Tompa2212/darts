@@ -6,13 +6,50 @@ import { addTeamSchema } from '@/schema/team.schema';
 import { NewPlayer } from '@/types/player';
 import { revalidatePath } from 'next/cache';
 
+function mapToDbPlayer(
+  players: Array<
+    | {
+        id: string;
+        username: string;
+      }
+    | {
+        name: string;
+      }
+  >,
+  teamId: string
+) {
+  return players.map((player) => {
+    if ('id' in player) {
+      return {
+        ...player,
+        userId: player.id,
+        teamId,
+        name: player.username
+      };
+    }
+
+    return {
+      ...player,
+      teamId
+    };
+  });
+}
+
 export async function addTeam({
   userId,
   ...values
 }: {
   userId: string;
   name: string;
-  players: NewPlayer[];
+  players: (
+    | {
+        id: string;
+        username: string;
+      }
+    | {
+        name: string;
+      }
+  )[];
 }) {
   const validatedFields = addTeamSchema.safeParse(values);
 
@@ -23,6 +60,22 @@ export async function addTeam({
   }
 
   const { name, players } = validatedFields.data;
+
+  const uniquePlayers = new Set(
+    players.map((player) => {
+      if ('id' in player) {
+        return player.username;
+      }
+
+      return player.name;
+    })
+  );
+
+  if (uniquePlayers.size !== players.length) {
+    return {
+      error: 'Players names must be unique!'
+    };
+  }
 
   const existingTeam = await db.query.teams.findFirst({
     where: (team, { eq, and }) =>
@@ -45,22 +98,7 @@ export async function addTeam({
       return null;
     }
 
-    await tx.insert(playersTable).values(
-      players.map((player) => {
-        if ('id' in player) {
-          return {
-            ...player,
-            userId: player.id,
-            teamId: added.id
-          };
-        }
-
-        return {
-          ...player,
-          teamId: added.id
-        };
-      })
-    );
+    await tx.insert(playersTable).values(mapToDbPlayer(players, added.id));
 
     return added;
   });

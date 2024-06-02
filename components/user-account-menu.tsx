@@ -23,18 +23,21 @@ const UserAccountNav = async ({ user }: UserAccountNavProps) => {
         <UserAvatar user={user} className="w-8 h-8" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-white" align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
+        <DropdownMenuItem asChild>
+          <Link
+            href="/profile"
+            className="flex flex-col !items-start justify-start space-y-1 leading-none"
+          >
             {user.username ? (
-              <p className="font-medium">{user.username}</p>
+              <p className="font-medium text-base">{user.username}</p>
             ) : null}
             {user.email ? (
-              <p className="w-[200px] truncate text-sm text-zinc-700">
+              <p className="leading-none w-[200px] truncate text-sm text-zinc-700">
                 {user.email}
               </p>
             ) : null}
-          </div>
-        </div>
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

@@ -10,10 +10,12 @@ const gameSetup: CricketGameInit = {
   useRandomNums: false,
   teams: [
     {
+      id: '1',
       name: 'Team 1',
       players: [PLAYER_1]
     },
     {
+      id: '2',
       name: 'Team 2',
       players: [PLAYER_2]
     }

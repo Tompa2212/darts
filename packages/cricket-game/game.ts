@@ -25,6 +25,7 @@ export class CricketGame {
   #game: Game;
   #undoStack: Game[] = [];
   #redoStack: Game[] = [];
+  #statisticsGenerator = new CricketStatisticGenerator();
 
   constructor(params: CricketGameInitParams) {
     if ('game' in params) {
@@ -51,24 +52,22 @@ export class CricketGame {
   }
 
   get teamsStats() {
-    return CricketStatisticGenerator.getTeamsStatistic([
+    return this.#statisticsGenerator.getTeamsStatistic([
       ...this.#undoStack,
       this.#game
     ]);
   }
 
-  throwDart(thrownDart: ThrownNumber) {
-    const { number, multiplier } = thrownDart;
+  throwDart(thrownNumber: ThrownNumber) {
+    const { number, multiplier } = thrownNumber;
 
-    if (!CricketGameValidator.canThrowDart(this.#game, thrownDart)) {
+    if (!CricketGameValidator.canThrowDart(this.#game, thrownNumber)) {
       return;
     }
 
     const newState = structuredClone(this.#game);
     const team = this.#getCurrentTeam(newState);
     const teamPointsBeforeThrow = team.points;
-
-    newState.thrownDarts.push(thrownDart);
 
     // Hit count represents how many times a number has been hit, triple counts as 3 hits
     const oldHidCount = team.hitCount[number];
@@ -91,6 +90,13 @@ export class CricketGame {
       }
     }
 
+    const thrownDart = {
+      ...thrownNumber,
+      points: team.points - teamPointsBeforeThrow,
+      closed: oldHidCount < CLOSED_HIT_COUNT && newHitCount >= CLOSED_HIT_COUNT
+    };
+
+    newState.thrownDarts.push(thrownDart);
     newState.currentTurnPoints =
       newState.currentTurnPoints + (team.points - teamPointsBeforeThrow);
 
@@ -100,7 +106,7 @@ export class CricketGame {
   nextPlayer() {
     this.#undoStack.push(structuredClone(this.#game));
     this.#redoStack = [];
-    console.log(CricketStatisticGenerator.getTeamsStatistic(this.#undoStack));
+    console.log(this.#statisticsGenerator.getTeamsStatistic(this.#undoStack));
     this.#nextPlayer();
   }
 
@@ -117,13 +123,9 @@ export class CricketGame {
       throw new Error('Player not found');
     }
 
-    const nextTeamIdx = (this.#game.currentTeam + 1) % this.#game.teams.length;
-    let nextPlayerIdx = currPlayerIdx;
     let nextRound = this.#game.currentRound;
 
-    if (nextTeamIdx === 0) {
-      nextPlayerIdx = (currPlayerIdx + 1) % this.#game.teams[0].players.length;
-    }
+    const [nextTeamIdx, nextPlayerIdx] = this.getNextTeamAndPlayerIdx();
 
     // count round as a new round if we've looped through one player of a each team
     if (nextTeamIdx === 0) {
@@ -142,6 +144,22 @@ export class CricketGame {
       currentRound: nextRound,
       currentTurnPoints: 0
     };
+  }
+
+  private getNextTeamAndPlayerIdx() {
+    // make it 0 indexed
+    const currRound = this.#game.currentRound - 1;
+    const nextRound = currRound + 1;
+
+    const nextTeamIdx = (this.#game.currentTeam + 1) % this.#game.teams.length;
+    let nextPlayerIdx =
+      nextRound % this.#game.teams[nextTeamIdx].players.length;
+
+    if (this.#game.teams[nextTeamIdx].players[nextPlayerIdx] === undefined) {
+      nextPlayerIdx = 0;
+    }
+
+    return [nextTeamIdx, nextPlayerIdx];
   }
 
   undoThrow() {

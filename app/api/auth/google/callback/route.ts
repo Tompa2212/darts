@@ -73,7 +73,6 @@ export async function GET(request: Request): Promise<Response> {
     const user = await registerUser({
       auth0Id: sub,
       email,
-      username: email,
       name,
       image: picture || null,
       emailVerified: email_verified ? new Date() : null

@@ -21,6 +21,13 @@ export type ThrownNumber = {
   multiplier: number;
 };
 
+export type ThrownDart = {
+  number: number;
+  multiplier: number;
+  points: number;
+  closed: boolean;
+};
+
 export type Game = {
   id: string;
   teams: TeamWithScore[];
@@ -34,5 +41,5 @@ export type Game = {
   maxRounds: number;
   winner: Team | null;
   closedNumbers: Set<number>;
-  thrownDarts: ThrownNumber[];
+  thrownDarts: ThrownDart[];
 };

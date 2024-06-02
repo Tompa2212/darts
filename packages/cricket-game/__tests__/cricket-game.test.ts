@@ -3,16 +3,19 @@ import { CricketGameInit } from '@/types/client/cricket';
 
 const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
+const PLAYER_3 = { id: '3', name: 'Player3' };
 
 const gameSetup: CricketGameInit = {
   maxRounds: 3,
   useRandomNums: false,
   teams: [
     {
+      id: '1',
       name: 'Team 1',
       players: [PLAYER_1]
     },
     {
+      id: '2',
       name: 'Team 2',
       players: [PLAYER_2]
     }
@@ -83,6 +86,45 @@ describe('Cricket Game', () => {
 
     cricketGame.redoTurn();
     expect(cricketGame.game.teams[0].points).toBe(80 + 17 * 2);
+  });
+
+  it('Calculates next player correctly', () => {
+    let cricketGame = new CricketGame({
+      ...gameSetup,
+      teams: [
+        {
+          id: '1',
+          name: 'Team 1',
+          players: [PLAYER_1, PLAYER_2]
+        },
+        {
+          id: '2',
+          name: 'Team 2',
+          players: [PLAYER_3]
+        }
+      ]
+    });
+
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_3);
+
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_2);
+
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_3);
+
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+
+    cricketGame = new CricketGame(gameSetup);
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_2);
+    cricketGame.nextPlayer();
+    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
   });
 
   it('Disables numbers correctly', () => {

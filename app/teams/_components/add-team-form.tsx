@@ -153,6 +153,10 @@ export const AddTeamForm = ({ user }: { user: SessionUser | null }) => {
                               'players',
                               selected.map((u) => JSON.parse(u.value))
                             );
+
+                            if (form.getValues('players').length === 1) {
+                              form.setValue('name', inputValue);
+                            }
                           }}
                           inputValue={inputValue}
                           onInputChange={(value, action) => {
