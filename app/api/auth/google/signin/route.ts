@@ -1,8 +1,9 @@
 import { google } from '@/auth';
 import { generateCodeVerifier, generateState } from 'arctic';
 import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
 
@@ -25,6 +26,25 @@ export async function GET() {
     maxAge: 60 * 10,
     sameSite: 'lax'
   });
+
+  const searchParams = req.nextUrl.searchParams;
+  const callbackUrl = searchParams.get('callback_url');
+
+  if (callbackUrl) {
+    // only allow relative URLs
+    const validCallbackUrl =
+      callbackUrl.startsWith('/') && !callbackUrl.includes('..');
+
+    if (validCallbackUrl) {
+      cookies().set('app_callback_url', callbackUrl, {
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 60 * 10,
+        sameSite: 'lax'
+      });
+    }
+  }
 
   return Response.redirect(url);
 }

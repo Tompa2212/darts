@@ -9,7 +9,7 @@ export type Team = {
   players: BasePlayer[];
 };
 
-type TeamWithScore = Team & {
+export type TeamWithScore = Team & {
   hitCount: {
     [key: string]: number;
   };
@@ -32,8 +32,8 @@ export type Game = {
   id: string;
   teams: TeamWithScore[];
   numbers: number[];
-  currentPlayer: BasePlayer | null;
-  currentTeam: number;
+  currentPlayer: BasePlayer;
+  currentTeam: TeamWithScore;
   currentRound: number;
   currentTurnPoints: number;
   isFinished: boolean;

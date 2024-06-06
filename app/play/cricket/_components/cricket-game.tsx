@@ -12,8 +12,10 @@ import FinishedGameDialog from './finished-game-dialog';
 type CricketGameProps = CricketGameInit;
 
 export const CricketGame = (props: CricketGameProps) => {
-  const { game, canRedo, canUndo, currentTeam, dispatcher } =
+  const { game, canRedo, canUndo, currentTeam, teamsStats, dispatcher } =
     useCricketGame(props);
+
+  console.log(teamsStats);
 
   return (
     <>
@@ -21,7 +23,7 @@ export const CricketGame = (props: CricketGameProps) => {
         game={game}
         onReplayGame={() => dispatcher({ type: 'REPLAY_GAME' })}
       />
-      <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:p-4">
+      <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:py-4 sm:px-2 lg:px-0">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-lg">
@@ -51,10 +53,10 @@ export const CricketGame = (props: CricketGameProps) => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between space-y-4">
+        <div className="flex flex-1 flex-col justify-between lg:justify-normal space-y-4 lg:space-y-8">
           <ScoresTable game={game} />
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 lg:mb-4">
               <div className="mb-4 border-b rounded-md w-fit p-2">
                 <p className="text-sm font-semibold">
                   Thrown Darts: <span>{game.thrownDarts.length}</span>

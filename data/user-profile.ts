@@ -1,11 +1,12 @@
 import db from '@/db/drizzle';
 import { getUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export async function getUserProfileData() {
   const sessionUser = await getUser();
 
   if (!sessionUser) {
-    throw new Error('Unauthorized');
+    redirect('/login');
   }
 
   return db.query.users.findFirst({

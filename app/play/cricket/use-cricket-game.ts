@@ -71,7 +71,7 @@ export const useCricketGame = (params: CricketGameInit) => {
     [removeGame, saveGame]
   );
 
-  const { canUndo, canRedo, currentTeam } = cricketGame.current;
+  const { canUndo, canRedo, currentTeam, teamsStats } = cricketGame.current;
 
   return {
     game,
@@ -79,6 +79,7 @@ export const useCricketGame = (params: CricketGameInit) => {
     canRedo,
     currentTeam,
     isFinished: game.isFinished,
+    teamsStats,
     dispatcher
   };
 };

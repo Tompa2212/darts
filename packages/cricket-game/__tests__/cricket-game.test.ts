@@ -1,11 +1,11 @@
 import CricketGame from '@/packages/cricket-game';
-import { CricketGameInit } from '@/types/client/cricket';
+import { CricketGameInitParams } from '../game';
 
 const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
 const PLAYER_3 = { id: '3', name: 'Player3' };
 
-const gameSetup: CricketGameInit = {
+const gameSetup: CricketGameInitParams = {
   maxRounds: 3,
   useRandomNums: false,
   teams: [

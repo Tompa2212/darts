@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { LoginForm } from '../_components/login-form';
 
 type Props = {};
@@ -6,7 +6,9 @@ type Props = {};
 const LoginPage = (props: Props) => {
   return (
     <div>
-      <LoginForm />
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 };

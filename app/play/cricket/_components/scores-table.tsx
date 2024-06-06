@@ -35,7 +35,7 @@ const getDiffToTeamWithMaxPoints = (game: CricketGameType) => {
   }
 
   const teamsPointsSorted = game.teams.toSorted((a, b) => b.points - a.points);
-  const currTeamPoints = game.teams[game.currentTeam].points;
+  const currTeamPoints = game.currentTeam.points;
   const winningTeamPoints = teamsPointsSorted[0].points;
 
   if (winningTeamPoints === currTeamPoints) {
@@ -52,7 +52,8 @@ type ScoresTableProps = {
 
 export const ScoresTable = ({ game }: ScoresTableProps) => {
   const pointsDiff = getDiffToTeamWithMaxPoints(game);
-  const currentTeam = game.teams[game.currentTeam];
+  const currentTeam = game.currentTeam;
+
   return (
     <Table>
       <TableHeader>

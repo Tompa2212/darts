@@ -25,14 +25,14 @@ const PlayCricketPage = () => {
 
   if (gameId) {
     return (
-      <div className="flex-1">
+      <div className="flex-1 xl:container">
         <SavedCricketGame id={gameId} />
       </div>
     );
   }
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 xl:container">
       {gameConfig ? (
         <CricketGame
           teams={gameConfig.teams}

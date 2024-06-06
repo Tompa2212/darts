@@ -8,7 +8,7 @@ import UserAccountNav from './user-account-menu';
 import { buttonVariants } from './ui/button';
 import { Icon } from './ui/icon';
 
-export const Navbar = async () => {
+export async function Navbar() {
   const user = await getUser();
 
   return (
@@ -16,7 +16,9 @@ export const Navbar = async () => {
       <div className="container py-2 shadow-sm sm:py-4 flex items-center gap-4 sm:gap-6">
         <Link href="/" className="flex gap-2 sm:gap-4">
           <span className="text-2xl inline-block leading-none">🎯</span>
-          <Heading className="hidden sm:block leading-none">Darts Hub</Heading>
+          <Heading className="hidden sm:block leading-none italic -ml-1">
+            Darts Hub
+          </Heading>
         </Link>
         <div className="flex-1 flex justify-between items-center gap-6">
           <NavbarBreadcrumbs />
@@ -36,4 +38,4 @@ export const Navbar = async () => {
       </div>
     </nav>
   );
-};
+}

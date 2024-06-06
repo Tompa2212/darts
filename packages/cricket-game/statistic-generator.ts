@@ -1,57 +1,42 @@
 import { CricketGameType } from '.';
-import { ThrownNumber } from './types';
+import { ThrownDart, ThrownNumber } from './types';
 
-type PlayerDartsStats = Record<
-  string,
-  {
+export type TeamsStats = {
+  id: string;
+  name: string;
+  score: number;
+  pointsPerRound: number;
+  players: PlayerDartsStats | null;
+};
+
+export type PlayerDartsStats = {
+  [playerName: string]: {
     teamName: string;
     darts: ThrownNumber[];
     doubles: number;
     triples: number;
     singles: number;
     misses: number;
-  }
->;
+    totalPoints: number;
+    pointsPerTurn: number;
+    pointsPerDart: number;
+  };
+};
 
 export class CricketStatisticGenerator {
   private MAX_THROWS = 3;
 
-  getPlayersStatistic(playedRounds: Array<CricketGameType>) {
-    if (!playedRounds.length) {
+  public getTeamsStatistic(
+    playedTurns: Array<CricketGameType>
+  ): TeamsStats[] | null {
+    if (!playedTurns.length) {
       return null;
     }
 
-    const roundsByTeam = playedRounds.reduce((acc, round) => {
-      round.teams.forEach((team, idx) => {
-        if (round.currentTeam === idx) {
-          acc[team.name] = acc[team.name] || [];
-          acc[team.name].push(round);
-        }
-      });
+    const teamPointsHistory = this.getTeamsPointsHistory(playedTurns);
+    const teams = playedTurns[0].teams.map(({ id, name }) => ({ id, name }));
 
-      return acc;
-    }, {} as Record<string, CricketGameType[]>);
-
-    const stats = Object.entries(roundsByTeam).reduce(
-      (acc, [teamName, rounds]) => {
-        acc[teamName] = this.getPlayersDartsStats(rounds);
-        return acc;
-      },
-      {} as Record<string, PlayerDartsStats>
-    );
-
-    return stats;
-  }
-
-  getTeamsStatistic(playedRounds: Array<CricketGameType>) {
-    if (!playedRounds.length) {
-      return null;
-    }
-
-    const teamPointsHistory = this.getTeamsPointsHistory(playedRounds);
-    const teams = playedRounds[0].teams.map(({ id, name }) => ({ id, name }));
-
-    const teamsStats = teams.map(({ id, name }) => {
+    return teams.map(({ id, name }) => {
       const currTeam = teamPointsHistory[name];
 
       if (!currTeam) {
@@ -59,23 +44,26 @@ export class CricketStatisticGenerator {
           id,
           name,
           score: 0,
-          pointsPerRound: 0
+          pointsPerRound: 0,
+          players: null
         };
       }
 
+      const teamPlayedTurns = playedTurns.filter(
+        (turn) => turn.currentTeam.name === name
+      );
+
       const totalScore = currTeam.at(-1) || 0;
-      const playerStats = this.getPlayersStatistic(playedRounds) || {};
+      const playerStats = this.getPlayersStatistic(teamPlayedTurns) || {};
 
       return {
-        id: id,
+        id,
         name,
-        score: teamPointsHistory[name].at(-1),
+        score: totalScore,
         pointsPerRound: totalScore / teamPointsHistory[name].length,
-        players: playerStats[name] || null
+        players: playerStats
       };
     });
-
-    return teamsStats;
   }
 
   private getTeamsPointsHistory(playedRounds: Array<CricketGameType>) {
@@ -85,7 +73,7 @@ export class CricketStatisticGenerator {
 
     const pointsEachRound = playedRounds.reduce((acc, round) => {
       round.teams.forEach((team, idx) => {
-        if (round.currentTeam === idx) {
+        if (round.currentTeam.name === team.name) {
           acc[team.name] = acc[team.name] || [];
           acc[team.name].push(team.points);
         }
@@ -97,60 +85,74 @@ export class CricketStatisticGenerator {
     return pointsEachRound;
   }
 
-  private getPlayersPointsHistory(playedRounds: Array<CricketGameType>) {
-    if (!playedRounds.length) {
-      return {};
+  /**
+   * Returns players statistic scoped by the team they belong to.
+   * For each player stats of darts thrown,
+   *  number of doubles, triples, singles, misses, total points and points per turn are calculated.
+   * @param playedTurns history of all played turns in the game
+   */
+  private getPlayersStatistic(
+    playedTurns: Array<CricketGameType>
+  ): PlayerDartsStats | null {
+    if (!playedTurns.length) {
+      return null;
     }
 
-    const pointsEachRound = playedRounds.reduce((acc, round) => {
-      round.teams.forEach((team, idx) => {
-        if (round.currentTeam === idx) {
-          acc[team.name] = acc[team.name] || [];
-          acc[team.name].push(team.points);
-        }
-      });
-
-      return acc;
-    }, {} as Record<string, number[]>);
-
-    return pointsEachRound;
+    return this.getPlayersDartsStats(playedTurns);
   }
 
-  private getPlayersDartsStats(playedRounds: Array<CricketGameType>) {
-    if (!playedRounds.length) {
+  private getPlayersDartsStats(playedTurns: Array<CricketGameType>) {
+    if (!playedTurns.length) {
       return {};
     }
 
-    return playedRounds.reduce((acc, round) => {
+    return playedTurns.reduce((acc, round) => {
       if (!round.currentPlayer) {
         return acc;
       }
 
+      // will always have a team name, so we can safely cast it to string
+      const teamName = round.teams.find(
+        (t) => t.name === round.currentTeam.name
+      )?.name as string;
+
       acc[round.currentPlayer.name] = acc[round.currentPlayer.name] || {
-        teamName: round.teams[round.currentTeam].name,
+        teamName,
         darts: [],
         doubles: 0,
         triples: 0,
         singles: 0,
-        misses: 0
+        misses: 0,
+        totalPoints: 0,
+        pointsPerTurn: 0,
+        pointsPerDart: 0
       };
 
       const stats = acc[round.currentPlayer.name];
 
       stats.darts.push(...round.thrownDarts);
+
       stats.singles += this.getDartsMultiplierCount(round.thrownDarts, 1);
       stats.doubles += this.getDartsMultiplierCount(round.thrownDarts, 2);
       stats.triples += this.getDartsMultiplierCount(round.thrownDarts, 3);
       stats.misses += this.MAX_THROWS - round.thrownDarts.length;
 
+      stats.totalPoints += round.thrownDarts.reduce(
+        (acc, dart) => acc + dart.points,
+        0
+      );
+      stats.pointsPerTurn =
+        stats.totalPoints /
+        // we can get played rounds by summing up all darts thrown + misses and divided by max throws per players round
+        ((stats.singles + stats.doubles + stats.triples + stats.misses) /
+          this.MAX_THROWS);
+      stats.pointsPerDart = stats.totalPoints / stats.darts.length;
+
       return acc;
     }, {} as PlayerDartsStats);
   }
 
-  private getDartsMultiplierCount(
-    darts: ThrownNumber[],
-    multiplier: 1 | 2 | 3
-  ) {
+  private getDartsMultiplierCount(darts: ThrownDart[], multiplier: 1 | 2 | 3) {
     return darts.filter((dart) => dart.multiplier === multiplier).length;
   }
 }

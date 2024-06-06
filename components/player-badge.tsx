@@ -20,7 +20,11 @@ const PlayerBadge = ({
   }
 
   return (
-    <Badge variant={variant} {...badgeProps} className="flex items-center">
+    <Badge
+      variant={variant}
+      {...badgeProps}
+      className="inline-flex items-center"
+    >
       {player.name}{' '}
       {user ? <Icon name="BadgeCheck" className="h-4 w-4 ml-2" /> : null}
     </Badge>

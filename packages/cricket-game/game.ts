@@ -1,3 +1,4 @@
+import { TeamWithPlayers } from '@/types/team';
 import {
   allNums,
   checkIsFinished,
@@ -6,13 +7,13 @@ import {
   defaultNumbers
 } from './helpers';
 import { CricketStatisticGenerator } from './statistic-generator';
-import { Game, Team, ThrownNumber } from './types';
+import { Game, Team, TeamWithScore, ThrownNumber } from './types';
 import { CricketGameValidator } from './validator';
 import { v4 as uuidv4 } from 'uuid';
 
 const CLOSED_HIT_COUNT = 3;
 
-type CricketGameInitParams =
+export type CricketGameInitParams =
   | {
       teams: Team[];
       useRandomNums: boolean;
@@ -106,7 +107,6 @@ export class CricketGame {
   nextPlayer() {
     this.#undoStack.push(structuredClone(this.#game));
     this.#redoStack = [];
-    console.log(this.#statisticsGenerator.getTeamsStatistic(this.#undoStack));
     this.#nextPlayer();
   }
 
@@ -139,7 +139,7 @@ export class CricketGame {
     this.#game = {
       ...this.#game,
       thrownDarts: [],
-      currentTeam: nextTeamIdx,
+      currentTeam: this.#game.teams[nextTeamIdx],
       currentPlayer: this.#game.teams[nextTeamIdx].players[nextPlayerIdx],
       currentRound: nextRound,
       currentTurnPoints: 0
@@ -151,7 +151,9 @@ export class CricketGame {
     const currRound = this.#game.currentRound - 1;
     const nextRound = currRound + 1;
 
-    const nextTeamIdx = (this.#game.currentTeam + 1) % this.#game.teams.length;
+    const currTeamIdx = this.#game.teams.indexOf(this.#getCurrentTeam());
+
+    const nextTeamIdx = (currTeamIdx + 1) % this.#game.teams.length;
     let nextPlayerIdx =
       nextRound % this.#game.teams[nextTeamIdx].players.length;
 
@@ -278,15 +280,16 @@ export class CricketGame {
         }
       });
     }
+    const teamsWithScore = teams.map((team) => ({
+      ...team,
+      hitCount: createScores(numbers),
+      points: 0
+    }));
 
     const game: Game = {
       id: uuidv4(),
-      teams: teams.map((team) => ({
-        ...team,
-        hitCount: createScores(numbers),
-        points: 0
-      })),
-      currentTeam: 0,
+      teams: teamsWithScore,
+      currentTeam: teamsWithScore[0],
       currentPlayer: teams[0].players[0],
       currentRound: 1,
       currentTurnPoints: 0,
@@ -339,6 +342,6 @@ export class CricketGame {
       game = this.#game;
     }
 
-    return game.teams[game.currentTeam];
+    return game.currentTeam;
   }
 }
