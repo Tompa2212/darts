@@ -4,6 +4,10 @@ import { AddTeamForm } from './_components/add-team-form';
 import { BackButton } from '@/components/back-button';
 import { getUser } from '@/lib/auth';
 
+export const metadata = {
+  title: 'Manage Teams'
+};
+
 export default async function ManageTeamsPage() {
   const user = await getUser();
 

@@ -7,6 +7,10 @@ import { getUser } from '@/lib/auth';
 import UserAccountNav from './user-account-menu';
 import { buttonVariants } from './ui/button';
 import { Icon } from './ui/icon';
+import logo from '@/public/logo-no-background.svg';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { lumanosimo } from '@/app/fonts';
 
 export async function Navbar() {
   const user = await getUser();
@@ -14,10 +18,15 @@ export async function Navbar() {
   return (
     <nav className="bg-zinc-50 shadow-sm">
       <div className="container py-2 shadow-sm sm:py-4 flex items-center gap-4 sm:gap-6">
-        <Link href="/" className="flex gap-2 sm:gap-4">
-          <span className="text-2xl inline-block leading-none">🎯</span>
-          <Heading className="hidden sm:block leading-none italic -ml-1">
-            Darts Hub
+        <Link href="/" className="flex gap-2 sm:gap-4 items-center">
+          <Image src={logo} alt="Bullseye Buddy logo" className="w-10 h-10" />
+          <Heading
+            className={cn(
+              'hidden sm:block leading-none italic -ml-1',
+              lumanosimo.className
+            )}
+          >
+            Bullseye Buddy
           </Heading>
         </Link>
         <div className="flex-1 flex justify-between items-center gap-6">

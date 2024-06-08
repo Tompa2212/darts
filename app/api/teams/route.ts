@@ -1,5 +1,6 @@
 import { getUserTeams } from '@/data/teams';
 import { getUser } from '@/lib/auth';
+import { StatusCodes } from 'http-status-codes';
 
 export const GET = async () => {
   const user = await getUser();
@@ -8,9 +9,9 @@ export const GET = async () => {
     return Response.json(
       {
         message: 'Unauthorized',
-        status: 401
+        status: StatusCodes.UNAUTHORIZED
       },
-      { status: 401 }
+      { status: StatusCodes.UNAUTHORIZED }
     );
   }
 

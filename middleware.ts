@@ -7,6 +7,7 @@ import {
 import { NextRequest, NextResponse } from 'next/server';
 import { validateRequest } from './lib/validate-request';
 import { verifyRequestOrigin } from 'lucia';
+import { StatusCodes } from 'http-status-codes';
 
 export default async function middleware(req: NextRequest) {
   const { session } = await validateRequest();
@@ -55,7 +56,7 @@ export default async function middleware(req: NextRequest) {
     !verifyRequestOrigin(originHeader, [hostHeader])
   ) {
     return new NextResponse(null, {
-      status: 403
+      status: StatusCodes.FORBIDDEN
     });
   }
 

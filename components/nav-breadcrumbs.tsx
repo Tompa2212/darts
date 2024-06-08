@@ -11,6 +11,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
+import { inter } from '@/app/fonts';
 
 const createBreadcrumbHref = (paths: string[], pathIdx: number) => {
   return `/${paths.slice(0, pathIdx + 1).join('/')}`;
@@ -32,12 +33,15 @@ export const NavbarBreadcrumbs = () => {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
+      <BreadcrumbList className={inter.className}>
         {pathList.map((path) => {
           return (
             <React.Fragment key={path.label}>
               <BreadcrumbItem>
-                <BreadcrumbLink asChild className="capitalize text-base">
+                <BreadcrumbLink
+                  asChild
+                  className="capitalize sm:text-lg italic"
+                >
                   <Link href={path.href}>{path.label}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -47,7 +51,7 @@ export const NavbarBreadcrumbs = () => {
             </React.Fragment>
           );
         })}
-        <BreadcrumbPage className="capitalize text-base">
+        <BreadcrumbPage className="capitalize sm:text-lg font-bold italic">
           {last?.label}
         </BreadcrumbPage>
       </BreadcrumbList>

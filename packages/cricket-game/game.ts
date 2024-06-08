@@ -41,11 +41,11 @@ export class CricketGame {
   }
 
   get canUndo() {
-    return this.#undoStack.length > 0;
+    return this.#undoStack.length > 0 && !this.#game.isFinished;
   }
 
   get canRedo() {
-    return this.#redoStack.length > 0;
+    return this.#redoStack.length > 0 && !this.#game.isFinished;
   }
 
   get currentTeam() {
@@ -238,16 +238,17 @@ export class CricketGame {
   }
 
   undoTurn() {
-    if (this.#undoStack.length === 0) {
+    if (this.#undoStack.length === 0 || this.#game.isFinished) {
       return;
     }
+
     this.#redoStack.push(structuredClone(this.#game));
     this.#game = this.#undoStack.pop() as Game;
     this.#clearThrows();
   }
 
   redoTurn() {
-    if (this.#redoStack.length === 0) {
+    if (this.#redoStack.length === 0 || this.#game.isFinished) {
       return;
     }
     this.#undoStack.push(structuredClone(this.#game));

@@ -5,6 +5,7 @@ import { GoogleTokens, OAuth2RequestError } from 'arctic';
 import { registerUser } from '@/use-cases/user/register-user';
 import { createAndAttachSessionCookie } from '@/use-cases/user/create-session-cookie';
 import { getUserByAuth0Id } from '@/data/user';
+import { StatusCodes } from 'http-status-codes';
 
 function cleanGoogleCookies() {
   cookies().delete('google_oauth_state');
@@ -28,7 +29,7 @@ export async function GET(request: Request): Promise<Response> {
     state !== storedState
   ) {
     return new Response(null, {
-      status: 400
+      status: StatusCodes.BAD_REQUEST
     });
   }
 
@@ -49,7 +50,7 @@ export async function GET(request: Request): Promise<Response> {
 
     if (!response.ok) {
       return new Response(null, {
-        status: 400
+        status: StatusCodes.BAD_REQUEST
       });
     }
 
@@ -94,11 +95,11 @@ export async function GET(request: Request): Promise<Response> {
     ) {
       // invalid code
       return new Response(null, {
-        status: 400
+        status: StatusCodes.BAD_REQUEST
       });
     }
     return new Response(null, {
-      status: 500
+      status: StatusCodes.INTERNAL_SERVER_ERROR
     });
   }
 }
