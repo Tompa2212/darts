@@ -2,22 +2,14 @@
 
 import db from '@/db/drizzle';
 import { teams, players as playersTable } from '@/db/schema';
+import { getUser } from '@/lib/auth';
 import { addTeamSchema } from '@/schema/team.schema';
-import { NewPlayer } from '@/types/player';
 import { revalidatePath } from 'next/cache';
+import * as z from 'zod';
 
-function mapToDbPlayer(
-  players: Array<
-    | {
-        id: string;
-        username: string;
-      }
-    | {
-        name: string;
-      }
-  >,
-  teamId: string
-) {
+type AddTeamData = z.infer<typeof addTeamSchema>;
+
+function mapToDbPlayer(players: AddTeamData['players'], teamId: string) {
   return players.map((player) => {
     if ('id' in player) {
       return {
@@ -35,22 +27,15 @@ function mapToDbPlayer(
   });
 }
 
-export async function addTeam({
-  userId,
-  ...values
-}: {
-  userId: string;
-  name: string;
-  players: (
-    | {
-        id: string;
-        username: string;
-      }
-    | {
-        name: string;
-      }
-  )[];
-}) {
+export async function addTeam(values: AddTeamData) {
+  const user = await getUser();
+
+  if (!user) {
+    return {
+      error: 'Unauthorized'
+    };
+  }
+
   const validatedFields = addTeamSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -79,7 +64,7 @@ export async function addTeam({
 
   const existingTeam = await db.query.teams.findFirst({
     where: (team, { eq, and }) =>
-      and(eq(team.userId, userId), eq(team.name, name))
+      and(eq(team.userId, user.id), eq(team.name, name))
   });
 
   if (existingTeam) {
@@ -90,7 +75,7 @@ export async function addTeam({
 
   const created = await db.transaction(async (tx) => {
     const added = (
-      await tx.insert(teams).values({ name, userId }).returning()
+      await tx.insert(teams).values({ name, userId: user.id }).returning()
     ).at(0);
 
     if (added === undefined) {

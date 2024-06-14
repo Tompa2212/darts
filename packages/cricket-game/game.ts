@@ -1,4 +1,3 @@
-import { TeamWithPlayers } from '@/types/team';
 import {
   allNums,
   checkIsFinished,
@@ -7,7 +6,7 @@ import {
   defaultNumbers
 } from './helpers';
 import { CricketStatisticGenerator } from './statistic-generator';
-import { Game, Team, TeamWithScore, ThrownNumber } from './types';
+import { Game, Team, ThrownNumber } from './types';
 import { CricketGameValidator } from './validator';
 import { v4 as uuidv4 } from 'uuid';
 

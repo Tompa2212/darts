@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -28,7 +28,9 @@ import {
 import { useUserSearch } from '@/hooks/use-user-search';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 import { User } from 'lucia';
-import { SessionUser } from '@/auth';
+import { FormError } from '@/components/form-error';
+import { FormSuccess } from '@/components/form-success';
+import { useAddTeamForm } from './use-add-team-form';
 
 const getUsersOptions = (users: Array<User | { name: string }>) =>
   users.map((user) => {
@@ -43,32 +45,20 @@ const getUsersOptions = (users: Array<User | { name: string }>) =>
     };
   });
 
-export const AddTeamForm = ({ user }: { user: SessionUser | null }) => {
+export const AddTeamForm = () => {
   const isDesktop = useIsDesktop();
 
-  const [inputValue, setInputValue] = useState('');
+  const {
+    form,
+    inputValue,
+    setInputValue,
+    formMessage,
+    loading,
+    handleSubmit
+  } = useAddTeamForm();
 
   const { data: users } = useUserSearch(inputValue);
   const userOptions = useMemo(() => getUsersOptions(users || []), [users]);
-
-  const form = useForm<z.infer<typeof addTeamSchema>>({
-    resolver: zodResolver(addTeamSchema),
-    defaultValues: {
-      name: '',
-      players: []
-    }
-  });
-
-  function handleSubmit(data: z.infer<typeof addTeamSchema>) {
-    if (!user || !user.id) {
-      return;
-    }
-
-    form.reset();
-    setInputValue('');
-
-    addTeam({ userId: user.id, ...data });
-  }
 
   function handleAddPlayer() {
     if (!inputValue) {
@@ -113,11 +103,7 @@ export const AddTeamForm = ({ user }: { user: SessionUser | null }) => {
                   <FormItem>
                     <FormLabel>Team name</FormLabel>
                     <FormControl>
-                      <Input
-                        disabled={form.getValues('players').length <= 1}
-                        placeholder="darts"
-                        {...field}
-                      />
+                      <Input placeholder="darts" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -174,11 +160,13 @@ export const AddTeamForm = ({ user }: { user: SessionUser | null }) => {
                   )}
                 />
               </div>
-              <Button className="w-full" type="submit">
-                Add Team
+              <Button className="w-full" type="submit" disabled={loading}>
+                {loading ? 'Adding team...' : 'Add Team'}
               </Button>
             </form>
           </Form>
+          <FormError message={formMessage?.error} />
+          <FormSuccess message={formMessage?.success} />
         </div>
       </SheetContent>
     </Sheet>

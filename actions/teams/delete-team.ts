@@ -2,13 +2,23 @@
 import { revalidatePath } from 'next/cache';
 import db from '@/db/drizzle';
 import { teams } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
+import { getUser } from '@/lib/auth';
 
 export async function deleteTeam(id: string) {
   try {
-    await db.delete(teams).where(eq(teams.id, id));
+    const user = await getUser();
+
+    if (!user) {
+      return {
+        error: 'Unauthorized'
+      };
+    }
+
+    await db
+      .delete(teams)
+      .where(and(eq(teams.id, id), eq(teams.userId, user.id)));
   } catch (error) {
-    console.error('Error deleting team', error);
     return {
       error: 'Unable to delete team'
     };

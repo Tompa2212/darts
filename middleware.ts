@@ -24,7 +24,7 @@ export default async function middleware(req: NextRequest) {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
     return NextResponse.next();
@@ -38,7 +38,7 @@ export default async function middleware(req: NextRequest) {
 
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-    return Response.redirect(
+    return NextResponse.redirect(
       new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }

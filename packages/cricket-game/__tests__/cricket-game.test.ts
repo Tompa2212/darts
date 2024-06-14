@@ -23,9 +23,13 @@ const gameSetup: CricketGameInitParams = {
 };
 
 describe('Cricket Game', () => {
-  it('Shows current turn points correctly', () => {
-    const cricketGame = new CricketGame(gameSetup);
+  let cricketGame: CricketGame;
 
+  beforeEach(() => {
+    cricketGame = new CricketGame(gameSetup);
+  });
+
+  it('Shows current turn points correctly', () => {
     expect(cricketGame.game.currentTurnPoints).toBe(0);
 
     cricketGame.throwDart({ number: 20, multiplier: 3 });
@@ -59,8 +63,6 @@ describe('Cricket Game', () => {
   });
 
   it('Calculates points correctly', () => {
-    const cricketGame = new CricketGame(gameSetup);
-
     cricketGame.throwDart({ number: 20, multiplier: 3 });
     cricketGame.throwDart({ number: 20, multiplier: 3 });
     cricketGame.throwDart({ number: 20, multiplier: 3 });
@@ -128,8 +130,6 @@ describe('Cricket Game', () => {
   });
 
   it('Disables numbers correctly', () => {
-    const cricketGame = new CricketGame(gameSetup);
-
     cricketGame.throwDart({ number: 20, multiplier: 3 });
     cricketGame.nextPlayer();
     cricketGame.throwDart({ number: 20, multiplier: 3 });
@@ -140,8 +140,6 @@ describe('Cricket Game', () => {
   });
 
   it('Notices when game is finished', () => {
-    const cricketGame = new CricketGame(gameSetup);
-
     cricketGame.throwDart({ number: 20, multiplier: 3 });
     cricketGame.throwDart({ number: 20, multiplier: 3 });
     cricketGame.throwDart({ number: 19, multiplier: 3 });
@@ -171,5 +169,54 @@ describe('Cricket Game', () => {
 
     expect(cricketGame.game.winner).not.toBeNull();
     expect(cricketGame.game.isFinished).toBe(true);
+  });
+
+  it('Sums up all points correctly after game is finished', () => {
+    //player 1
+    cricketGame.throwDart({ number: 20, multiplier: 3 });
+    cricketGame.throwDart({ number: 19, multiplier: 3 });
+    cricketGame.throwDart({ number: 18, multiplier: 3 });
+
+    cricketGame.nextPlayer();
+
+    //player 2
+    cricketGame.throwDart({ number: 18, multiplier: 3 });
+    cricketGame.throwDart({ number: 17, multiplier: 3 });
+    cricketGame.throwDart({ number: 16, multiplier: 3 });
+
+    cricketGame.nextPlayer();
+
+    //player 1
+    cricketGame.throwDart({ number: 20, multiplier: 3 });
+    cricketGame.throwDart({ number: 17, multiplier: 3 });
+    cricketGame.throwDart({ number: 16, multiplier: 3 });
+
+    cricketGame.nextPlayer();
+
+    //player 2
+    cricketGame.throwDart({ number: 20, multiplier: 3 });
+    cricketGame.throwDart({ number: 19, multiplier: 3 });
+    cricketGame.throwDart({ number: 15, multiplier: 3 });
+
+    cricketGame.nextPlayer();
+
+    //player 1
+    cricketGame.throwDart({ number: 15, multiplier: 3 });
+    cricketGame.throwDart({ number: 25, multiplier: 2 });
+    cricketGame.throwDart({ number: 25, multiplier: 1 });
+
+    cricketGame.nextPlayer();
+
+    const game = cricketGame.game;
+    expect(game.winner).toBeDefined();
+    expect(game.winner).toBe(game.teams[0]);
+
+    const allNumbersClosedPoints = game.numbers
+      .map((n) => n * 3)
+      .reduce((a, b) => a + b, 0);
+
+    expect(game.teams[0].points).toBe(allNumbersClosedPoints + 20 * 3);
+    // player 2 didnt close bullseye
+    expect(game.teams[1].points).toBe(allNumbersClosedPoints - 25 * 3);
   });
 });

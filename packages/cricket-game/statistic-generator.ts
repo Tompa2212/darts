@@ -33,13 +33,14 @@ export class CricketStatisticGenerator {
       return null;
     }
 
-    const teamPointsHistory = this.getTeamsPointsHistory(playedTurns);
     const teams = playedTurns[0].teams.map(({ id, name }) => ({ id, name }));
 
     return teams.map(({ id, name }) => {
-      const currTeam = teamPointsHistory[name];
+      const teamPlayedTurns = playedTurns.filter(
+        (turn) => turn.currentTeam.name === name
+      );
 
-      if (!currTeam) {
+      if (!teamPlayedTurns.length) {
         return {
           id,
           name,
@@ -49,40 +50,19 @@ export class CricketStatisticGenerator {
         };
       }
 
-      const teamPlayedTurns = playedTurns.filter(
-        (turn) => turn.currentTeam.name === name
-      );
+      const totalScore =
+        playedTurns.at(-1)?.teams.find((t) => t.name === name)?.points || 0;
 
-      const totalScore = currTeam.at(-1) || 0;
       const playerStats = this.getPlayersStatistic(teamPlayedTurns) || {};
 
       return {
         id,
         name,
         score: totalScore,
-        pointsPerRound: totalScore / teamPointsHistory[name].length,
+        pointsPerRound: totalScore / teamPlayedTurns.length,
         players: playerStats
       };
     });
-  }
-
-  private getTeamsPointsHistory(playedRounds: Array<CricketGameType>) {
-    if (!playedRounds.length) {
-      return {};
-    }
-
-    const pointsEachRound = playedRounds.reduce((acc, round) => {
-      round.teams.forEach((team, idx) => {
-        if (round.currentTeam.name === team.name) {
-          acc[team.name] = acc[team.name] || [];
-          acc[team.name].push(team.points);
-        }
-      });
-
-      return acc;
-    }, {} as Record<string, number[]>);
-
-    return pointsEachRound;
   }
 
   /**
@@ -146,7 +126,10 @@ export class CricketStatisticGenerator {
         // we can get played rounds by summing up all darts thrown + misses and divided by max throws per players round
         ((stats.singles + stats.doubles + stats.triples + stats.misses) /
           this.MAX_THROWS);
-      stats.pointsPerDart = stats.totalPoints / stats.darts.length;
+
+      if (stats.darts.length > 0) {
+        stats.pointsPerDart = stats.totalPoints / stats.darts.length;
+      }
 
       return acc;
     }, {} as PlayerDartsStats);

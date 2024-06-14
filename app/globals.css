@@ -33,6 +33,14 @@
     --ring: 240 10% 3.9%;
 
     --radius: 0.5rem;
+
+    --navbar-height: 3.5rem;
+  }
+
+  @media screen and (min-width: 640px) {
+    :root {
+      --navbar-height: 4rem;
+    }
   }
 
   .dark {

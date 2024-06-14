@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import { SlashIcon } from '@radix-ui/react-icons';
@@ -20,7 +21,6 @@ const createBreadcrumbHref = (paths: string[], pathIdx: number) => {
 export const NavbarBreadcrumbs = () => {
   const pathName = usePathname();
   const pathList = [
-    { label: 'home', href: '/' },
     ...pathName
       .split('/')
       .filter((path) => path !== '')

@@ -97,7 +97,12 @@ export const gameModeEnum = pgEnum('game_mode', ['cricket', '501']);
 
 export const game = pgTable('game', {
   id: uuid('id').notNull().primaryKey().defaultRandom(),
-  winner: uuid('winner').references(() => teams.id, { onDelete: 'cascade' }),
+  creator: uuid('creator')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+  winner: uuid('winner')
+    .references(() => teams.id, { onDelete: 'cascade' })
+    .notNull(),
   gameMode: gameModeEnum('game_mode').notNull(),
   playedRounds: integer('played_rounds').notNull(),
   maxRounds: integer('max_rounds'),
@@ -122,9 +127,11 @@ export const game_player_stats = pgTable(
     gameId: uuid('game_id')
       .notNull()
       .references(() => game.id, { onDelete: 'cascade' }),
-    teamId: uuid('team_id').references(() => teams.id, {
-      onDelete: 'set null'
-    }),
+    teamId: uuid('team_id')
+      .references(() => teams.id, {
+        onDelete: 'set null'
+      })
+      .notNull(),
     // no foreign key to player_id because players can be withoud user id (anonymous player),
     // so we can't enforce a foreign key constraint.
     // We can enforce it in the application layer. Stats wont be calculated for anonymous players.

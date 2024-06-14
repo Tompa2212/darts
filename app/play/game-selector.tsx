@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader
-} from '@/components/ui/card';
+import { Card, CardDescription, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Link from 'next/link';
 import React from 'react';

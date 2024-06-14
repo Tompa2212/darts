@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ResumeMatchCard from './resume-match-card';
 import { Heading } from '@/components/ui/heading';
+import Link from 'next/link';
 
 function ResumeMatchList() {
   const [games, setGames] = useState(cricketGameSaver.getSavedGames());
@@ -39,10 +40,26 @@ function ResumeMatchList() {
     );
   });
 
-  let emptyMessage: string | null = null;
+  let emptyMessage: React.ReactNode | null = null;
 
   if (filteredGames.length === 0) {
-    emptyMessage = teamSearch ? 'No games found' : 'No saved games';
+    emptyMessage = teamSearch ? (
+      <Heading>No games found</Heading>
+    ) : (
+      <div>
+        <Heading className="mb-2">No saved games</Heading>
+        <p>
+          Click{' '}
+          <Link
+            className="text-blue-800 underline underline-offset-2"
+            href="/play"
+          >
+            here
+          </Link>{' '}
+          to play some games.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -55,7 +72,7 @@ function ResumeMatchList() {
         onChange={(e) => handleSearch(e.target.value)}
       />
       {emptyMessage ? (
-        <Heading>{emptyMessage}</Heading>
+        emptyMessage
       ) : (
         <motion.div
           layout

@@ -2,15 +2,12 @@ import React, { Suspense } from 'react';
 import { TeamsList, TeamsListSkeleton } from './_components/teams-list';
 import { AddTeamForm } from './_components/add-team-form';
 import { BackButton } from '@/components/back-button';
-import { getUser } from '@/lib/auth';
 
 export const metadata = {
   title: 'Manage Teams'
 };
 
-export default async function ManageTeamsPage() {
-  const user = await getUser();
-
+export default function ManageTeamsPage() {
   return (
     <div>
       <div className="mb-4">
@@ -18,7 +15,7 @@ export default async function ManageTeamsPage() {
         <BackButton />
       </div>
       <div className="mx-auto space-y-6">
-        <AddTeamForm user={user} />
+        <AddTeamForm />
         <Suspense fallback={<TeamsListSkeleton />}>
           <TeamsList />
         </Suspense>
