@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import clsx from 'clsx';
 import Providers from '@/providers/providers';
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/navbar/navbar';
 import { inter } from './fonts';
 
 export const metadata: Metadata = {
