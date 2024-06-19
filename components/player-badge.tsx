@@ -13,10 +13,15 @@ const PlayerBadge = ({
   variant = 'secondary',
   ...badgeProps
 }: PlayerBadgeProps) => {
-  let user: UserPlayer['user'] | null = null;
+  let isRegisteredUser: boolean = false;
+  let playerName = player.name;
 
-  if ('user' in player) {
-    user = player.user;
+  if ('user' in player && player.user) {
+    playerName = player.user.username;
+  }
+
+  if ('userId' in player && player.userId) {
+    isRegisteredUser = true;
   }
 
   return (
@@ -25,8 +30,10 @@ const PlayerBadge = ({
       {...badgeProps}
       className="inline-flex items-center"
     >
-      {player.name}{' '}
-      {user ? <Icon name="BadgeCheck" className="h-4 w-4 ml-2" /> : null}
+      {playerName}{' '}
+      {isRegisteredUser ? (
+        <Icon name="BadgeCheck" className="h-4 w-4 ml-2" />
+      ) : null}
     </Badge>
   );
 };
