@@ -1,6 +1,8 @@
 'use server';
 
 import db from '@/db/drizzle';
+import { players } from '@/db/schema';
+import { sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const getUserTeams = async (userId: string | null | undefined) => {
@@ -14,10 +16,15 @@ export const getUserTeams = async (userId: string | null | undefined) => {
     where: (teams, { eq }) => eq(teams.userId, userId),
     with: {
       players: {
+        extras: {
+          id: sql<string>`${players.userId}`.as('id')
+        },
         with: {
           user: {
             columns: {
-              emailVerified: false
+              id: true,
+              name: true,
+              username: true
             }
           }
         }

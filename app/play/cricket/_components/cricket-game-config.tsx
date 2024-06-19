@@ -127,7 +127,7 @@ export const CricketGameConfig = ({
                   options={allTeams.map((team) => ({
                     value: team.name,
                     label: `${team.name} - (${team.players
-                      .map((p) => p.name)
+                      .map((p) => p?.user?.username ?? p.name)
                       .join(', ')})`
                   }))}
                   onChange={(value) => {

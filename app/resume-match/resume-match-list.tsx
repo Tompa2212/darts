@@ -8,6 +8,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ResumeMatchCard from './resume-match-card';
 import { Heading } from '@/components/ui/heading';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
+import { Label } from '@/components/ui/label';
 
 function ResumeMatchList() {
   const [games, setGames] = useState(cricketGameSaver.getSavedGames());
@@ -44,35 +48,50 @@ function ResumeMatchList() {
 
   if (filteredGames.length === 0) {
     emptyMessage = teamSearch ? (
-      <Heading>No games found</Heading>
+      <>
+        <div className="mb-4">
+          <Heading>No games found</Heading>
+          <p className="text-muted-foreground">
+            We couldn&apos;t find any games for the team {`"${teamSearch}"`}
+          </p>
+        </div>
+        <Icon
+          name="SearchX"
+          className="h-20 w-20 mx-auto stroke-muted-foreground"
+        />
+      </>
     ) : (
-      <div>
-        <Heading className="mb-2">No saved games</Heading>
-        <p>
-          Click{' '}
-          <Link
-            className="text-blue-800 underline underline-offset-2"
-            href="/play"
-          >
-            here
-          </Link>{' '}
-          to play some games.
-        </p>
-      </div>
+      <>
+        <div className="mb-4">
+          <Heading className="mb-2">You have no saved games</Heading>
+          <p className="text-muted-foreground">
+            Games will be automatically saved when you start a new game.
+          </p>
+        </div>
+        <Link href="/play" className={cn(buttonVariants())}>
+          Play
+        </Link>
+      </>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <Input
-        className="max-w-xl"
-        placeholder="Search by team name..."
-        type="text"
-        defaultValue={searchParams.get('team')?.toString()}
-        onChange={(e) => handleSearch(e.target.value)}
-      />
+    <div className="flex flex-col">
+      <div className="mb-8">
+        <Label htmlFor="team" className="mb-1">
+          Team
+        </Label>
+        <Input
+          type="text"
+          id="team"
+          className="max-w-xl"
+          placeholder="Search by team name..."
+          defaultValue={searchParams.get('team')?.toString()}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
       {emptyMessage ? (
-        emptyMessage
+        <div className="text-center mt-[6vh] sm:mt-[17vh]">{emptyMessage}</div>
       ) : (
         <motion.div
           layout

@@ -89,7 +89,6 @@ export async function addTeam(values: AddTeamData) {
   });
 
   revalidatePath('/teams');
-  revalidatePath('/play');
 
   return created || { error: 'Failed to create team!' };
 }

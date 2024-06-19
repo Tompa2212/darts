@@ -11,7 +11,7 @@ export const saveCricketGameSchema = z.object({
       name: z.string(),
       players: z.array(
         z.object({
-          id: z.string().optional(),
+          id: z.string().or(z.null()).optional(),
           name: z.string()
         })
       )

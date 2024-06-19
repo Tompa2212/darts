@@ -9,8 +9,7 @@ export const addTeamSchema = z.object({
       z
         .object({
           id: z.string(),
-          username: z.string(),
-          email: z.string().email()
+          username: z.string()
         })
         .or(z.object({ name: z.string() }))
     )

@@ -72,7 +72,7 @@ export const AddTeamForm = () => {
 
     form.setValue('players', [...currPlayers, { name: inputValue }]);
 
-    if (form.getValues('players').length === 1) {
+    if (form.getValues('players').length === 1 && !form.getValues('name')) {
       form.setValue('name', inputValue);
     }
   }
@@ -127,7 +127,7 @@ export const AddTeamForm = () => {
                           value={form.getValues('players').map((p) => {
                             if ('id' in p) {
                               return {
-                                label: `${p.username} (${p.email})`,
+                                label: `${p.username}`,
                                 value: JSON.stringify(p)
                               };
                             }

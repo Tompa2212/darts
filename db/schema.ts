@@ -14,7 +14,7 @@ import {
 import { relations } from 'drizzle-orm';
 
 export const users = pgTable(
-  'user',
+  'users',
   {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
     name: text('name'),
@@ -30,7 +30,7 @@ export const users = pgTable(
   })
 );
 
-export const sessions = pgTable('session', {
+export const sessions = pgTable('sessions', {
   id: text('id').primaryKey(),
   userId: uuid('user_id')
     .notNull()
@@ -41,7 +41,7 @@ export const sessions = pgTable('session', {
   }).notNull()
 });
 
-export const teams = pgTable('team', {
+export const teams = pgTable('teams', {
   id: uuid('id').notNull().primaryKey().defaultRandom(),
   name: text('name').notNull(),
   userId: uuid('user_id')
@@ -52,7 +52,7 @@ export const teams = pgTable('team', {
 });
 
 export const players = pgTable(
-  'player',
+  'players',
   {
     userId: uuid('user_id'),
     teamId: uuid('team_id')
@@ -70,32 +70,9 @@ export const players = pgTable(
   })
 );
 
-export const userRelations = relations(users, ({ many }) => ({
-  teams: many(teams)
-}));
-
-export const teamsRelations = relations(teams, ({ one, many }) => ({
-  user: one(users, {
-    fields: [teams.userId],
-    references: [users.id]
-  }),
-  players: many(players)
-}));
-
-export const playersRelations = relations(players, ({ one }) => ({
-  team: one(teams, {
-    fields: [players.teamId],
-    references: [teams.id]
-  }),
-  user: one(users, {
-    fields: [players.userId],
-    references: [users.id]
-  })
-}));
-
 export const gameModeEnum = pgEnum('game_mode', ['cricket', '501']);
 
-export const game = pgTable('game', {
+export const game = pgTable('games', {
   id: uuid('id').notNull().primaryKey().defaultRandom(),
   creator: uuid('creator')
     .references(() => users.id, { onDelete: 'cascade' })
@@ -127,11 +104,9 @@ export const game_player_stats = pgTable(
     gameId: uuid('game_id')
       .notNull()
       .references(() => game.id, { onDelete: 'cascade' }),
-    teamId: uuid('team_id')
-      .references(() => teams.id, {
-        onDelete: 'set null'
-      })
-      .notNull(),
+    teamId: uuid('team_id').references(() => teams.id, {
+      onDelete: 'set null'
+    }),
     // no foreign key to player_id because players can be withoud user id (anonymous player),
     // so we can't enforce a foreign key constraint.
     // We can enforce it in the application layer. Stats wont be calculated for anonymous players.
@@ -149,3 +124,51 @@ export const game_player_stats = pgTable(
     )
   })
 );
+
+export const userRelations = relations(users, ({ many }) => ({
+  teams: many(teams),
+  games: many(game)
+}));
+
+export const teamsRelations = relations(teams, ({ one, many }) => ({
+  user: one(users, {
+    fields: [teams.userId],
+    references: [users.id]
+  }),
+  players: many(players),
+  gameTeams: many(game_teams)
+}));
+
+export const playersRelations = relations(players, ({ one }) => ({
+  team: one(teams, {
+    fields: [players.teamId],
+    references: [teams.id]
+  }),
+  user: one(users, {
+    fields: [players.userId],
+    references: [users.id]
+  })
+}));
+
+export const gamesRelations = relations(game, ({ one, many }) => ({
+  user: one(users, {
+    fields: [game.creator],
+    references: [users.id]
+  }),
+  gameTeams: many(game_teams),
+  winner: one(teams, {
+    fields: [game.winner],
+    references: [teams.id]
+  })
+}));
+
+export const gameTeamsRelations = relations(game_teams, ({ many, one }) => ({
+  game: one(game, {
+    fields: [game_teams.gameId],
+    references: [game.id]
+  }),
+  team: one(teams, {
+    fields: [game_teams.teamId],
+    references: [teams.id]
+  })
+}));

@@ -1,5 +1,5 @@
 export type BasePlayer = {
-  id?: string;
+  id?: string | null;
   name: string;
 };
 

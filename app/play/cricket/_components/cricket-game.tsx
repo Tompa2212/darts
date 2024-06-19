@@ -15,8 +15,6 @@ export const CricketGame = (props: CricketGameProps) => {
   const { game, canRedo, canUndo, currentTeam, teamsStats, dispatcher } =
     useCricketGame(props);
 
-  console.log(teamsStats);
-
   return (
     <>
       <FinishedGameDialog

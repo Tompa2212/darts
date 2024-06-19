@@ -1,16 +1,5 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { Heading } from '@/components/ui/heading';
 import { ChangeUsernameForm } from './change-username-form';
 import { getUser } from '@/lib/auth';
@@ -31,8 +20,6 @@ export default async function SettingsPage() {
           <Link href="#" className="font-semibold text-primary">
             General
           </Link>
-          <Link href="#">Security</Link>
-          <Link href="#">Advanced</Link>
         </nav>
         <div className="grid gap-6">
           {user && <ChangeUsernameForm user={user} />}

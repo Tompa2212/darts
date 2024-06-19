@@ -50,16 +50,16 @@ export class CricketStatisticGenerator {
         };
       }
 
-      const totalScore =
-        playedTurns.at(-1)?.teams.find((t) => t.name === name)?.points || 0;
-
       const playerStats = this.getPlayersStatistic(teamPlayedTurns) || {};
+      const teamPoints = Object.values(playerStats)
+        .filter((stat) => stat.teamName === name)
+        .reduce((acc, stat) => acc + stat.totalPoints, 0);
 
       return {
         id,
         name,
-        score: totalScore,
-        pointsPerRound: totalScore / teamPlayedTurns.length,
+        score: teamPoints,
+        pointsPerRound: teamPoints / teamPlayedTurns.length,
         players: playerStats
       };
     });
@@ -76,14 +76,6 @@ export class CricketStatisticGenerator {
   ): PlayerDartsStats | null {
     if (!playedTurns.length) {
       return null;
-    }
-
-    return this.getPlayersDartsStats(playedTurns);
-  }
-
-  private getPlayersDartsStats(playedTurns: Array<CricketGameType>) {
-    if (!playedTurns.length) {
-      return {};
     }
 
     return playedTurns.reduce((acc, round) => {
