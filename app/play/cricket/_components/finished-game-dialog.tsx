@@ -17,8 +17,16 @@ export default function FinishedGameDialog({
   game,
   onReplayGame
 }: FinishedGameDialogProps) {
+  const [open, setOpen] = React.useState<boolean | undefined>(undefined);
+
+  if (!game.isFinished) {
+    return null;
+  }
+
+  const isOpen = open !== undefined ? open : game.isFinished;
+
   return (
-    <DialogResponsive open={game.isFinished} onOpenChange={(open) => {}}>
+    <DialogResponsive open={isOpen} onOpenChange={setOpen}>
       <DialogResponsiveContent>
         <DialogResponsiveHeader>
           <h2 className="text-2xl">Game finished!</h2>

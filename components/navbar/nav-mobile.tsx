@@ -66,14 +66,11 @@ export default function NavMobile() {
   const pathname = usePathname();
 
   return (
-    <Drawer direction="right" open={open} onOpenChange={setOpen}>
+    <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger>
         <Icon name="Menu" className="h-6 w-6" />
       </DrawerTrigger>
-      <DrawerContent
-        className="h-full left-[auto] w-[85%] rounded-none"
-        hideDrawerHandle
-      >
+      <DrawerContent className="h-full w-[85%] rounded-none" hideDrawerHandle>
         <DrawerHeader className="text-left p-2">
           <DrawerTitle className="flex items-center justify-between">
             <Heading>
@@ -125,7 +122,7 @@ export default function NavMobile() {
             <Button
               variant="ghost"
               size="lg"
-              className="w-full text-left justify-start ps-2"
+              className={createLinkClasses(pathname, '/signout')}
               onClick={() => {
                 setOpen(false);
                 signout();

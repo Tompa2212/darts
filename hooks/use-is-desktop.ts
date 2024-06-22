@@ -1,7 +1,5 @@
 import { useMediaQuery } from './use-media-query';
 
 export const useIsDesktop = () => {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-
-  return isDesktop;
+  return useMediaQuery('(min-width: 768px)', { defaultValue: true });
 };

@@ -98,8 +98,8 @@ export const game_teams = pgTable('game_teams', {
   pointsPerRound: doublePrecision('points_per_round').notNull()
 });
 
-export const game_player_stats = pgTable(
-  'game_player_stats',
+export const cricket_game_player_stats = pgTable(
+  'cricket_game_player_stats',
   {
     gameId: uuid('game_id')
       .notNull()
@@ -111,9 +111,14 @@ export const game_player_stats = pgTable(
     // so we can't enforce a foreign key constraint.
     // We can enforce it in the application layer. Stats wont be calculated for anonymous players.
     playerId: uuid('player_id').notNull(),
+    singles: integer('singles').default(0).notNull(),
     doubles: integer('doubles').default(0).notNull(),
     triples: integer('triples').default(0).notNull(),
-    pointsPerRound: doublePrecision('points_per_round').notNull(),
+    misses: integer('misses').default(0).notNull(),
+    marksPerRound: doublePrecision('marks_per_round').notNull(),
+    marksPerDart: doublePrecision('marks_per_dart').notNull(),
+    totalMarks: integer('total_marks').notNull(),
+    playedTurns: integer('played_turns').notNull(),
     thrownDarts: jsonb('thrown_darts').array().notNull()
   },
   (stats) => ({

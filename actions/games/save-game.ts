@@ -1,8 +1,8 @@
 'use server';
 import db from '@/db/drizzle';
-import { game, game_player_stats, game_teams } from '@/db/schema';
+import { game, cricket_game_player_stats, game_teams } from '@/db/schema';
 import { getUser } from '@/lib/auth';
-import { TeamsStats } from '@/packages/cricket-game/statistic-generator';
+import { TeamWithScore } from '@/packages/cricket-game/types';
 import { saveCricketGameSchema } from '@/schema/save-game.schema';
 import { NewGame } from '@/types/game';
 import { NewGamePlayerStats } from '@/types/player';
@@ -22,21 +22,24 @@ function getRegisteredPlayers(teams: InsertCricketGameData['teams']) {
     .filter((player) => player.id) as {
     id: string;
     name: string;
-    team: { id: string; name: string };
+    team: TeamWithScore;
   }[];
 }
 
-function getTeamStats(id: string, stats: TeamsStats[]) {
-  return stats.find((stat) => stat.id === id);
-}
+function getPlayerStats(team: TeamWithScore, playerName: string) {
+  const playerStats = team.stats?.players[playerName] ?? {
+    thrownDarts: [],
+    singles: 0,
+    doubles: 0,
+    triples: 0,
+    misses: 0,
+    totalMarks: 0,
+    marksPerRound: 0,
+    marksPerDart: 0,
+    playedTurns: 0
+  };
 
-function getPlayerStats(
-  teamId: string,
-  playerName: string,
-  stats: TeamsStats[]
-) {
-  const teamStats = getTeamStats(teamId, stats);
-  return (teamStats?.players || {})[playerName];
+  return playerStats;
 }
 
 async function insertGame(tx: PgTransaction<any, any, any>, data: NewGame) {
@@ -58,15 +61,14 @@ async function insertGamePlayerStats(
     return;
   }
 
-  return tx.insert(game_player_stats).values(data).returning();
+  return tx.insert(cricket_game_player_stats).values(data).returning();
 }
 
 export type InsertCricketGameData = z.infer<typeof saveCricketGameSchema>;
 
 export default async function saveGame(
   newGame: InsertCricketGameData,
-  gameMode: 'cricket',
-  stats: TeamsStats[]
+  gameMode: 'cricket'
 ) {
   const user = await getUser();
 
@@ -108,12 +110,12 @@ export default async function saveGame(
         insertGameTeams(
           tx,
           gameData.teams.map((team) => {
-            const teamStats = getTeamStats(team.id, stats);
+            const teamStats = team.stats;
 
             return {
               teamId: team.id,
               gameId: insertedGame.id,
-              score: teamStats?.score || 0,
+              score: teamStats?.totalPoints || 0,
               pointsPerRound: teamStats?.pointsPerRound || 0
             };
           })
@@ -121,20 +123,13 @@ export default async function saveGame(
         insertGamePlayerStats(
           tx,
           registeredPlayers.map((player) => {
-            const playerStats = getPlayerStats(
-              player.team.id,
-              player.name,
-              stats
-            );
+            const stats = getPlayerStats(player.team, player.name);
 
             return {
               gameId: insertedGame.id,
               teamId: player.team.id,
               playerId: player.id,
-              doubles: playerStats?.doubles || 0,
-              triples: playerStats?.triples || 0,
-              pointsPerRound: playerStats?.pointsPerTurn || 0,
-              thrownDarts: playerStats?.darts || []
+              ...stats
             };
           })
         )
@@ -142,6 +137,7 @@ export default async function saveGame(
 
       return { succes: 'Game saved', data: insertedGame.id };
     } catch (error) {
+      console.log(error);
       tx.rollback();
       return { error: 'Cannot save game' };
     }

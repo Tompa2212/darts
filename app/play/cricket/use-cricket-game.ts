@@ -41,11 +41,7 @@ export const useCricketGame = (params: CricketGameInit) => {
 
         const { isFinished, winner } = cricketGame.current.game;
         if (isFinished && winner) {
-          saveGameToDb(
-            { ...cricketGame.current.game, winner },
-            'cricket',
-            cricketGame.current.teamsStats || []
-          );
+          saveGameToDb({ ...cricketGame.current.game, winner }, 'cricket');
           removeGame(cricketGame.current.game.id);
         } else {
           saveGame(cricketGame.current.game);
@@ -78,7 +74,7 @@ export const useCricketGame = (params: CricketGameInit) => {
     [removeGame, saveGame]
   );
 
-  const { canUndo, canRedo, currentTeam, teamsStats } = cricketGame.current;
+  const { canUndo, canRedo, currentTeam } = cricketGame.current;
 
   return {
     game,
@@ -86,7 +82,6 @@ export const useCricketGame = (params: CricketGameInit) => {
     canRedo,
     currentTeam,
     isFinished: game.isFinished,
-    teamsStats,
     dispatcher
   };
 };

@@ -38,21 +38,29 @@ describe('Statistic Generator Tests', () => {
   });
 
   it('Should generate statistics for a game', () => {
-    cricketGame.throwDart({ number: 20, multiplier: 3 });
-    cricketGame.throwDart({ number: 20, multiplier: 3 });
-    cricketGame.throwDart({ number: 20, multiplier: 3 });
+    throwDarts(cricketGame, [
+      [20, 3],
+      [20, 3],
+      [20, 3]
+    ]);
 
     cricketGame.nextPlayer();
-    cricketGame.throwDart({ number: 19, multiplier: 3 });
-    cricketGame.throwDart({ number: 19, multiplier: 3 });
-    cricketGame.throwDart({ number: 20, multiplier: 3 });
+    throwDarts(cricketGame, [
+      [19, 3],
+      [19, 3],
+      [20, 3]
+    ]);
 
     cricketGame.nextPlayer();
-    cricketGame.throwDart({ number: 18, multiplier: 3 });
-    cricketGame.throwDart({ number: 18, multiplier: 3 });
-    cricketGame.throwDart({ number: 20, multiplier: 1 });
+    throwDarts(cricketGame, [
+      [18, 3],
+      [18, 3],
+      [20, 1]
+    ]);
 
-    expect(cricketGame.teamsStats).toBeDefined();
+    cricketGame.game.teams.forEach((team) => {
+      expect(team.stats).toBeDefined();
+    });
   });
 
   it('Shows correct total points for teams', () => {
@@ -101,10 +109,48 @@ describe('Statistic Generator Tests', () => {
 
     cricketGame.nextPlayer();
 
-    expect(cricketGame.teamsStats?.find((t) => t.id === '1')?.score).toEqual(
-      20 * 3
-    );
+    expect(
+      cricketGame.game.teams.find((t) => t.id === '1')?.stats?.totalPoints
+    ).toEqual(20 * 3);
 
-    expect(cricketGame.teamsStats?.find((t) => t.id === '2')?.score).toEqual(0);
+    expect(
+      cricketGame.game.teams.find((t) => t.id === '2')?.stats?.totalPoints
+    ).toEqual(0);
+  });
+
+  it('calculates correct marks stats for players', () => {
+    // player 1
+    throwDarts(cricketGame, [
+      [20, 3],
+      [19, 3],
+      [18, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    // player 2
+    throwDarts(cricketGame, [
+      [18, 3],
+      [17, 3],
+      [16, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    // player 1
+    throwDarts(cricketGame, [[19, 3]]);
+    cricketGame.nextPlayer();
+
+    // player 2
+    throwDarts(cricketGame, [[18, 3]]);
+    cricketGame.nextPlayer();
+
+    const game = cricketGame.game;
+    const team1 = game.teams.find((t) => t.id === '1');
+    const team2 = game.teams.find((t) => t.id === '2');
+
+    expect(team1?.stats?.players[PLAYER_1.name].totalMarks).toEqual(12);
+    expect(team2?.stats?.players[PLAYER_2.name].totalMarks).toEqual(9);
+
+    expect(team1?.stats?.players[PLAYER_1.name].marksPerRound).toEqual(6);
+    expect(team2?.stats?.players[PLAYER_2.name].marksPerRound).toEqual(4.5);
   });
 });

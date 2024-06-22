@@ -12,7 +12,7 @@ import FinishedGameDialog from './finished-game-dialog';
 type CricketGameProps = CricketGameInit;
 
 export const CricketGame = (props: CricketGameProps) => {
-  const { game, canRedo, canUndo, currentTeam, teamsStats, dispatcher } =
+  const { game, canRedo, canUndo, currentTeam, dispatcher } =
     useCricketGame(props);
 
   return (

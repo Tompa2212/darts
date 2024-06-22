@@ -20,8 +20,8 @@ import { twMerge } from 'tailwind-merge';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 type DialogResponsiveProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 };
 
@@ -94,8 +94,8 @@ export function DialogResponsiveContent({
 }
 
 type DialogResponsiveContextProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   isDesktop: boolean;
 };
 

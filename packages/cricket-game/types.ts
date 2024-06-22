@@ -14,6 +14,7 @@ export type TeamWithScore = Team & {
     [key: string]: number;
   };
   points: number;
+  stats?: TeamsStats;
 };
 
 export type ThrownNumber = {
@@ -42,4 +43,25 @@ export type Game = {
   winner: Team | null;
   closedNumbers: Set<number>;
   thrownDarts: ThrownDart[];
+};
+
+export type TeamsStats = {
+  playedTurns: number;
+  pointsPerRound: number;
+  totalPoints: number;
+  players: PlayerDartsStats;
+};
+
+export type PlayerDartsStats = {
+  [playerName: string]: {
+    thrownDarts: ThrownNumber[];
+    doubles: number;
+    triples: number;
+    singles: number;
+    misses: number;
+    playedTurns: number;
+    totalMarks: number;
+    marksPerRound: number;
+    marksPerDart: number;
+  };
 };

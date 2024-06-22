@@ -25,13 +25,14 @@ export class CricketGame {
   #game: Game;
   #undoStack: Game[] = [];
   #redoStack: Game[] = [];
+
   #statisticsGenerator = new CricketStatisticGenerator();
 
   constructor(params: CricketGameInitParams) {
     if ('game' in params) {
       this.#game = params.game;
     } else {
-      this.#game = this.#createGame(params);
+      this.#game = this.createGame(params);
     }
   }
 
@@ -48,14 +49,7 @@ export class CricketGame {
   }
 
   get currentTeam() {
-    return this.#getCurrentTeam();
-  }
-
-  get teamsStats() {
-    return this.#statisticsGenerator.getTeamsStatistic([
-      ...this.#undoStack,
-      this.#game
-    ]);
+    return this.getCurrentTeam();
   }
 
   throwDart(thrownNumber: ThrownNumber) {
@@ -66,7 +60,7 @@ export class CricketGame {
     }
 
     const newState = structuredClone(this.#game);
-    const team = this.#getCurrentTeam(newState);
+    const team = this.getCurrentTeam(newState);
     const teamPointsBeforeThrow = team.points;
 
     // Hit count represents how many times a number has been hit, triple counts as 3 hits
@@ -104,17 +98,19 @@ export class CricketGame {
   }
 
   nextPlayer() {
+    this.#statisticsGenerator.calculateTeamStats(this.#game);
     this.#undoStack.push(structuredClone(this.#game));
     this.#redoStack = [];
-    this.#nextPlayer();
+    this.__nextPlayer();
   }
 
-  #nextPlayer() {
+  private __nextPlayer() {
     if (this.#game.isFinished) {
       return;
     }
 
-    const currPlayerIdx = this.#getCurrentTeam().players.findIndex(
+    const newGame = structuredClone(this.#game);
+    const currPlayerIdx = this.getCurrentTeam().players.findIndex(
       (p) => JSON.stringify(p) === JSON.stringify(this.#game.currentPlayer)
     );
 
@@ -132,14 +128,14 @@ export class CricketGame {
     }
 
     if (checkIsFinished(this.#game)) {
-      this.#setWinner();
+      this.setWinner();
     }
 
     this.#game = {
-      ...this.#game,
+      ...newGame,
       thrownDarts: [],
-      currentTeam: this.#game.teams[nextTeamIdx],
-      currentPlayer: this.#game.teams[nextTeamIdx].players[nextPlayerIdx],
+      currentTeam: newGame.teams[nextTeamIdx],
+      currentPlayer: newGame.teams[nextTeamIdx].players[nextPlayerIdx],
       currentRound: nextRound,
       currentTurnPoints: 0
     };
@@ -150,7 +146,7 @@ export class CricketGame {
     const currRound = this.#game.currentRound - 1;
     const nextRound = currRound + 1;
 
-    const currTeamIdx = this.#game.teams.indexOf(this.#getCurrentTeam());
+    const currTeamIdx = this.#game.teams.indexOf(this.getCurrentTeam());
 
     const nextTeamIdx = (currTeamIdx + 1) % this.#game.teams.length;
     let nextPlayerIdx =
@@ -173,7 +169,7 @@ export class CricketGame {
     }
 
     const newState = structuredClone(this.#game);
-    const team = this.#getCurrentTeam(newState);
+    const team = this.getCurrentTeam(newState);
     const teamPointsBeforeUndo = team.points;
 
     const { number: lastDart = 0, multiplier = 0 } =
@@ -228,7 +224,7 @@ export class CricketGame {
 
     this.#undoStack = [];
     this.#redoStack = [];
-    this.#game = this.#createGame({
+    this.#game = this.createGame({
       teams: newTeams,
       useRandomNums: this.#game.isRandomNumbers,
       numbers: this.#game.numbers,
@@ -243,7 +239,7 @@ export class CricketGame {
 
     this.#redoStack.push(structuredClone(this.#game));
     this.#game = this.#undoStack.pop() as Game;
-    this.#clearThrows();
+    this.clearThrows();
   }
 
   redoTurn() {
@@ -254,7 +250,7 @@ export class CricketGame {
     this.#game = this.#redoStack.pop() as Game;
   }
 
-  #createGame({
+  private createGame({
     teams,
     numbers,
     useRandomNums = false,
@@ -305,7 +301,7 @@ export class CricketGame {
     return game;
   }
 
-  #setWinner() {
+  private setWinner() {
     const totalPointsTeams = this.#game.teams.map((team) => {
       let points = team.points;
 
@@ -331,13 +327,13 @@ export class CricketGame {
     };
   }
 
-  #clearThrows() {
+  private clearThrows() {
     while (this.#game.thrownDarts.length) {
       this.undoThrow();
     }
   }
 
-  #getCurrentTeam(game?: Game) {
+  private getCurrentTeam(game?: Game) {
     if (!game) {
       game = this.#game;
     }
