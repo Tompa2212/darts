@@ -127,23 +127,23 @@ describe('Cricket Game', () => {
     expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
 
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_3);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_3);
 
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_2);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_2);
 
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_3);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_3);
 
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
 
     cricketGame = new CricketGame(gameSetup);
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_2);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_2);
     cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
   });
 
   it('Disables numbers correctly', () => {

@@ -109,7 +109,6 @@ export class CricketGame {
       return;
     }
 
-    const newGame = structuredClone(this.#game);
     const currPlayerIdx = this.getCurrentTeam().players.findIndex(
       (p) => JSON.stringify(p) === JSON.stringify(this.#game.currentPlayer)
     );
@@ -130,6 +129,8 @@ export class CricketGame {
     if (checkIsFinished(this.#game)) {
       this.setWinner();
     }
+
+    const newGame = structuredClone(this.#game);
 
     this.#game = {
       ...newGame,

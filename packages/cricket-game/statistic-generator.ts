@@ -34,9 +34,9 @@ export class CricketStatisticGenerator {
   ) {
     playerStats.thrownDarts.push(...game.thrownDarts);
     playerStats.playedTurns++;
-    playerStats.singles = this.getDartsMultiplierCount(game.thrownDarts, 1);
-    playerStats.doubles = this.getDartsMultiplierCount(game.thrownDarts, 2);
-    playerStats.triples = this.getDartsMultiplierCount(game.thrownDarts, 3);
+    playerStats.singles += this.getDartsMultiplierCount(game.thrownDarts, 1);
+    playerStats.doubles += this.getDartsMultiplierCount(game.thrownDarts, 2);
+    playerStats.triples += this.getDartsMultiplierCount(game.thrownDarts, 3);
     playerStats.misses += this.MAX_THROWS - game.thrownDarts.length;
 
     playerStats.totalMarks += game.thrownDarts.reduce(
@@ -46,9 +46,10 @@ export class CricketStatisticGenerator {
     playerStats.marksPerRound =
       playerStats.totalMarks / playerStats.playedTurns;
 
-    if (playerStats.thrownDarts.length > 0) {
-      playerStats.marksPerDart =
-        playerStats.totalMarks / playerStats.thrownDarts.length;
+    const totalThrows = playerStats.thrownDarts.length + playerStats.misses;
+
+    if (totalThrows > 0) {
+      playerStats.marksPerDart = playerStats.totalMarks / totalThrows;
     }
   }
 

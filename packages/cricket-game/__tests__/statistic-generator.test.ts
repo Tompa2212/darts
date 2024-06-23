@@ -118,7 +118,7 @@ describe('Statistic Generator Tests', () => {
     ).toEqual(0);
   });
 
-  it('calculates correct marks stats for players', () => {
+  it('Calculates correct marks stats for players', () => {
     // player 1
     throwDarts(cricketGame, [
       [20, 3],
@@ -152,5 +152,57 @@ describe('Statistic Generator Tests', () => {
 
     expect(team1?.stats?.players[PLAYER_1.name].marksPerRound).toEqual(6);
     expect(team2?.stats?.players[PLAYER_2.name].marksPerRound).toEqual(4.5);
+
+    // misses are also counted, so 3 darts are always "thrown" per turn
+    expect(team1?.stats?.players[PLAYER_1.name].marksPerDart).toEqual(2);
+    expect(team2?.stats?.players[PLAYER_2.name].marksPerDart).toEqual(1.5);
+  });
+
+  it('Calculates correct darts stats for players', () => {
+    // player 1
+    throwDarts(cricketGame, [
+      [20, 3],
+      [19, 3],
+      [18, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    // player 2
+    throwDarts(cricketGame, [
+      [18, 3],
+      [17, 3],
+      [16, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    // player 1
+    throwDarts(cricketGame, [
+      [19, 3],
+      [25, 2]
+    ]);
+    cricketGame.nextPlayer();
+
+    // player 2
+    throwDarts(cricketGame, [[18, 3]]);
+    cricketGame.nextPlayer();
+
+    const game = cricketGame.game;
+
+    const player1 = game.teams.find((t) => t.id === '1')?.stats?.players[
+      PLAYER_1.name
+    ]!;
+    const player2 = game.teams.find((t) => t.id === '2')?.stats?.players[
+      PLAYER_2.name
+    ]!;
+
+    expect(player1.singles).toEqual(0);
+    expect(player1.doubles).toEqual(1);
+    expect(player1.triples).toEqual(4);
+    expect(player1.misses).toEqual(1);
+
+    expect(player2.singles).toEqual(0);
+    expect(player2.doubles).toEqual(0);
+    expect(player2.triples).toEqual(3);
+    expect(player2.misses).toEqual(3);
   });
 });
