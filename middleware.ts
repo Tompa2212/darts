@@ -1,13 +1,7 @@
-import {
-  DEFAULT_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  authRoutes,
-  privateRoutes
-} from '@/routes';
+import { apiAuthPrefix, authRoutes, privateRoutes } from '@/routes';
+import { StatusCodes } from 'http-status-codes';
+import { verifyRequestOrigin } from 'lucia';
 import { NextRequest, NextResponse } from 'next/server';
-// import { validateRequest } from './lib/validate-request';
-// import { verifyRequestOrigin } from 'lucia';
-// import { StatusCodes } from 'http-status-codes';
 
 export const preferredRegion = ['fra1'];
 
@@ -50,18 +44,18 @@ export default async function middleware(req: NextRequest) {
   //   return NextResponse.next();
   // }
 
-  // const originHeader = req.headers.get('Origin');
-  // // NOTE: You may need to use `X-Forwarded-Host` instead
-  // const hostHeader = req.headers.get('Host');
-  // if (
-  //   !originHeader ||
-  //   !hostHeader ||
-  //   !verifyRequestOrigin(originHeader, [hostHeader])
-  // ) {
-  //   return new NextResponse(null, {
-  //     status: StatusCodes.FORBIDDEN
-  //   });
-  // }
+  const originHeader = req.headers.get('Origin');
+  // NOTE: You may need to use `X-Forwarded-Host` instead
+  const hostHeader = req.headers.get('Host');
+  if (
+    !originHeader ||
+    !hostHeader ||
+    !verifyRequestOrigin(originHeader, [hostHeader])
+  ) {
+    return new NextResponse(null, {
+      status: StatusCodes.FORBIDDEN
+    });
+  }
 
   return NextResponse.next();
 }

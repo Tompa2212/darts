@@ -1,11 +1,14 @@
 import { Heading } from '@/components/ui/heading';
 import { GameSelector } from './game-selector';
+import protectedPage from '@/lib/protected-page';
 
 export const metadata = {
   title: 'Select Match'
 };
 
-const PlayPage = () => {
+export default async function PlayPage() {
+  await protectedPage();
+
   return (
     <div className="container flex-1 space-y-4 py-4">
       <Heading Type="h2">New Match</Heading>
@@ -13,6 +16,4 @@ const PlayPage = () => {
       <GameSelector />
     </div>
   );
-};
-
-export default PlayPage;
+}

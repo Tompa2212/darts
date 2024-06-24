@@ -2,12 +2,15 @@ import React, { Suspense } from 'react';
 import { TeamsList, TeamsListSkeleton } from './_components/teams-list';
 import { AddTeamForm } from './_components/add-team-form';
 import { BackButton } from '@/components/back-button';
+import protectedPage from '@/lib/protected-page';
 
 export const metadata = {
   title: 'Manage Teams'
 };
 
-export default function ManageTeamsPage() {
+export default async function ManageTeamsPage() {
+  await protectedPage();
+
   return (
     <div>
       <div className="mb-4">

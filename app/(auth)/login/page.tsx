@@ -1,9 +1,17 @@
 import React, { Suspense } from 'react';
 import { LoginForm } from '../_components/login-form';
+import { getUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 type Props = {};
 
-const LoginPage = (props: Props) => {
+export default async function LoginPage(props: Props) {
+  const user = await getUser();
+
+  if (user) {
+    return redirect('/');
+  }
+
   return (
     <div>
       <Suspense>
@@ -11,6 +19,4 @@ const LoginPage = (props: Props) => {
       </Suspense>
     </div>
   );
-};
-
-export default LoginPage;
+}

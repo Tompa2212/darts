@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 import { Heading } from '@/components/ui/heading';
 import { ChangeUsernameForm } from './change-username-form';
-import { getUser } from '@/lib/auth';
+import protectedPage from '@/lib/protected-page';
 
 export default async function SettingsPage() {
-  const user = await getUser();
+  const user = await protectedPage();
 
   return (
     <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
