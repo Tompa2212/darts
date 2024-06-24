@@ -5,9 +5,9 @@ import {
   privateRoutes
 } from '@/routes';
 import { NextRequest, NextResponse } from 'next/server';
-import { validateRequest } from './lib/validate-request';
-import { verifyRequestOrigin } from 'lucia';
-import { StatusCodes } from 'http-status-codes';
+// import { validateRequest } from './lib/validate-request';
+// import { verifyRequestOrigin } from 'lucia';
+// import { StatusCodes } from 'http-status-codes';
 
 export const preferredRegion = ['fra1'];
 
@@ -22,46 +22,46 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const { session } = await validateRequest();
-  const isLoggedIn = !!session;
+  // const { session } = await validateRequest();
+  // const isLoggedIn = !!session;
 
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
+  // if (isAuthRoute) {
+  //   if (isLoggedIn) {
+  //     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  //   }
 
-    return NextResponse.next();
-  }
+  //   return NextResponse.next();
+  // }
 
-  if (!isLoggedIn && isPrivateRoute) {
-    let callbackUrl = nextUrl.pathname;
-    if (nextUrl.search) {
-      callbackUrl += nextUrl.search;
-    }
+  // if (!isLoggedIn && isPrivateRoute) {
+  //   let callbackUrl = nextUrl.pathname;
+  //   if (nextUrl.search) {
+  //     callbackUrl += nextUrl.search;
+  //   }
 
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+  //   const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-    return NextResponse.redirect(
-      new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
-    );
-  }
+  //   return NextResponse.redirect(
+  //     new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+  //   );
+  // }
 
-  if (req.method === 'GET') {
-    return NextResponse.next();
-  }
+  // if (req.method === 'GET') {
+  //   return NextResponse.next();
+  // }
 
-  const originHeader = req.headers.get('Origin');
-  // NOTE: You may need to use `X-Forwarded-Host` instead
-  const hostHeader = req.headers.get('Host');
-  if (
-    !originHeader ||
-    !hostHeader ||
-    !verifyRequestOrigin(originHeader, [hostHeader])
-  ) {
-    return new NextResponse(null, {
-      status: StatusCodes.FORBIDDEN
-    });
-  }
+  // const originHeader = req.headers.get('Origin');
+  // // NOTE: You may need to use `X-Forwarded-Host` instead
+  // const hostHeader = req.headers.get('Host');
+  // if (
+  //   !originHeader ||
+  //   !hostHeader ||
+  //   !verifyRequestOrigin(originHeader, [hostHeader])
+  // ) {
+  //   return new NextResponse(null, {
+  //     status: StatusCodes.FORBIDDEN
+  //   });
+  // }
 
   return NextResponse.next();
 }
