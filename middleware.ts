@@ -12,8 +12,6 @@ import { StatusCodes } from 'http-status-codes';
 export const preferredRegion = ['fra1'];
 
 export default async function middleware(req: NextRequest) {
-  const { session } = await validateRequest();
-  const isLoggedIn = !!session;
   const { nextUrl } = req;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
@@ -23,6 +21,9 @@ export default async function middleware(req: NextRequest) {
   if (isApiAuthRoute) {
     return NextResponse.next();
   }
+
+  const { session } = await validateRequest();
+  const isLoggedIn = !!session;
 
   if (isAuthRoute) {
     if (isLoggedIn) {
