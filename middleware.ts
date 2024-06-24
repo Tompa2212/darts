@@ -44,18 +44,18 @@ export default async function middleware(req: NextRequest) {
   //   return NextResponse.next();
   // }
 
-  const originHeader = req.headers.get('Origin');
-  // NOTE: You may need to use `X-Forwarded-Host` instead
-  const hostHeader = req.headers.get('Host');
-  if (
-    !originHeader ||
-    !hostHeader ||
-    !verifyRequestOrigin(originHeader, [hostHeader])
-  ) {
-    return new NextResponse(null, {
-      status: StatusCodes.FORBIDDEN
-    });
-  }
+  // const originHeader = req.headers.get('Origin');
+  // // NOTE: You may need to use `X-Forwarded-Host` instead
+  // const hostHeader = req.headers.get('Host');
+  // if (
+  //   !originHeader ||
+  //   !hostHeader ||
+  //   !verifyRequestOrigin(originHeader, [hostHeader])
+  // ) {
+  //   return new NextResponse(null, {
+  //     status: StatusCodes.FORBIDDEN
+  //   });
+  // }
 
   return NextResponse.next();
 }
