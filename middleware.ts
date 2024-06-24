@@ -9,6 +9,8 @@ import { validateRequest } from './lib/validate-request';
 import { verifyRequestOrigin } from 'lucia';
 import { StatusCodes } from 'http-status-codes';
 
+export const preferredRegion = 'fra1';
+
 export default async function middleware(req: NextRequest) {
   const { session } = await validateRequest();
   const isLoggedIn = !!session;
