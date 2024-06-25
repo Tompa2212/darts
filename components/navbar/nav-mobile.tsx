@@ -55,7 +55,7 @@ const mainLinks = [
     text: 'Profile'
   },
   {
-    href: '/profile?active=stats',
+    href: '/profile?activeTab=stats',
     icon: BarChart3Icon,
     text: 'Stats'
   }

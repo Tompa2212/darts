@@ -91,7 +91,7 @@ export default function NavDesktop({ user }: { user: SessionUser }) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/profile?active=stats">
+            <Link href="/profile?activeTab=stats">
               <Icon name="BarChart3" className="w-4 h-4 mr-2" />
               Stats
             </Link>

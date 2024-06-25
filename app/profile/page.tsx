@@ -2,17 +2,18 @@ import { getUserProfileData } from '@/data/user-profile';
 import React, { Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Icon } from '@/components/ui/icon';
-import { Heading } from '@/components/ui/heading';
 import UserGamesList, { UserGamesListSkeleton } from './user-games';
+import { Heading } from '@/components/ui/heading';
+import { ProfileTabs } from './profile-tabs';
 
 export default async function ProfilePage({
   searchParams = {}
 }: {
   params: { slug: string };
-  searchParams?: { active?: string };
+  searchParams?: { activeTab?: string };
 }) {
   const user = await getUserProfileData();
-  const { active = 'games' } = searchParams;
+  const { activeTab = 'games' } = searchParams;
 
   return (
     <main className="container py-4 space-y-6 max-w-6xl">
@@ -22,13 +23,13 @@ export default async function ProfilePage({
         </Heading>
         <p className="text-muted-foreground text-lg">{user?.name}</p>
       </header>
-      <Tabs defaultValue={active}>
-        <TabsList>
-          <TabsTrigger value="games">
+      <ProfileTabs defaultActive={activeTab}>
+        <TabsList className="w-full sm:w-auto mb-2">
+          <TabsTrigger value="games" className="flex-1">
             <span className="inline-block h-4 w-4 mr-1 leading-none">🎯</span>
             Games
           </TabsTrigger>
-          <TabsTrigger value="stats">
+          <TabsTrigger value="stats" className="flex-1">
             <Icon className="w-4 h-4 mr-1 stroke-green-600" name="BarChart3" />
             Stats
           </TabsTrigger>
@@ -39,7 +40,7 @@ export default async function ProfilePage({
           </Suspense>
         </TabsContent>
         <TabsContent value="stats">Stats.</TabsContent>
-      </Tabs>
+      </ProfileTabs>
     </main>
   );
 }
