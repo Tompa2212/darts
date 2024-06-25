@@ -11,14 +11,12 @@ import { Heading } from '@/components/ui/heading';
 import { Icon } from '@/components/ui/icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getUserTeams } from '@/data/teams';
-import { getUser } from '@/lib/auth';
 import React from 'react';
 
 type TeamsListProps = {};
 
 export async function TeamsList({}: TeamsListProps) {
-  const user = await getUser();
-  const teams = await getUserTeams(user?.id);
+  const teams = await getUserTeams();
 
   return (
     <div>
