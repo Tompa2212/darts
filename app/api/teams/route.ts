@@ -15,7 +15,7 @@ export const GET = async () => {
     );
   }
 
-  const userTeams = await getUserTeams(user.id);
+  const userTeams = await getUserTeams();
 
   return Response.json({ data: userTeams });
 };

@@ -3,9 +3,7 @@ import { LoginForm } from '../_components/login-form';
 import { getUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
-type Props = {};
-
-export default async function LoginPage(props: Props) {
+export default async function LoginPage() {
   const user = await getUser();
 
   if (user) {

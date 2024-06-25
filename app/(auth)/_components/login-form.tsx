@@ -2,16 +2,11 @@
 
 import React from 'react';
 import { CardWrapper } from './card-wrapper';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
 
 export const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? "You're already registered with this email. Please login with your social account."
-      : '';
   const router = useRouter();
 
   const onSignIn = () => {
