@@ -72,10 +72,15 @@ export const ScoresTable = ({ game }: ScoresTableProps) => {
           <TableRow key={team.name} className="h-12">
             <TableCell
               title={team.name}
-              className="text-overflow-ellipsis max-w-14 p-0 font-semibold sm:w-full"
+              className="text-overflow-ellipsis max-w-14 p-0 sm:w-full"
             >
-              <span className="mr-2">{team.name}</span>
-              {currentTeam.name === team.name && '🎯'}
+              <span
+                className={cn('mr-2', {
+                  'font-bold': currentTeam.name === team.name
+                })}
+              >
+                {team.name}
+              </span>
             </TableCell>
             {game.numbers.map((num) => (
               <TableCell key={num} className="w-18 text-center sm:min-w-20">

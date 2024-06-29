@@ -24,7 +24,7 @@ export const CricketGame = (props: CricketGameProps) => {
       <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:py-4 sm:px-2 lg:px-0">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-lg">
+            <p className="max-w-[290px] xs:max-w-full text-lg text-overflow-ellipsis">
               Playing: <span className="font-semibold">{currentTeam.name}</span>
               ,{' '}
               <span className="text-zinc-500 font-semibold">

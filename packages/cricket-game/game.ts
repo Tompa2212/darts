@@ -1,3 +1,4 @@
+import { ne } from 'drizzle-orm';
 import {
   allNums,
   checkIsFinished,
@@ -143,21 +144,40 @@ export class CricketGame {
   }
 
   private getNextTeamAndPlayerIdx() {
-    // make it 0 indexed
-    const currRound = this.#game.currentRound - 1;
-    const nextRound = currRound + 1;
-
-    const currTeamIdx = this.#game.teams.indexOf(this.getCurrentTeam());
+    const playedTurns = this.#undoStack.length;
+    const teams = this.#game.teams;
+    const currTeamIdx = teams.indexOf(this.getCurrentTeam());
+    const playersInOrder = this.getPlayersInThrowOrder();
 
     const nextTeamIdx = (currTeamIdx + 1) % this.#game.teams.length;
-    let nextPlayerIdx =
-      nextRound % this.#game.teams[nextTeamIdx].players.length;
+    const nextPlayer = playersInOrder[playedTurns % playersInOrder.length];
+    let nextPlayerIdx = this.#game.teams[nextTeamIdx].players.findIndex(
+      (p) => p.name === nextPlayer.name
+    );
 
     if (this.#game.teams[nextTeamIdx].players[nextPlayerIdx] === undefined) {
       nextPlayerIdx = 0;
     }
 
     return [nextTeamIdx, nextPlayerIdx];
+  }
+
+  private getPlayersInThrowOrder() {
+    const playersInOrder = [];
+    const teamPlayers = structuredClone(this.#game.teams.map((t) => t.players));
+
+    const biggestTeamLength = Math.max(...teamPlayers.map((p) => p.length));
+
+    for (let i = 0; i < biggestTeamLength; i++) {
+      for (let j = 0; j < teamPlayers.length; j++) {
+        const player = teamPlayers[j][i % teamPlayers[j].length];
+        if (player) {
+          playersInOrder.push(player);
+        }
+      }
+    }
+
+    return playersInOrder;
   }
 
   undoThrow() {
@@ -287,7 +307,7 @@ export class CricketGame {
       id: uuidv4(),
       teams: teamsWithScore,
       currentTeam: teamsWithScore[0],
-      currentPlayer: teams[0].players[0],
+      currentPlayer: teamsWithScore[0].players[0],
       currentRound: 1,
       currentTurnPoints: 0,
       isFinished: false,

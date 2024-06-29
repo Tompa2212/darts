@@ -4,9 +4,10 @@ import { CricketGameInitParams } from '../game';
 const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
 const PLAYER_3 = { id: '3', name: 'Player3' };
+const PLAYER_4 = { id: '4', name: 'Player4' };
 
 const gameSetup: CricketGameInitParams = {
-  maxRounds: 3,
+  maxRounds: 300,
   useRandomNums: false,
   teams: [
     {
@@ -124,26 +125,99 @@ describe('Cricket Game', () => {
       ]
     });
 
-    expect(cricketGame.game.currentPlayer).toBe(PLAYER_1);
+    function confirmOrder(
+      game: CricketGame,
+      expectedOrder: {
+        id: string;
+        name: string;
+      }[]
+    ) {
+      for (let player of expectedOrder) {
+        expect(game.game.currentPlayer).toEqual(player);
+        game.nextPlayer();
+      }
+    }
 
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_3);
+    let expectedOrder = [
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_2,
+      PLAYER_3,
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_2
+    ];
 
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_2);
-
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_3);
-
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
+    confirmOrder(cricketGame, expectedOrder);
 
     cricketGame = new CricketGame(gameSetup);
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_2);
-    cricketGame.nextPlayer();
-    expect(cricketGame.game.currentPlayer).toEqual(PLAYER_1);
+    expectedOrder = [
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_1,
+      PLAYER_2
+    ];
+
+    confirmOrder(cricketGame, expectedOrder);
+
+    cricketGame = new CricketGame({
+      ...gameSetup,
+      teams: [
+        {
+          id: '1',
+          name: 'Team 1',
+          players: [PLAYER_1, PLAYER_2]
+        },
+        {
+          id: '2',
+          name: 'Team 2',
+          players: [PLAYER_3, PLAYER_4]
+        }
+      ]
+    });
+
+    expectedOrder = [
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_2,
+      PLAYER_4,
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_2,
+      PLAYER_4
+    ];
+    confirmOrder(cricketGame, expectedOrder);
+
+    cricketGame = new CricketGame({
+      ...gameSetup,
+      teams: [
+        {
+          id: '1',
+          name: 'Team 1',
+          players: [PLAYER_1]
+        },
+        {
+          id: '2',
+          name: 'Team 2',
+          players: [PLAYER_2, PLAYER_3]
+        }
+      ]
+    });
+
+    expectedOrder = [
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_1,
+      PLAYER_3
+    ];
+
+    confirmOrder(cricketGame, expectedOrder);
   });
 
   it('Disables numbers correctly', () => {

@@ -34,7 +34,8 @@
       "runtimeArgs": [
         "--inspect-brk",
         "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand"
+        "--runInBand",
+        "--testPathPattern=zero-one-game-test.ts"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
