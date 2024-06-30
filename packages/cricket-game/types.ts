@@ -36,6 +36,7 @@ export type Game = {
   currentPlayer: BasePlayer;
   currentTeam: TeamWithScore;
   currentRound: number;
+  currentRoundTurns: number;
   currentTurnPoints: number;
   isFinished: boolean;
   isRandomNumbers: boolean;

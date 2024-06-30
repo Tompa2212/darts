@@ -5,6 +5,7 @@ const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
 const PLAYER_3 = { id: '3', name: 'Player3' };
 const PLAYER_4 = { id: '4', name: 'Player4' };
+const PLAYER_5 = { id: '5', name: 'Player5' };
 
 const gameSetup: CricketGameInitParams = {
   maxRounds: 300,
@@ -34,6 +35,19 @@ function throwDarts(
 
 describe('Cricket Game', () => {
   let cricketGame: CricketGame;
+
+  function confirmOrder(
+    game: CricketGame,
+    expectedOrder: {
+      id: string;
+      name: string;
+    }[]
+  ) {
+    for (let player of expectedOrder) {
+      expect(game.game.currentPlayer).toEqual(player);
+      game.nextPlayer();
+    }
+  }
 
   beforeEach(() => {
     cricketGame = new CricketGame(gameSetup);
@@ -125,19 +139,6 @@ describe('Cricket Game', () => {
       ]
     });
 
-    function confirmOrder(
-      game: CricketGame,
-      expectedOrder: {
-        id: string;
-        name: string;
-      }[]
-    ) {
-      for (let player of expectedOrder) {
-        expect(game.game.currentPlayer).toEqual(player);
-        game.nextPlayer();
-      }
-    }
-
     let expectedOrder = [
       PLAYER_1,
       PLAYER_3,
@@ -145,13 +146,17 @@ describe('Cricket Game', () => {
       PLAYER_3,
       PLAYER_1,
       PLAYER_3,
-      PLAYER_2
+      PLAYER_2,
+      PLAYER_3,
+      PLAYER_1
     ];
 
     confirmOrder(cricketGame, expectedOrder);
 
     cricketGame = new CricketGame(gameSetup);
     expectedOrder = [
+      PLAYER_1,
+      PLAYER_2,
       PLAYER_1,
       PLAYER_2,
       PLAYER_1,
@@ -214,9 +219,44 @@ describe('Cricket Game', () => {
       PLAYER_1,
       PLAYER_2,
       PLAYER_1,
-      PLAYER_3
+      PLAYER_3,
+      PLAYER_1,
+      PLAYER_2
     ];
+    confirmOrder(cricketGame, expectedOrder);
 
+    cricketGame = new CricketGame({
+      ...gameSetup,
+      teams: [
+        {
+          id: '1',
+          name: 'Team 1',
+          players: [PLAYER_1]
+        },
+        {
+          id: '2',
+          name: 'Team 2',
+          players: [PLAYER_2, PLAYER_3]
+        },
+        {
+          id: '3',
+          name: 'Team 3',
+          players: [PLAYER_4, PLAYER_5]
+        }
+      ]
+    });
+
+    expectedOrder = [
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_4,
+      PLAYER_1,
+      PLAYER_3,
+      PLAYER_5,
+      PLAYER_1,
+      PLAYER_2,
+      PLAYER_4
+    ];
     confirmOrder(cricketGame, expectedOrder);
   });
 

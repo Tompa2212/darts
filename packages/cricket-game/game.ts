@@ -1,4 +1,3 @@
-import { ne } from 'drizzle-orm';
 import {
   allNums,
   checkIsFinished,
@@ -10,6 +9,7 @@ import { CricketStatisticGenerator } from './statistic-generator';
 import { Game, Team, ThrownNumber } from './types';
 import { CricketGameValidator } from './validator';
 import { v4 as uuidv4 } from 'uuid';
+import { CricketGameType } from '.';
 
 const CLOSED_HIT_COUNT = 3;
 
@@ -110,74 +110,54 @@ export class CricketGame {
       return;
     }
 
-    const currPlayerIdx = this.getCurrentTeam().players.findIndex(
-      (p) => JSON.stringify(p) === JSON.stringify(this.#game.currentPlayer)
-    );
-
-    if (currPlayerIdx === -1) {
-      throw new Error('Player not found');
-    }
-
-    let nextRound = this.#game.currentRound;
-
-    const [nextTeamIdx, nextPlayerIdx] = this.getNextTeamAndPlayerIdx();
-
-    // count round as a new round if we've looped through one player of a each team
-    if (nextTeamIdx === 0) {
-      nextRound++;
-    }
-
-    if (checkIsFinished(this.#game)) {
-      this.setWinner();
-    }
-
     const newGame = structuredClone(this.#game);
+
+    newGame.currentRoundTurns++;
+    const isNextRound = newGame.currentRoundTurns > newGame.teams.length;
+    if (isNextRound) {
+      newGame.currentRound++;
+      newGame.currentRoundTurns = 1;
+    }
+
+    const [nextTeamIdx, nextPlayerIdx] = this.getNextTeamAndPlayerIdx(newGame);
+
+    if (checkIsFinished(newGame)) {
+      return this.setWinner(newGame);
+    }
 
     this.#game = {
       ...newGame,
       thrownDarts: [],
       currentTeam: newGame.teams[nextTeamIdx],
       currentPlayer: newGame.teams[nextTeamIdx].players[nextPlayerIdx],
-      currentRound: nextRound,
       currentTurnPoints: 0
     };
   }
 
-  private getNextTeamAndPlayerIdx() {
-    const playedTurns = this.#undoStack.length;
-    const teams = this.#game.teams;
-    const currTeamIdx = teams.indexOf(this.getCurrentTeam());
-    const playersInOrder = this.getPlayersInThrowOrder();
+  private getNextTeamAndPlayerIdx(game: CricketGameType) {
+    const teams = game.teams;
+    const round = game.currentRound;
+    const playedTurns = game.currentRoundTurns;
 
-    const nextTeamIdx = (currTeamIdx + 1) % this.#game.teams.length;
-    const nextPlayer = playersInOrder[playedTurns % playersInOrder.length];
-    let nextPlayerIdx = this.#game.teams[nextTeamIdx].players.findIndex(
+    const nextPlayer = this.roundRobin(round - 1, playedTurns - 1);
+    const nextTeamIdx = teams.findIndex((t) =>
+      t.players.find((p) => p.name === nextPlayer.name)
+    );
+    const nextPlayerIdx = teams[nextTeamIdx].players.findIndex(
       (p) => p.name === nextPlayer.name
     );
-
-    if (this.#game.teams[nextTeamIdx].players[nextPlayerIdx] === undefined) {
-      nextPlayerIdx = 0;
-    }
 
     return [nextTeamIdx, nextPlayerIdx];
   }
 
-  private getPlayersInThrowOrder() {
-    const playersInOrder = [];
-    const teamPlayers = structuredClone(this.#game.teams.map((t) => t.players));
+  private roundRobin(round: number, turn: number) {
+    const teamPlayers = structuredClone(
+      this.#game.teams.map((team) => team.players)
+    );
+    const totalTeams = teamPlayers.length;
+    const currTeamLength = teamPlayers[turn % totalTeams].length;
 
-    const biggestTeamLength = Math.max(...teamPlayers.map((p) => p.length));
-
-    for (let i = 0; i < biggestTeamLength; i++) {
-      for (let j = 0; j < teamPlayers.length; j++) {
-        const player = teamPlayers[j][i % teamPlayers[j].length];
-        if (player) {
-          playersInOrder.push(player);
-        }
-      }
-    }
-
-    return playersInOrder;
+    return teamPlayers[turn % totalTeams][round % currTeamLength];
   }
 
   undoThrow() {
@@ -309,6 +289,7 @@ export class CricketGame {
       currentTeam: teamsWithScore[0],
       currentPlayer: teamsWithScore[0].players[0],
       currentRound: 1,
+      currentRoundTurns: 1,
       currentTurnPoints: 0,
       isFinished: false,
       isRandomNumbers: useRandomNums,
@@ -322,8 +303,10 @@ export class CricketGame {
     return game;
   }
 
-  private setWinner() {
-    const totalPointsTeams = this.#game.teams.map((team) => {
+  private setWinner(game?: CricketGameType) {
+    game = game || this.#game;
+
+    const totalPointsTeams = game.teams.map((team) => {
       let points = team.points;
 
       Object.entries(team.hitCount).forEach(([num, hitCount]) => {
@@ -341,11 +324,13 @@ export class CricketGame {
     const winner = totalPointsTeams.toSorted((a, b) => b.points - a.points)[0];
 
     this.#game = {
-      ...this.#game,
+      ...game,
       teams: totalPointsTeams,
       winner,
       isFinished: true
     };
+
+    return this.#game;
   }
 
   private clearThrows() {
