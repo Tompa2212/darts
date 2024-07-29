@@ -1,5 +1,5 @@
 import { gameModes } from '@/packages/zero-one';
-import { z, ZodType } from 'zod';
+import { z } from 'zod';
 
 export const cricketConfigSchema = z
   .object({
@@ -65,3 +65,5 @@ export const zeroOneConfigSchema = z.object({
     )
     .min(1, 'Minimum 1 team required')
 });
+
+export type ConfigTeams = z.infer<typeof cricketConfigSchema>['teams'];

@@ -17,9 +17,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cricketConfigSchema } from '@/schema/games-config.schema';
 import { Heading } from '@/components/ui/heading';
 import { MultiSelect } from '@/components/ui/multiselect';
-import { useUserTeams } from '../../use-user-teams';
 import Link from 'next/link';
 import { allNums } from '@/packages/cricket-game/helpers';
+import { TeamsSelector } from '../../_components/teams-selector';
 
 type ConfigValues = z.infer<typeof cricketConfigSchema>;
 
@@ -28,7 +28,6 @@ export const CricketGameConfig = ({
 }: {
   onConfigured: (values: ConfigValues) => void;
 }) => {
-  const allTeams = useUserTeams();
   const form = useForm<ConfigValues>({
     resolver: zodResolver(cricketConfigSchema),
     defaultValues: {
@@ -122,25 +121,11 @@ export const CricketGameConfig = ({
             render={({ field: { onChange, value, ...rest } }) => (
               <FormItem>
                 <FormLabel>Teams</FormLabel>
-                <MultiSelect
-                  selected={value.map((team) => team.name)}
-                  options={allTeams.map((team) => ({
-                    value: team.name,
-                    label: `${team.name} - (${team.players
-                      .map((p) => p?.user?.username ?? p.name)
-                      .join(', ')})`
-                  }))}
-                  onChange={(value) => {
-                    const newSelectedTeams = value
-                      .map((teamName) =>
-                        allTeams.find((t) => t.name === teamName)
-                      )
-                      .filter(Boolean);
-
-                    onChange(newSelectedTeams);
-                  }}
-                  {...rest}
+                <TeamsSelector
+                  value={form.getValues('teams')}
+                  onChange={onChange}
                   className="sm:w-[510px]"
+                  {...rest}
                 />
                 <FormMessage />
                 <FormDescription className="text-sm">
