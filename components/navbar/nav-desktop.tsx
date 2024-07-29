@@ -37,7 +37,7 @@ export default function NavDesktop({ user }: { user: SessionUser }) {
                   Be the first player to close all the numbers and have most
                   points.
                 </ListItem>
-                <ListItem href="/play/501" title="501">
+                <ListItem href="/play/zero-one" title="01">
                   Be the first player to reach 0 points.
                 </ListItem>
               </ul>

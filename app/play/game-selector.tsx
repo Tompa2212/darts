@@ -19,11 +19,11 @@ export const GameSelector = () => {
           </CardHeader>
         </Card>
       </Link>
-      <Link href="/play/501">
+      <Link href="/play/zero-one">
         <Card className="h-full hover:bg-zinc-50 transition-colors">
           <CardHeader className="sm:p-4">
             <Heading Type="h3">
-              501 <span className="text-2xl inline-block mx-2">🎯</span>
+              01 <span className="text-2xl inline-block mx-2">🎯</span>
             </Heading>
             <CardDescription>
               Be the first to reach exactly 0 points. Score points by hitting

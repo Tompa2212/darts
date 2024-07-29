@@ -12,6 +12,7 @@ import { Icon } from '@/components/ui/icon';
 import { CrossedIcon } from '@/components/ui/icons/CrossedIcon';
 import { cn } from '@/lib/utils';
 import { CricketGameType } from '@/packages/cricket-game';
+import { TriangleLeftIcon } from '@radix-ui/react-icons';
 
 const getHitCountIcon = (count: number) => {
   if (count === 0) {
@@ -60,7 +61,7 @@ export const ScoresTable = ({ game }: ScoresTableProps) => {
         <TableRow>
           <TableHead className="p-0">Team</TableHead>
           {game.numbers.map((number) => (
-            <TableHead className="min-w-10 p-0 text-center" key={number}>
+            <TableHead className="w-0 p-0 text-center" key={number}>
               {number === 25 ? 'bull' : number}
             </TableHead>
           ))}
@@ -68,30 +69,38 @@ export const ScoresTable = ({ game }: ScoresTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {game.teams.map((team) => (
-          <TableRow key={team.name} className="h-12">
-            <TableCell
-              title={team.name}
-              className="text-overflow-ellipsis max-w-14 p-0 sm:w-full"
-            >
-              <span
-                className={cn('mr-2', {
-                  'font-bold': currentTeam.name === team.name
-                })}
-              >
-                {team.name}
-              </span>
-            </TableCell>
-            {game.numbers.map((num) => (
-              <TableCell key={num} className="w-18 text-center sm:min-w-20">
-                <div className="grid max-w-full items-center justify-center">
-                  {getHitCountIcon(team.hitCount[num])}
+        {game.teams.map((team) => {
+          const isTeamPlaying = currentTeam.name === team.name;
+          return (
+            <TableRow key={team.name} className="h-12">
+              <TableCell title={team.name} className="p-0 w-14 min-w-14">
+                <div className="grid grid-cols-[1fr_auto] items-center p-0 sm:w-full">
+                  <span
+                    className={cn('text-overflow-ellipsis', {
+                      'font-bold': isTeamPlaying
+                    })}
+                  >
+                    {team.name}
+                  </span>
+                  {isTeamPlaying ? (
+                    <TriangleLeftIcon className="w-4 h-4" />
+                  ) : null}
                 </div>
               </TableCell>
-            ))}
-            <TableCell className="w-18 text-right">{team.points}</TableCell>
-          </TableRow>
-        ))}
+              {game.numbers.map((num) => (
+                <TableCell
+                  key={num}
+                  className="w-10 min-w-10 text-center sm:min-w-20 p-0"
+                >
+                  <div className="grid max-w-full items-center justify-center">
+                    {getHitCountIcon(team.hitCount[num])}
+                  </div>
+                </TableCell>
+              ))}
+              <TableCell className="w-18 text-right">{team.points}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
       <TableFooter className="bg-transparent">
         <TableRow>

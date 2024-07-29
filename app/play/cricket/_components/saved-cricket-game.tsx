@@ -11,7 +11,7 @@ type SavedCricketGameProps = {
 };
 
 export const SavedCricketGame = ({ id }: SavedCricketGameProps) => {
-  const game = cricketGameSaver.getGame(id);
+  const game = cricketGameSaver.getGameByIdAndType(id, 'cricket');
 
   if (!game) {
     return (

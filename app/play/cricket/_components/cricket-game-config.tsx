@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form';
 
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { cricketConfigSchema } from '@/schema/cricket-config.schema';
+import { cricketConfigSchema } from '@/schema/games-config.schema';
 import { Heading } from '@/components/ui/heading';
 import { MultiSelect } from '@/components/ui/multiselect';
 import { useUserTeams } from '../../use-user-teams';
@@ -121,7 +121,7 @@ export const CricketGameConfig = ({
             name="teams"
             render={({ field: { onChange, value, ...rest } }) => (
               <FormItem>
-                <FormLabel>Select Teams</FormLabel>
+                <FormLabel>Teams</FormLabel>
                 <MultiSelect
                   selected={value.map((team) => team.name)}
                   options={allTeams.map((team) => ({
@@ -131,9 +131,13 @@ export const CricketGameConfig = ({
                       .join(', ')})`
                   }))}
                   onChange={(value) => {
-                    onChange(
-                      allTeams.filter((team) => value.includes(team.name))
-                    );
+                    const newSelectedTeams = value
+                      .map((teamName) =>
+                        allTeams.find((t) => t.name === teamName)
+                      )
+                      .filter(Boolean);
+
+                    onChange(newSelectedTeams);
                   }}
                   {...rest}
                   className="sm:w-[510px]"

@@ -17,7 +17,8 @@ const config: Config = {
     // 🧑🏻‍🔧 resolve react module with the next.js inset one.
     react: 'next/dist/compiled/react/cjs/react.development.js',
     '^@/(.*)$': '<rootDir>/src/$1'
-  }
+  },
+  modulePathIgnorePatterns: ['__mocks__']
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

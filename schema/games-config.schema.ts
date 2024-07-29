@@ -1,4 +1,5 @@
-import * as z from 'zod';
+import { gameModes } from '@/packages/zero-one';
+import { z, ZodType } from 'zod';
 
 export const cricketConfigSchema = z
   .object({
@@ -31,3 +32,36 @@ export const cricketConfigSchema = z
       });
     }
   });
+
+export const zeroOneConfigSchema = z.object({
+  type: z.enum(gameModes),
+  sets: z.preprocess(
+    Number,
+    z
+      .number()
+      .min(1, { message: 'Atleast one set needs to be played' })
+      .max(20, { message: 'Maximum 20 sets allowed' })
+  ),
+  legs: z.preprocess(
+    Number,
+    z
+      .number()
+      .min(1, { message: 'Atleast one leg needs to be played' })
+      .max(20, { message: 'Maximum 20 legs allowed' })
+  ),
+  doubleOut: z.boolean(),
+  teams: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string({ required_error: 'Please enter a team name' }),
+        players: z.array(
+          z.object({
+            id: z.string().or(z.null()).optional(),
+            name: z.string({ required_error: 'Please enter a player name' })
+          })
+        )
+      })
+    )
+    .min(1, 'Minimum 1 team required')
+});

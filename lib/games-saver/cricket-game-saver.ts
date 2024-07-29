@@ -1,17 +1,44 @@
 import { storage } from '@/lib/local-storage';
 import { CricketGameType } from '@/packages/cricket-game';
+import { ZeroOneGameType } from '@/packages/zero-one/types';
+
+const LOCAL_STORAGE_KEY = 'saved-games';
+const SAVED_GAME_TYPES = ['cricket', '01'] as const;
 
 type SavedCricketGame = Omit<CricketGameType, 'closedNumbers'> & {
   closedNumbers: number[];
 };
+type SavedZeroOneGame = ZeroOneGameType;
 
-const LOCAL_STORAGE_KEY = 'cricket-games';
+type StorageSavedGame =
+  | {
+      type: 'cricket';
+      game: SavedCricketGame;
+    }
+  | {
+      type: '01';
+      game: SavedZeroOneGame;
+    };
 
-function savedGameToCricketGame(savedGame: SavedCricketGame) {
+type SavedGameType = (typeof SAVED_GAME_TYPES)[number];
+
+type SavedCricketGameTypeMap = {
+  cricket: CricketGameType;
+  '01': ZeroOneGameType;
+};
+
+function savedGameMapper({ type, game }: StorageSavedGame) {
+  if (type === '01') {
+    return { type, game };
+  }
+
   return {
-    ...savedGame,
-    closedNumbers: new Set(savedGame.closedNumbers)
-  } as CricketGameType;
+    type,
+    game: {
+      ...game,
+      closedNumbers: new Set(game.closedNumbers)
+    }
+  };
 }
 
 function cricketGameToSavedGame(game: CricketGameType) {
@@ -21,15 +48,25 @@ function cricketGameToSavedGame(game: CricketGameType) {
   } as SavedCricketGame;
 }
 
-function saveGame(game: CricketGameType) {
-  const gameCopy = cricketGameToSavedGame(game);
+export type SavedGame =
+  | {
+      type: 'cricket';
+      game: CricketGameType;
+    }
+  | {
+      type: '01';
+      game: ZeroOneGameType;
+    };
+
+function saveGame({ type, game }: SavedGame) {
+  const gameDto = type === '01' ? game : cricketGameToSavedGame(game);
 
   let currectCricketGames =
-    storage.getValue<Array<SavedCricketGame>>(LOCAL_STORAGE_KEY) || [];
+    storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || [];
 
   currectCricketGames = [
-    gameCopy,
-    ...currectCricketGames.filter((g) => g.id !== game.id)
+    { type, game: gameDto } as StorageSavedGame,
+    ...currectCricketGames.filter((g) => g.game.id !== game.id)
   ];
 
   storage.setValue(LOCAL_STORAGE_KEY, JSON.stringify(currectCricketGames));
@@ -37,12 +74,12 @@ function saveGame(game: CricketGameType) {
 
 function getSavedGames() {
   return (
-    storage.getValue<Array<SavedCricketGame>>(LOCAL_STORAGE_KEY) || []
-  ).map(savedGameToCricketGame);
+    storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || []
+  ).map(savedGameMapper) as SavedGame[];
 }
 
 function getGame(id: string) {
-  const savedGame = getSavedGames().find((g) => g.id === id);
+  const savedGame = getSavedGames().find((g) => g.game.id === id);
   if (!savedGame) {
     return null;
   }
@@ -51,20 +88,41 @@ function getGame(id: string) {
 }
 
 function removeGame(id: string) {
-  const allGames = storage.getValue<Array<SavedCricketGame>>(LOCAL_STORAGE_KEY);
+  const allGames = storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY);
   if (allGames === null) {
     return;
   }
 
   storage.setValue(
     LOCAL_STORAGE_KEY,
-    JSON.stringify(allGames.filter((g) => g.id !== id))
+    JSON.stringify(allGames.filter((g) => g.game.id !== id))
   );
+}
+
+function getGameByIdAndType(
+  id: string,
+  type: 'cricket'
+): CricketGameType | null;
+function getGameByIdAndType(id: string, type: '01'): ZeroOneGameType | null;
+function getGameByIdAndType(
+  id: string,
+  type: SavedGameType
+): CricketGameType | ZeroOneGameType | null {
+  let savedGame = getSavedGames().find(
+    (g) => g.game.id === id && g.type === type
+  )?.game;
+
+  if (!savedGame) {
+    return null;
+  }
+
+  return savedGame;
 }
 
 export const cricketGameSaver = {
   saveGame,
   getSavedGames,
   getGame,
+  getGameByIdAndType,
   removeGame
 };

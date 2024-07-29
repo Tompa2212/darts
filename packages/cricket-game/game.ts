@@ -6,7 +6,7 @@ import {
   defaultNumbers
 } from './helpers';
 import { CricketStatisticGenerator } from './statistic-generator';
-import { Game, Team, ThrownNumber } from './types';
+import { Team, TeamWithScore, ThrownNumber } from './types';
 import { CricketGameValidator } from './validator';
 import { v4 as uuidv4 } from 'uuid';
 import { CricketGameType } from '.';
@@ -20,33 +20,33 @@ export type CricketGameInitParams =
       numbers?: number[];
       maxRounds: number;
     }
-  | { game: Game };
+  | { game: CricketGameType };
 
 export class CricketGame {
-  #game: Game;
-  #undoStack: Game[] = [];
-  #redoStack: Game[] = [];
+  private _game: CricketGameType;
+  #undoStack: CricketGameType[] = [];
+  #redoStack: CricketGameType[] = [];
 
   #statisticsGenerator = new CricketStatisticGenerator();
 
   constructor(params: CricketGameInitParams) {
     if ('game' in params) {
-      this.#game = params.game;
+      this._game = params.game;
     } else {
-      this.#game = this.createGame(params);
+      this._game = this.createGame(params);
     }
   }
 
   get game() {
-    return this.#game;
+    return this._game;
   }
 
   get canUndo() {
-    return this.#undoStack.length > 0 && !this.#game.isFinished;
+    return this.#undoStack.length > 0 && !this._game.isFinished;
   }
 
   get canRedo() {
-    return this.#redoStack.length > 0 && !this.#game.isFinished;
+    return this.#redoStack.length > 0 && !this._game.isFinished;
   }
 
   get currentTeam() {
@@ -56,11 +56,11 @@ export class CricketGame {
   throwDart(thrownNumber: ThrownNumber) {
     const { number, multiplier } = thrownNumber;
 
-    if (!CricketGameValidator.canThrowDart(this.#game, thrownNumber)) {
+    if (!CricketGameValidator.canThrowDart(this._game, thrownNumber)) {
       return;
     }
 
-    const newState = structuredClone(this.#game);
+    const newState = structuredClone(this._game);
     const team = this.getCurrentTeam(newState);
     const teamPointsBeforeThrow = team.points;
 
@@ -95,22 +95,22 @@ export class CricketGame {
     newState.currentTurnPoints =
       newState.currentTurnPoints + (team.points - teamPointsBeforeThrow);
 
-    this.#game = newState;
+    this._game = newState;
   }
 
   nextPlayer() {
-    this.#statisticsGenerator.calculateTeamStats(this.#game);
-    this.#undoStack.push(structuredClone(this.#game));
+    this.#statisticsGenerator.calculateTeamStats(this._game);
+    this.#undoStack.push(structuredClone(this._game));
     this.#redoStack = [];
     this.__nextPlayer();
   }
 
   private __nextPlayer() {
-    if (this.#game.isFinished) {
+    if (this._game.isFinished) {
       return;
     }
 
-    const newGame = structuredClone(this.#game);
+    const newGame = structuredClone(this._game);
 
     newGame.currentRoundTurns++;
     const isNextRound = newGame.currentRoundTurns > newGame.teams.length;
@@ -119,13 +119,13 @@ export class CricketGame {
       newGame.currentRoundTurns = 1;
     }
 
-    const [nextTeamIdx, nextPlayerIdx] = this.getNextTeamAndPlayerIdx(newGame);
-
     if (checkIsFinished(newGame)) {
       return this.setWinner(newGame);
     }
 
-    this.#game = {
+    const [nextTeamIdx, nextPlayerIdx] = this.getNextTeamAndPlayerIdx(newGame);
+
+    this._game = {
       ...newGame,
       thrownDarts: [],
       currentTeam: newGame.teams[nextTeamIdx],
@@ -139,7 +139,7 @@ export class CricketGame {
     const round = game.currentRound;
     const playedTurns = game.currentRoundTurns;
 
-    const nextPlayer = this.roundRobin(round - 1, playedTurns - 1);
+    const nextPlayer = this.roundRobin(round - 1, playedTurns - 1, game.teams);
     const nextTeamIdx = teams.findIndex((t) =>
       t.players.find((p) => p.name === nextPlayer.name)
     );
@@ -150,10 +150,8 @@ export class CricketGame {
     return [nextTeamIdx, nextPlayerIdx];
   }
 
-  private roundRobin(round: number, turn: number) {
-    const teamPlayers = structuredClone(
-      this.#game.teams.map((team) => team.players)
-    );
+  private roundRobin(round: number, turn: number, teams: TeamWithScore[]) {
+    const teamPlayers = structuredClone(teams.map((team) => team.players));
     const totalTeams = teamPlayers.length;
     const currTeamLength = teamPlayers[turn % totalTeams].length;
 
@@ -161,15 +159,15 @@ export class CricketGame {
   }
 
   undoThrow() {
-    if (this.#game.isFinished) {
+    if (this._game.isFinished) {
       return;
     }
 
-    if (this.#game.thrownDarts.length === 0) {
+    if (this._game.thrownDarts.length === 0) {
       return;
     }
 
-    const newState = structuredClone(this.#game);
+    const newState = structuredClone(this._game);
     const team = this.getCurrentTeam(newState);
     const teamPointsBeforeUndo = team.points;
 
@@ -195,11 +193,11 @@ export class CricketGame {
       0
     );
 
-    this.#game = newState;
+    this._game = newState;
   }
 
   replayGame() {
-    const newTeams = this.#game.teams.map((team) => {
+    const newTeams = this._game.teams.map((team) => {
       const players = [...team.players];
 
       // change order of players on each replay
@@ -212,7 +210,7 @@ export class CricketGame {
         id: team.id,
         name: team.name,
         players,
-        hitCount: createScores(this.#game.numbers),
+        hitCount: createScores(this._game.numbers),
         points: 0
       };
     });
@@ -225,30 +223,30 @@ export class CricketGame {
 
     this.#undoStack = [];
     this.#redoStack = [];
-    this.#game = this.createGame({
+    this._game = this.createGame({
       teams: newTeams,
-      useRandomNums: this.#game.isRandomNumbers,
-      numbers: this.#game.numbers,
-      maxRounds: this.#game.maxRounds
+      useRandomNums: this._game.isRandomNumbers,
+      numbers: this._game.numbers,
+      maxRounds: this._game.maxRounds
     });
   }
 
   undoTurn() {
-    if (this.#undoStack.length === 0 || this.#game.isFinished) {
+    if (this.#undoStack.length === 0 || this._game.isFinished) {
       return;
     }
 
-    this.#redoStack.push(structuredClone(this.#game));
-    this.#game = this.#undoStack.pop() as Game;
+    this.#redoStack.push(structuredClone(this._game));
+    this._game = this.#undoStack.pop() as CricketGameType;
     this.clearThrows();
   }
 
   redoTurn() {
-    if (this.#redoStack.length === 0 || this.#game.isFinished) {
+    if (this.#redoStack.length === 0 || this._game.isFinished) {
       return;
     }
-    this.#undoStack.push(structuredClone(this.#game));
-    this.#game = this.#redoStack.pop() as Game;
+    this.#undoStack.push(structuredClone(this._game));
+    this._game = this.#redoStack.pop() as CricketGameType;
   }
 
   private createGame({
@@ -261,7 +259,7 @@ export class CricketGame {
     useRandomNums: boolean;
     numbers?: number[];
     maxRounds: number;
-  }): Game {
+  }): CricketGameType {
     if (useRandomNums) {
       numbers = createRandomNums();
     } else {
@@ -283,7 +281,7 @@ export class CricketGame {
       points: 0
     }));
 
-    const game: Game = {
+    const game: CricketGameType = {
       id: uuidv4(),
       teams: teamsWithScore,
       currentTeam: teamsWithScore[0],
@@ -304,7 +302,7 @@ export class CricketGame {
   }
 
   private setWinner(game?: CricketGameType) {
-    game = game || this.#game;
+    game = game || this._game;
 
     const totalPointsTeams = game.teams.map((team) => {
       let points = team.points;
@@ -323,25 +321,25 @@ export class CricketGame {
 
     const winner = totalPointsTeams.toSorted((a, b) => b.points - a.points)[0];
 
-    this.#game = {
+    this._game = {
       ...game,
       teams: totalPointsTeams,
       winner,
       isFinished: true
     };
 
-    return this.#game;
+    return this._game;
   }
 
   private clearThrows() {
-    while (this.#game.thrownDarts.length) {
+    while (this._game.thrownDarts.length) {
       this.undoThrow();
     }
   }
 
-  private getCurrentTeam(game?: Game) {
+  private getCurrentTeam(game?: CricketGameType) {
     if (!game) {
-      game = this.#game;
+      game = this._game;
     }
 
     return game.currentTeam;

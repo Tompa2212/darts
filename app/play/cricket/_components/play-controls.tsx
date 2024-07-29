@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@/components/ui/icon';
 import { ThrownNumber } from '@/packages/cricket-game/types';
 import { ThrowDartButton } from './throw-dart-button';

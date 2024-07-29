@@ -54,14 +54,14 @@ export const CricketGame = (props: CricketGameProps) => {
         <div className="flex flex-1 flex-col justify-between lg:justify-normal space-y-4 lg:space-y-8">
           <ScoresTable game={game} />
           <div>
-            <div className="flex items-center gap-4 lg:mb-4">
-              <div className="mb-4 border-b rounded-md w-fit p-2">
-                <p className="text-sm font-semibold">
+            <div className="grid grid-cols-2 items-center gap-4 lg:mb-4">
+              <div className="mb-4 border-b rounded-md p-2 text-center">
+                <p className="font-semibold text-lg">
                   Thrown Darts: <span>{game.thrownDarts.length}</span>
                 </p>
               </div>
-              <div className="mb-4 border-b rounded-md w-fit p-2">
-                <p className="text-sm font-semibold">
+              <div className="mb-4 border-b rounded-md p-2 text-center">
+                <p className="font-semibold text-lg">
                   Points: <span>{game.currentTurnPoints}</span>
                 </p>
               </div>

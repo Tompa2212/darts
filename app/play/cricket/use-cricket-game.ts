@@ -44,7 +44,7 @@ export const useCricketGame = (params: CricketGameInit) => {
           saveGameToDb({ ...cricketGame.current.game, winner }, 'cricket');
           removeGame(cricketGame.current.game.id);
         } else {
-          saveGame(cricketGame.current.game);
+          saveGame({ type: 'cricket', game: cricketGame.current.game });
         }
       };
 

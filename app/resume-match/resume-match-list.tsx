@@ -37,7 +37,7 @@ function ResumeMatchList() {
     replace(`${pathname}?${params.toString()}`);
   }
 
-  const filteredGames = games.filter((game) => {
+  const filteredGames = games.filter(({ game }) => {
     const search = teamSearch || '';
     return game.teams.some((team) =>
       team.name.toLowerCase().includes(search.toLowerCase())
@@ -98,10 +98,10 @@ function ResumeMatchList() {
           className="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 gap-4"
         >
           <AnimatePresence>
-            {filteredGames.map((game) => (
+            {filteredGames.map((savedGame) => (
               <ResumeMatchCard
-                key={game.id}
-                game={game}
+                key={savedGame.game.id}
+                savedGame={savedGame}
                 onDeleteGame={handleDeleteGame}
               />
             ))}
