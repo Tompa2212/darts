@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,6 +20,8 @@ import { MultiSelect } from '@/components/ui/multiselect';
 import Link from 'next/link';
 import { allNums } from '@/packages/cricket-game/helpers';
 import { TeamsSelector } from '../../_components/teams-selector';
+import TeamsReorder from '../../_components/teams-reorder/teams-reorder';
+import { cn } from '@/lib/utils';
 
 type ConfigValues = z.infer<typeof cricketConfigSchema>;
 
@@ -128,14 +130,17 @@ export const CricketGameConfig = ({
                   {...rest}
                 />
                 <FormMessage />
-                <FormDescription className="text-sm">
+                <div className="flex items-center gap-2 text-sm">
+                  <TeamsReorder teams={value} onReorder={onChange} />
                   <Link
-                    className="text-blue-500 underline underline-offset-1"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'sm' })
+                    )}
                     href="/teams"
                   >
                     Create New Teams
                   </Link>
-                </FormDescription>
+                </div>
               </FormItem>
             )}
           />

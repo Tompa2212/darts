@@ -107,7 +107,6 @@ describe('ZeroOneGame', () => {
 
     game.enterScore(0);
 
-    console.log(game.game.currentPlayer);
     expect(game.game.currentPlayer).toEqual(PLAYER_2);
   });
 

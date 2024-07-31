@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -26,6 +26,9 @@ import { gameModes } from '@/packages/zero-one';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SelectValue } from '@/components/ui/select';
+import { TeamsSelector } from '../../_components/teams-selector';
+import TeamsReorder from '../../_components/teams-reorder/teams-reorder';
+import { cn } from '@/lib/utils';
 
 type ConfigValues = z.infer<typeof zeroOneConfigSchema>;
 
@@ -112,35 +115,24 @@ export function ZeroOneGameConfig({
             render={({ field: { onChange, value, ...rest } }) => (
               <FormItem>
                 <FormLabel>Teams</FormLabel>
-                <MultiSelect
-                  selected={value.map((team) => team.name)}
-                  options={allTeams.map((team) => ({
-                    value: team.name,
-                    label: `${team.name} - (${team.players
-                      .map((p) => p?.user?.username ?? p.name)
-                      .join(', ')})`
-                  }))}
-                  onChange={(value) => {
-                    const newSelectedTeams = value
-                      .map((teamName) =>
-                        allTeams.find((t) => t.name === teamName)
-                      )
-                      .filter(Boolean);
-
-                    onChange(newSelectedTeams);
-                  }}
-                  {...rest}
+                <TeamsSelector
+                  value={form.getValues('teams')}
+                  onChange={onChange}
                   className="sm:w-[510px]"
+                  {...rest}
                 />
                 <FormMessage />
-                <FormDescription className="text-sm">
+                <div className="flex items-center gap-2 text-sm">
+                  <TeamsReorder teams={value} onReorder={onChange} />
                   <Link
-                    className="text-blue-500 underline underline-offset-1"
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'sm' })
+                    )}
                     href="/teams"
                   >
                     Create New Teams
                   </Link>
-                </FormDescription>
+                </div>
               </FormItem>
             )}
           />

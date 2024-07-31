@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { CricketGameInit } from '@/types/client/cricket';
 import FinishedGameDialog from './finished-game-dialog';
+import CricketGameInfo from './cricket-game-info';
 
 type CricketGameProps = CricketGameInit;
 
@@ -54,18 +55,7 @@ export const CricketGame = (props: CricketGameProps) => {
         <div className="flex flex-1 flex-col justify-between lg:justify-normal space-y-4 lg:space-y-8">
           <ScoresTable game={game} />
           <div>
-            <div className="grid grid-cols-2 items-center gap-4 lg:mb-4">
-              <div className="mb-4 border-b rounded-md p-2 text-center">
-                <p className="font-semibold text-lg">
-                  Thrown Darts: <span>{game.thrownDarts.length}</span>
-                </p>
-              </div>
-              <div className="mb-4 border-b rounded-md p-2 text-center">
-                <p className="font-semibold text-lg">
-                  Points: <span>{game.currentTurnPoints}</span>
-                </p>
-              </div>
-            </div>
+            <CricketGameInfo game={game} />
             <PlayControls
               game={game}
               onThrowDart={(thrownDart) => {

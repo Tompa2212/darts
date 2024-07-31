@@ -65,5 +65,3 @@ export const zeroOneConfigSchema = z.object({
     )
     .min(1, 'Minimum 1 team required')
 });
-
-export type ConfigTeams = z.infer<typeof cricketConfigSchema>['teams'];
