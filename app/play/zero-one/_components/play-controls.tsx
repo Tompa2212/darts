@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 import { ZeroOneGameType } from '@/packages/zero-one';
 import React from 'react';
+import { toast } from 'sonner';
 
 type PlayControlsProps = {
   game: ZeroOneGameType;
@@ -24,19 +25,24 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
   }
 
   function handleEnterScore() {
-    const message = onEnterScore(+score);
-
+    const message = onEnterScore(Number(score));
     if (!message) {
       setScore('');
     } else if (message.error) {
-      alert(message.error);
+      toast.error(message.error, {
+        position: 'top-center',
+        description: 'Invalid score was entered. Please try again.',
+        duration: 2000
+      });
     }
   }
 
+  const scoreDisplay = score !== '' ? score : game.currentTeam.points;
+
   return (
     <div>
-      <Badge className="mb-4 rounded-2xl text-lg justify-center w-20 h-10">
-        {score || 0}
+      <Badge className="mb-4 rounded-xl text-2xl justify-center w-32 h-12">
+        {scoreDisplay}
       </Badge>
       <div className="grid grid-cols-3 gap-1 sm:flex sm:flex-wrap sm:gap-3">
         {nums.map((num, idx, arr) => (

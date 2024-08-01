@@ -37,7 +37,7 @@ const Providers = ({ children }: Props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster />
+      <Toaster richColors />
       {children}
     </QueryClientProvider>
   );

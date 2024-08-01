@@ -7,7 +7,8 @@ import { useCallback, useRef, useState } from 'react';
 type Action =
   | { type: 'ENTER_SCORE'; payload: number }
   | { type: 'UNDO_TURN' }
-  | { type: 'REDO_TURN' };
+  | { type: 'REDO_TURN' }
+  | { type: 'REPLAY_GAME' };
 
 export const useZeroOneGame = (params: ZeroOneGameInit) => {
   const zeroOneGame = useRef(new ZeroOneGame(params));
@@ -27,6 +28,8 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
       case 'REDO_TURN':
         ref.redoTurn();
         break;
+      case 'REPLAY_GAME':
+        ref.replayGame();
     }
 
     setGame(ref.game);
@@ -40,6 +43,7 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
   const redoTurn = () => dispatcher({ type: 'REDO_TURN' });
   const enterScore = (score: number) =>
     dispatcher({ type: 'ENTER_SCORE', payload: score });
+  const replayGame = () => dispatcher({ type: 'REPLAY_GAME' });
 
   return {
     game,
@@ -49,6 +53,7 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
     isFinished: game.isFinished,
     undoTurn,
     redoTurn,
-    enterScore
+    enterScore,
+    replayGame
   };
 };
