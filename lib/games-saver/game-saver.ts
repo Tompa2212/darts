@@ -119,7 +119,7 @@ function getGameByIdAndType(
   return savedGame;
 }
 
-export const cricketGameSaver = {
+export const gameSaver = {
   saveGame,
   getSavedGames,
   getGame,

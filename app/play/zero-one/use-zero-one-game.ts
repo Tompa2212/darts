@@ -1,5 +1,6 @@
 'use client';
 
+import { gameSaver } from '@/lib/games-saver/game-saver';
 import { ZeroOneGame } from '@/packages/zero-one';
 import { ZeroOneGameInit } from '@/types/client/zero-one';
 import { useCallback, useRef, useState } from 'react';
@@ -14,30 +15,47 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
   const zeroOneGame = useRef(new ZeroOneGame(params));
   const [game, setGame] = useState(zeroOneGame.current.game);
 
-  const dispatcher = useCallback((action: Action) => {
-    const ref = zeroOneGame.current;
-    let returnValue;
+  const { removeGame, saveGame } = gameSaver;
 
-    switch (action.type) {
-      case 'ENTER_SCORE':
-        returnValue = ref.enterScore(action.payload);
-        break;
-      case 'UNDO_TURN':
-        ref.undoTurn();
-        break;
-      case 'REDO_TURN':
-        ref.redoTurn();
-        break;
-      case 'REPLAY_GAME':
-        ref.replayGame();
-    }
+  const dispatcher = useCallback(
+    (action: Action) => {
+      const updateGame = () => {
+        setGame(zeroOneGame.current.game);
 
-    setGame(ref.game);
+        const { isFinished, winner } = zeroOneGame.current.game;
+        if (isFinished && winner) {
+          removeGame(zeroOneGame.current.game.id);
+        } else {
+          saveGame({ type: '01', game: zeroOneGame.current.game });
+        }
+      };
 
-    return returnValue;
-  }, []);
+      const ref = zeroOneGame.current;
+      let returnValue;
 
-  const { canUndo, canRedo, currentTeam } = zeroOneGame.current;
+      switch (action.type) {
+        case 'ENTER_SCORE':
+          returnValue = ref.enterScore(action.payload);
+          break;
+        case 'UNDO_TURN':
+          ref.undoTurn();
+          break;
+        case 'REDO_TURN':
+          ref.redoTurn();
+          break;
+        case 'REPLAY_GAME':
+          ref.replayGame();
+      }
+
+      updateGame();
+
+      return returnValue;
+    },
+    [saveGame, removeGame]
+  );
+
+  const { canUndo, canRedo, currentTeam, teamsOutshotCombinations } =
+    zeroOneGame.current;
 
   const undoTurn = () => dispatcher({ type: 'UNDO_TURN' });
   const redoTurn = () => dispatcher({ type: 'REDO_TURN' });
@@ -51,6 +69,7 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
     canRedo,
     currentTeam,
     isFinished: game.isFinished,
+    teamsOutshotCombinations,
     undoTurn,
     redoTurn,
     enterScore,

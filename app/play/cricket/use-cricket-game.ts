@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 import { CricketGame } from '@/packages/cricket-game/game';
 import { ThrownNumber } from '@/packages/cricket-game/types';
 import { CricketGameInit } from '@/types/client/cricket';
-import { cricketGameSaver } from '@/lib/games-saver/cricket-game-saver';
+import { gameSaver } from '@/lib/games-saver/game-saver';
 import saveGameToDb from '@/actions/games/save-game';
 
 type Action =
@@ -32,7 +32,7 @@ export const useCricketGame = (params: CricketGameInit) => {
   const cricketGame = useRef(new CricketGame(params));
   const [game, setGame] = useState(cricketGame.current.game);
 
-  const { removeGame, saveGame } = cricketGameSaver;
+  const { removeGame, saveGame } = gameSaver;
 
   const dispatcher = useCallback(
     (action: Action) => {

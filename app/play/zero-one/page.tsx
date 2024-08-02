@@ -2,12 +2,25 @@
 
 import React from 'react';
 import type { ZeroOneGameConfig as ZeroOneGameConfigType } from '@/types/client/zero-one';
-import ZeroOneGame from './_components/zero-one-game';
+import { ZeroOneGame } from './_components/zero-one-game';
 import { ZeroOneGameConfig } from './_components/zero-one-game-config';
+import { useSearchParams } from 'next/navigation';
+import { SavedZeroOneGame } from './_components/saved-zero-one-game';
 
 export default function PlayZeroOnePage() {
   const [gameConfig, setGameConfig] =
     React.useState<ZeroOneGameConfigType | null>(null);
+
+  const searchParams = useSearchParams();
+  const gameId = searchParams.get('gameId');
+
+  if (gameId) {
+    return (
+      <div className="flex-1 xl:container">
+        <SavedZeroOneGame id={gameId} />
+      </div>
+    );
+  }
 
   if (!gameConfig) {
     return (

@@ -1,6 +1,14 @@
-import { Team, TeamWithScore, ZeroOneGameType, ZeroOneType } from './types';
+import {
+  Dart,
+  Team,
+  TeamsOutshotCombinations,
+  TeamWithScore,
+  ZeroOneGameType,
+  ZeroOneType
+} from './types';
 import { v4 as uuidv4 } from 'uuid';
 import { ZeroOneGameValidator } from './validator';
+import { OutshotCalculator } from './outshot-calc';
 
 type ConfiguredZeroOneGameType = {
   teams: Team[];
@@ -18,6 +26,7 @@ export class ZeroOneGame {
   private _game: ZeroOneGameType;
   private _undoStack: ZeroOneGameType[] = [];
   private _redoStack: ZeroOneGameType[] = [];
+  private _teamOutshotCombinations: TeamsOutshotCombinations = {};
 
   get game() {
     return this._game;
@@ -33,6 +42,29 @@ export class ZeroOneGame {
 
   get currentTeam() {
     return this.getCurrentTeam();
+  }
+
+  get teamsOutshotCombinations() {
+    const data = this._game.teams.reduce((acc, team) => {
+      const savedPoints = this._teamOutshotCombinations[team.id]?.points;
+      const savedCombinations =
+        this._teamOutshotCombinations[team.id]?.combinations;
+
+      acc[team.id] = {
+        points: team.points,
+        combinations:
+          team.points !== savedPoints
+            ? OutshotCalculator.findOuthsotCombinations(team.points, {
+                doubleOut: this.game.doubleOut
+              }).slice(0, 3)
+            : savedCombinations
+      };
+
+      return acc;
+    }, {} as TeamsOutshotCombinations);
+
+    this._teamOutshotCombinations = data;
+    return data;
   }
 
   constructor(params: ZeroOneGameTypeParams) {
@@ -264,6 +296,7 @@ export class ZeroOneGame {
 
     this._undoStack = [];
     this._redoStack = [];
+    this._teamOutshotCombinations = {};
     this._game = this.createGame({
       teams: newTeams,
       type: this._game.type,

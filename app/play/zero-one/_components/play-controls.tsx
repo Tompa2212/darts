@@ -38,10 +38,16 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
   }
 
   const scoreDisplay = score !== '' ? score : game.currentTeam.points;
+  const isWritingScore = score !== '';
 
   return (
     <div>
-      <Badge className="mb-4 rounded-xl text-2xl justify-center w-32 h-12">
+      <Badge
+        className={cn(
+          'mb-4 rounded-xl text-2xl justify-center w-32 h-14',
+          isWritingScore && 'bg-green-700'
+        )}
+      >
         {scoreDisplay}
       </Badge>
       <div className="grid grid-cols-3 gap-1 sm:flex sm:flex-wrap sm:gap-3">
@@ -53,7 +59,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
             className={cn(
               arr.length - 1 === idx &&
                 'col-start-2 col-end-3 row-start-4 row-end-5',
-              'h-12'
+              'h-12 hover:bg-[#E6E4C7]'
             )}
             onClick={() => handleNumClick(num)}
           >
@@ -62,7 +68,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
         ))}
         <Button
           size="lg"
-          className="h-12"
+          className="h-12 hover:bg-[#E6E4C7]"
           variant="outline"
           onClick={handleDeleteNum}
           disabled={!score}
@@ -72,7 +78,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
         </Button>
         <Button
           variant="outline"
-          className="h-12"
+          className="h-12 hover:bg-[#E6E4C7]"
           size="lg"
           onClick={handleEnterScore}
         >

@@ -1,7 +1,7 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { cricketGameSaver } from '@/lib/games-saver/cricket-game-saver';
+import { gameSaver } from '@/lib/games-saver/game-saver';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,7 +14,7 @@ import { Icon } from '@/components/ui/icon';
 import { Label } from '@/components/ui/label';
 
 function ResumeMatchList() {
-  const [games, setGames] = useState(cricketGameSaver.getSavedGames());
+  const [games, setGames] = useState(gameSaver.getSavedGames());
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -22,8 +22,8 @@ function ResumeMatchList() {
   const teamSearch = searchParams.get('team');
 
   function handleDeleteGame(gameId: string) {
-    cricketGameSaver.removeGame(gameId);
-    setGames(cricketGameSaver.getSavedGames());
+    gameSaver.removeGame(gameId);
+    setGames(gameSaver.getSavedGames());
   }
 
   function handleSearch(value: string) {

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CricketGame } from './cricket-game';
+import { ZeroOneGame } from './zero-one-game';
 import Link from 'next/link';
 import { Heading } from '@/components/ui/heading';
 import { gameSaver } from '@/lib/games-saver/game-saver';
@@ -10,8 +10,8 @@ type SavedCricketGameProps = {
   id: string;
 };
 
-export const SavedCricketGame = ({ id }: SavedCricketGameProps) => {
-  const game = gameSaver.getGameByIdAndType(id, 'cricket');
+export const SavedZeroOneGame = ({ id }: SavedCricketGameProps) => {
+  const game = gameSaver.getGameByIdAndType(id, '01');
 
   if (!game) {
     return (
@@ -19,7 +19,7 @@ export const SavedCricketGame = ({ id }: SavedCricketGameProps) => {
         <Heading Type="h2">Game not found.</Heading>
         <p>
           Play new game{' '}
-          <Link className="text-blue-500" href="/play/cricket">
+          <Link className="text-blue-500" href="/play/zero-one">
             here
           </Link>
           .
@@ -28,5 +28,5 @@ export const SavedCricketGame = ({ id }: SavedCricketGameProps) => {
     );
   }
 
-  return <CricketGame game={game} />;
+  return <ZeroOneGame game={game} />;
 };

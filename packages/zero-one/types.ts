@@ -37,3 +37,15 @@ export type ZeroOneGameType = {
   isFinished: boolean;
   doubleOut: boolean;
 };
+
+export type Dart = {
+  value: number;
+  multiplier: number;
+};
+
+export type TeamsOutshotCombinations = {
+  [teamId: string]: {
+    points: number;
+    combinations: Dart[][];
+  };
+};

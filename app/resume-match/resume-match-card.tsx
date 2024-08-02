@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import ResumeCricketMatch from './resume-cricket-match';
-import { SavedGame } from '@/lib/games-saver/cricket-game-saver';
+import { SavedGame } from '@/lib/games-saver/game-saver';
+import ResumeZeroOneMatch from './resume-zero-one-match';
 
 type ResumeMatchCardProps = {
   savedGame: SavedGame;
@@ -21,7 +22,9 @@ export default function ResumeMatchCard({
     >
       {savedGame.type === 'cricket' ? (
         <ResumeCricketMatch game={savedGame.game} onDeleteGame={onDeleteGame} />
-      ) : null}
+      ) : (
+        <ResumeZeroOneMatch game={savedGame.game} onDeleteGame={onDeleteGame} />
+      )}
     </motion.div>
   );
 }
