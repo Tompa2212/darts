@@ -88,7 +88,7 @@ const PlayControls = ({
         ))}
         <Button
           size="lg"
-          className="h-12"
+          className="h-12 hover:bg-[#E6E4C7]"
           variant="outline"
           disabled={game.thrownDarts.length === 0}
           onClick={onUndoThrow}
@@ -98,7 +98,7 @@ const PlayControls = ({
         </Button>
         <Button
           variant="outline"
-          className="h-12"
+          className="h-12 hover:bg-[#E6E4C7]"
           size="lg"
           onClick={onFinishTurn}
         >

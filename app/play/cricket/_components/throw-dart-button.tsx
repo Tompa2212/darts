@@ -29,7 +29,7 @@ export const ThrowDartButton = ({
     <Button
       variant="outline"
       size="lg"
-      className={cn(className, 'h-12')}
+      className={cn(className, 'h-12 hover:bg-[#E6E4C7]')}
       onClick={() => onThrowDart(number)}
       disabled={disabled}
       aria-label={`Throw ${number}`}
