@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { Icon } from '@/components/ui/icon';
 import { ThrownNumber } from '@/packages/cricket-game/types';
@@ -86,27 +86,34 @@ const PlayControls = ({
             )}
           />
         ))}
-        <Button
-          size="lg"
-          className="h-12 hover:bg-[#E6E4C7]"
-          variant="outline"
+        <ControlBtn
           disabled={game.thrownDarts.length === 0}
           onClick={onUndoThrow}
           aria-label="Undo last throw"
         >
           <Icon name="Delete" className="w-6 h-6" />
-        </Button>
-        <Button
-          variant="outline"
-          className="h-12 hover:bg-[#E6E4C7]"
-          size="lg"
-          onClick={onFinishTurn}
-        >
-          Enter
-        </Button>
+        </ControlBtn>
+        <ControlBtn onClick={onFinishTurn}>Enter</ControlBtn>
       </div>
     </div>
   );
 };
 
 export default PlayControls;
+
+function ControlBtn({ children, onClick, className, ...rest }: ButtonProps) {
+  return (
+    <Button
+      variant="outline"
+      className={cn(
+        'h-12 hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground duration-75',
+        className
+      )}
+      size="lg"
+      onClick={onClick}
+      {...rest}
+    >
+      {children}
+    </Button>
+  );
+}

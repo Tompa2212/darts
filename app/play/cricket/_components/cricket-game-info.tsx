@@ -22,13 +22,13 @@ const CricketGameInfo = ({ game }: CricketGameInfoProps) => {
       .join(', ') || '/';
 
   return (
-    <div className="flex items-center gap-4 lg:mb-4">
-      <div className="mb-4 p-2 text-center grow">
+    <div className="flex items-center gap-4 lg:mb-4 py-2">
+      <div className="mb-4 text-center grow">
         <p className="font-semibold text-lg">
           Thrown Darts: <span>{thrownDartsInfo}</span>
         </p>
       </div>
-      <div className="mb-4 p-2 text-center grow">
+      <div className="mb-4 text-center grow">
         <p className="font-semibold text-lg">
           Points: <span>{game.currentTurnPoints}</span>
         </p>

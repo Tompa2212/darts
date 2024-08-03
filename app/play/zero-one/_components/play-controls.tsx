@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 import { ZeroOneGameType } from '@/packages/zero-one';
@@ -52,39 +52,43 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
       </Badge>
       <div className="grid grid-cols-3 gap-1 sm:flex sm:flex-wrap sm:gap-3">
         {nums.map((num, idx, arr) => (
-          <Button
+          <ControlBtn
             key={num}
-            variant="outline"
-            size="lg"
             className={cn(
               arr.length - 1 === idx &&
-                'col-start-2 col-end-3 row-start-4 row-end-5',
-              'h-12 hover:bg-[#E6E4C7]'
+                'col-start-2 col-end-3 row-start-4 row-end-5'
             )}
             onClick={() => handleNumClick(num)}
           >
             {num}
-          </Button>
+          </ControlBtn>
         ))}
-        <Button
-          size="lg"
-          className="h-12 hover:bg-[#E6E4C7]"
-          variant="outline"
+        <ControlBtn
           onClick={handleDeleteNum}
           disabled={!score}
           aria-label="Undo last throw"
         >
           <Icon name="Delete" className="w-6 h-6" />
-        </Button>
-        <Button
-          variant="outline"
-          className="h-12 hover:bg-[#E6E4C7]"
-          size="lg"
-          onClick={handleEnterScore}
-        >
-          Enter
-        </Button>
+        </ControlBtn>
+        <ControlBtn onClick={handleEnterScore}>Enter</ControlBtn>
       </div>
     </div>
+  );
+}
+
+function ControlBtn({ children, onClick, className, ...rest }: ButtonProps) {
+  return (
+    <Button
+      variant="outline"
+      className={cn(
+        'h-12 hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground duration-75',
+        className
+      )}
+      size="lg"
+      onClick={onClick}
+      {...rest}
+    >
+      {children}
+    </Button>
   );
 }
