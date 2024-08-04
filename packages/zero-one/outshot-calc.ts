@@ -29,9 +29,27 @@ export class OutshotCalculator {
     score: number,
     checkoutOptions?: CheckoutOptions
   ) {
-    const results: Dart[][] = [];
-    this.dfs(allDartsCombinations, score, [], results, checkoutOptions);
+    let validCheckoutMultipliers = [1, 2, 3];
 
+    if (checkoutOptions?.doubleOut) {
+      validCheckoutMultipliers = [2];
+    }
+    if (checkoutOptions?.mastersOut) {
+      validCheckoutMultipliers = [2, 3];
+    }
+
+    const results: Dart[][] = [];
+
+    this.dfs(
+      allDartsCombinations,
+      score,
+      [],
+      results,
+      validCheckoutMultipliers,
+      checkoutOptions
+    );
+
+    results.sort((a, b) => a.length - b.length);
     return results;
   }
 
@@ -40,17 +58,9 @@ export class OutshotCalculator {
     target: number,
     path: Dart[],
     results: Dart[][],
+    validCheckoutMultipliers: number[],
     { doubleOut = false, mastersOut = false }: CheckoutOptions = {}
   ) {
-    let validCheckoutMultipliers = [1, 2, 3];
-
-    if (doubleOut) {
-      validCheckoutMultipliers = [2];
-    }
-    if (mastersOut) {
-      validCheckoutMultipliers = [2, 3];
-    }
-
     if (
       target === 0 &&
       path.length > 0 &&
@@ -66,10 +76,17 @@ export class OutshotCalculator {
 
     for (let dart of darts) {
       path.push(dart);
-      this.dfs(darts, target - dart.value * dart.multiplier, path, results, {
-        doubleOut,
-        mastersOut
-      });
+      this.dfs(
+        darts,
+        target - dart.value * dart.multiplier,
+        path,
+        results,
+        validCheckoutMultipliers,
+        {
+          doubleOut,
+          mastersOut
+        }
+      );
       path.pop();
     }
   }
