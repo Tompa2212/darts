@@ -82,7 +82,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
             const showPlayers = team.players.length > 1;
 
             return (
-              <>
+              <React.Fragment key={team.id}>
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold text-lg">{team.name}</span>
                   <div className="space-x-1">
@@ -112,7 +112,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
                     }}
                   />
                 </RenderIf>
-              </>
+              </React.Fragment>
             );
           })}
         </ul>
