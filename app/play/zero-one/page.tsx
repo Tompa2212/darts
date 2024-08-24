@@ -16,9 +16,9 @@ export default function PlayZeroOnePage() {
 
   if (gameId) {
     return (
-      <div className="flex-1 xl:container">
+      <Container>
         <SavedZeroOneGame id={gameId} />
-      </div>
+      </Container>
     );
   }
 

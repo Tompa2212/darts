@@ -45,6 +45,7 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
           break;
         case 'REPLAY_GAME':
           ref.replayGame();
+          break;
       }
 
       updateGame();

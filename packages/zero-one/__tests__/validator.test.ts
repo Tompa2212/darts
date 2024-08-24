@@ -40,4 +40,26 @@ describe('ZeroOneGame Validator Tests', () => {
       );
     }
   });
+
+  test('it should notice when a score is bust', () => {
+    let game = new ZeroOneGame(gameSetup);
+    // team 1
+    game.enterScore(180);
+    // team 2
+    game.enterScore(180);
+
+    expect(ZeroOneGameValidator.isBust(120, game.game)).toBe(false);
+    expect(ZeroOneGameValidator.isBust(121, game.game)).toBe(false);
+    expect(ZeroOneGameValidator.isBust(125, game.game)).toBe(true);
+
+    game = new ZeroOneGame({ ...gameSetup, doubleOut: true });
+    // team 1
+    game.enterScore(180);
+    // team 2
+    game.enterScore(180);
+
+    expect(ZeroOneGameValidator.isBust(120, game.game)).toBe(true);
+    expect(ZeroOneGameValidator.isBust(121, game.game)).toBe(false);
+    expect(ZeroOneGameValidator.isBust(125, game.game)).toBe(true);
+  });
 });

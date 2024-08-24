@@ -32,7 +32,7 @@ export function ChangeUsernameForm({ user }: { user: SessionUser }) {
       <CardContent className="space-y-4">
         <form action={action} className="space-y-4">
           <div>
-            <Input type="hidden" name="userId" value={user.id} />
+            <Input type="hidden" name="userId" defaultValue={user.id} />
             <Label htmlFor="change-username">Username</Label>
             <Input
               name="username"

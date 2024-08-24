@@ -20,6 +20,7 @@ export function useMediaQuery(
     if (IS_SERVER) {
       return defaultValue;
     }
+
     return window.matchMedia(query).matches;
   };
 
@@ -27,6 +28,7 @@ export function useMediaQuery(
     if (initializeWithValue) {
       return getMatches(query);
     }
+
     return defaultValue;
   });
 

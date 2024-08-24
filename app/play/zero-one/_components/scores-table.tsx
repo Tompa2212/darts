@@ -8,18 +8,12 @@ import {
 } from '@/components/ui/table';
 import { ZeroOneGameType } from '@/packages/zero-one';
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { TeamsOutshotCombinations } from '@/packages/zero-one/types';
 
 type ScoresTableProps = {
   game: ZeroOneGameType;
-  teamsOutshotCombinations: TeamsOutshotCombinations;
 };
 
-export default function ScoresTable({
-  game,
-  teamsOutshotCombinations
-}: ScoresTableProps) {
+export default function ScoresTable({ game }: ScoresTableProps) {
   const showSets = game.sets > 1;
   const showLegs = game.legs > 1;
 

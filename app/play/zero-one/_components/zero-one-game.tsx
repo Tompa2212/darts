@@ -67,10 +67,7 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
         </div>
 
         <div className="flex flex-col justify-between flex-1 space-y-4 lg:justify-normal lg:space-y-8 justify-self-end">
-          <ScoresTable
-            game={game}
-            teamsOutshotCombinations={teamsOutshotCombinations}
-          />
+          <ScoresTable game={game} />
           <div className="space-y-4 mx-auto my-[10%]">
             <div>
               <div className="flex gap-2 flex-wrap">
