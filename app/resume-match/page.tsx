@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 
 import { Heading } from '@/components/ui/heading';
-import ResumeMatchList from './resume-match-list';
+import ResumeMatchList, { ResumeMatchListSkeleton } from './resume-match-list';
 import protectedPage from '@/lib/protected-page';
 
 export const metadata = {
@@ -14,7 +14,7 @@ export default async function ResumeMatchPage() {
   return (
     <div className="container py-4 space-y-4">
       <Heading Type="h1">Resume Saved Match</Heading>
-      <Suspense>
+      <Suspense fallback={<ResumeMatchListSkeleton />}>
         <ResumeMatchList />
       </Suspense>
     </div>

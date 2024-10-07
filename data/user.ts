@@ -1,4 +1,3 @@
-'use server';
 import db from '@/db/drizzle';
 
 export const getUserByEmail = async (email: string) => {

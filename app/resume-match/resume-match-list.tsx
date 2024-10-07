@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function ResumeMatchList() {
   const [games, setGames] = useState(gameSaver.getSavedGames());
@@ -113,3 +114,19 @@ function ResumeMatchList() {
 }
 
 export default ResumeMatchList;
+
+export const ResumeMatchListSkeleton = () => {
+  return (
+    <div className="grid md:grid-cols-2 2xl:grid-cols-3 gap-6">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="flex flex-col space-y-3">
+          <Skeleton className="h-[205px] w-full rounded-xl" />
+          <div className="space-y-2 w-full">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
