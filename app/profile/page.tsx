@@ -9,7 +9,6 @@ import { BarChart3Icon } from 'lucide-react';
 export default async function ProfilePage({
   searchParams
 }: {
-  params: { slug: string };
   searchParams: Promise<{ activeTab?: string }>;
 }) {
   const user = await getUserProfileData();

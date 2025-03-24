@@ -7,17 +7,19 @@ import { createAndAttachSessionCookie } from '@/use-cases/user/create-session-co
 import { getUserByAuth0Id } from '@/data/user';
 import { StatusCodes } from 'http-status-codes';
 
-function cleanGoogleCookies() {
-  cookies().delete('google_oauth_state');
-  cookies().delete('google_code_verifier');
+async function cleanGoogleCookies() {
+  const c = await cookies();
+  c.delete('google_oauth_state');
+  c.delete('google_code_verifier');
 }
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
-  const codeVerifier = cookies().get('google_code_verifier')?.value ?? null;
-  const storedState = cookies().get('google_oauth_state')?.value ?? null;
+  const c = await cookies();
+  const codeVerifier = c.get('google_code_verifier')?.value ?? null;
+  const storedState = c.get('google_oauth_state')?.value ?? null;
 
   cleanGoogleCookies();
 

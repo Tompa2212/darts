@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     scopes: ['openid', 'email', 'profile']
   });
 
-  cookies().set('google_oauth_state', state, {
+  (await cookies()).set('google_oauth_state', state, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     sameSite: 'lax'
   });
 
-  cookies().set('google_code_verifier', codeVerifier, {
+  (await cookies()).set('google_code_verifier', codeVerifier, {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
       callbackUrl.startsWith('/') && !callbackUrl.includes('..');
 
     if (validCallbackUrl) {
-      cookies().set('app_callback_url', callbackUrl, {
+      (await cookies()).set('app_callback_url', callbackUrl, {
         path: '/',
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
