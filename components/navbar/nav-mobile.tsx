@@ -16,6 +16,7 @@ import { usePathname } from 'next/navigation';
 import { DartIcon } from '../ui/icons/dart-icon';
 import {
   BarChart3Icon,
+  LogOutIcon,
   MenuIcon,
   PlayIcon,
   SettingsIcon,
@@ -133,7 +134,7 @@ export default function NavMobile() {
                 signout();
               }}
             >
-              <SettingsIcon
+              <LogOutIcon
                 name="LogOut"
                 className="w-4 h-4 mr-2 stroke-muted-foreground"
               />

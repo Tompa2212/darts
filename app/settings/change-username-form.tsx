@@ -22,7 +22,7 @@ export function ChangeUsernameForm({ user }: { user: SessionUser }) {
   const hasUsernameError = (state?.details?.username || []).length > 0;
 
   return (
-    <Card x-chunk="dashboard-04-chunk-1">
+    <Card className="py-4">
       <CardHeader>
         <CardTitle>Change Username</CardTitle>
         <CardDescription>
