@@ -34,7 +34,7 @@ function ResumeCricketMatch({ game, onDeleteGame }: ResumeCricketMatchProps) {
                 onDeleteGame(game.id);
               }}
             >
-              <XIcon className="stroke-red-500" />
+              <XIcon className="stroke-red-500 size-6" />
             </Button>
           </div>
           <CardDescription>Numbers: {game.numbers.join(', ')}</CardDescription>

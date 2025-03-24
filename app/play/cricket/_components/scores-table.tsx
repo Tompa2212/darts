@@ -20,14 +20,14 @@ const getHitCountIcon = (count: number) => {
   }
 
   if (count === 1) {
-    return <SlashIcon className="h-6 w-6 stroke-red-300" />;
+    return <SlashIcon className="size-6 stroke-red-300" />;
   }
 
   if (count === 2) {
-    return <CrossedIcon className="h-6 w-6 stroke-red-400 text-red-400" />;
+    return <CrossedIcon className="size-6 stroke-red-400 text-red-400" />;
   }
 
-  return <LocateFixedIcon className="h-6 w-6 stroke-red-600" />;
+  return <LocateFixedIcon className="size-6 stroke-red-600" />;
 };
 
 const getDiffToTeamWithMaxPoints = (game: CricketGameType) => {
@@ -47,11 +47,7 @@ const getDiffToTeamWithMaxPoints = (game: CricketGameType) => {
   return currTeamPoints - winningTeamPoints;
 };
 
-type ScoresTableProps = {
-  game: CricketGameType;
-};
-
-export const ScoresTable = ({ game }: ScoresTableProps) => {
+export const ScoresTable = ({ game }: { game: CricketGameType }) => {
   const pointsDiff = getDiffToTeamWithMaxPoints(game);
   const currentTeam = game.currentTeam;
 

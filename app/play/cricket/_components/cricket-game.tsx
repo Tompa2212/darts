@@ -40,7 +40,7 @@ export const CricketGame = (props: CricketGameProps) => {
               onClick={() => dispatcher({ type: 'UNDO_TURN' })}
               disabled={!canUndo}
             >
-              <UndoIcon className="h-6 w-6" />
+              <UndoIcon className="size-6" />
             </Button>
             <Button
               onClick={() => dispatcher({ type: 'REDO_TURN' })}
@@ -48,7 +48,7 @@ export const CricketGame = (props: CricketGameProps) => {
               size="icon"
               disabled={!canRedo}
             >
-              <RedoIcon className="h-6 w-6" />
+              <RedoIcon className="size-6" />
             </Button>
           </div>
         </div>

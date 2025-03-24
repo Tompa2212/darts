@@ -1,4 +1,5 @@
 'use client';
+
 import { changeUsername } from '@/actions/users/change-username';
 import { SessionUser } from '@/auth';
 import { FormError } from '@/components/form-error';

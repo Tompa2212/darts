@@ -3,7 +3,8 @@ import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
-  DrawerHeader
+  DrawerHeader,
+  DrawerTitle
 } from '@/components/ui/drawer';
 
 import React from 'react';
@@ -72,8 +73,10 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
       </DrawerTrigger>
 
       <DrawerContent className="p-4">
-        <DrawerHeader>
-          <h3 className="text-lg font-semibold">Reorder Teams</h3>
+        <DrawerHeader className="px-0">
+          <DrawerTitle className="text-lg font-semibold">
+            Reorder Teams
+          </DrawerTitle>
         </DrawerHeader>
         <ul className="space-y-4">
           {teams.map((team, idx) => {

@@ -91,7 +91,7 @@ const PlayControls = ({
           onClick={onUndoThrow}
           aria-label="Undo last throw"
         >
-          <DeleteIcon className="w-6 h-6" />
+          <DeleteIcon className="size-6" />
         </ControlBtn>
         <ControlBtn onClick={onFinishTurn}>Enter</ControlBtn>
       </div>

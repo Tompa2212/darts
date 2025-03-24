@@ -11,11 +11,6 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { addTeam } from '@/actions/teams/add-team';
-import { addTeamSchema } from '@/schema/team.schema';
 import { AddPlayersSelect } from './add-players-select';
 import {
   Sheet,
@@ -83,7 +78,7 @@ export const AddTeamForm = () => {
         <Button>Add Team</Button>
       </SheetTrigger>
       <SheetContent side={isDesktop ? 'right' : 'bottom'}>
-        <SheetHeader className="mb-4">
+        <SheetHeader>
           <SheetTitle>Create New Team</SheetTitle>
           <SheetDescription>
             Name your team, and add players to it. Click Add Team when you{"'"}

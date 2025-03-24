@@ -36,7 +36,7 @@ const ResumeZeroOneMatch = ({
                 onDeleteGame(game.id);
               }}
             >
-              <XIcon name="X" className="stroke-red-500" />
+              <XIcon name="X" className="stroke-red-500 size-6" />
             </Button>
           </div>
           <CardDescription>Type: {game.type}</CardDescription>

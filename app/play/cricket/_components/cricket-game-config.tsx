@@ -22,6 +22,7 @@ import { allNums } from '@/packages/cricket-game/helpers';
 import { TeamsSelector } from '../../_components/teams-selector';
 import TeamsReorder from '../../_components/teams-reorder/teams-reorder';
 import { cn } from '@/lib/utils';
+import { NumbersSelector } from './numbers-selector';
 
 type ConfigValues = z.infer<typeof cricketConfigSchema>;
 
@@ -34,13 +35,16 @@ export const CricketGameConfig = ({
     resolver: zodResolver(cricketConfigSchema),
     defaultValues: {
       cricketNumbersOption: 'standard',
-      teams: []
+      teams: [],
+      numbers: []
     }
   });
 
   function onSubmit(data: ConfigValues) {
     onConfigured(data);
   }
+
+  const isCustomNumbers = form.watch('cricketNumbersOption') === 'customNums';
 
   return (
     <div className="p-4">
@@ -60,10 +64,7 @@ export const CricketGameConfig = ({
                 <FormLabel>Game Mode</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      form.resetField('numbers');
-                    }}
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
@@ -95,20 +96,25 @@ export const CricketGameConfig = ({
               </FormItem>
             )}
           />
-          {form.getValues('cricketNumbersOption') === 'customNums' && (
+          {isCustomNumbers ? (
             <FormField
               control={form.control}
               name="numbers"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Numbers</FormLabel>
-                  <MultiSelect
+                  <NumbersSelector
                     selected={field.value?.map(String) ?? []}
                     options={allNums.map((num) => ({
                       label: num.toString(),
                       value: num.toString()
                     }))}
-                    onChange={(value) => field.onChange(value.map(Number))}
+                    onChange={(value) => {
+                      if (value.length > 7) {
+                        return;
+                      }
+                      field.onChange(value.map(Number));
+                    }}
                     className="sm:w-[510px]"
                   />
                   <FormDescription>Select seven numbers</FormDescription>
@@ -116,7 +122,7 @@ export const CricketGameConfig = ({
                 </FormItem>
               )}
             />
-          )}
+          ) : null}
           <FormField
             control={form.control}
             name="teams"

@@ -9,7 +9,8 @@ import {
   pgEnum,
   uniqueIndex,
   jsonb,
-  doublePrecision
+  doublePrecision,
+  boolean
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -144,11 +145,9 @@ export const zero_one_game_player_stats = pgTable(
     endScore: integer('end_score').notNull(),
     totalScore: integer('total_score').notNull(),
     turnsTaken: integer('turns_taken').notNull(),
-    dartsThrown: integer('darts_thrown').notNull(),
     averageScorePerTurn: doublePrecision('average_score_per_turn').notNull(),
     highestScoreInSingleTurn: integer('highest_score_in_single_turn').notNull(),
-    checkoutPercentage: doublePrecision('checkout_percentage').notNull(),
-    thrownDarts: jsonb('thrown_darts').array().notNull()
+    checkoutPercentage: doublePrecision('checkout_percentage').notNull()
   },
   (stats) => ({
     gamePlayerTeamIdx: uniqueIndex('game_player_team_idx').on(

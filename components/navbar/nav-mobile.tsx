@@ -74,7 +74,7 @@ export default function NavMobile() {
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger>
-        <MenuIcon name="Menu" className="h-6 w-6" />
+        <MenuIcon name="Menu" className="size-6" />
       </DrawerTrigger>
       <DrawerContent className="h-full w-[85%] rounded-none" hideDrawerHandle>
         <DrawerHeader className="text-left p-2">

@@ -68,7 +68,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
           disabled={!score}
           aria-label="Undo last throw"
         >
-          <DeleteIcon name="Delete" className="w-6 h-6" />
+          <DeleteIcon name="Delete" className="size-6" />
         </ControlBtn>
         <ControlBtn onClick={handleEnterScore}>Enter</ControlBtn>
       </div>

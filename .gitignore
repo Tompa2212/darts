@@ -36,6 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 drizzle
+to-do.md
 
 # Auto Generated PWA files
 **/public/sw.js

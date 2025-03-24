@@ -53,7 +53,7 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
               onClick={undoTurn}
               disabled={!canUndo}
             >
-              <UndoIcon name="Undo" className="w-6 h-6" />
+              <UndoIcon name="Undo" className="size-6" />
             </Button>
             <Button
               onClick={redoTurn}
@@ -61,7 +61,7 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
               size="icon"
               disabled={!canRedo}
             >
-              <RedoIcon name="Redo" className="w-6 h-6" />
+              <RedoIcon name="Redo" className="size-6" />
             </Button>
           </div>
         </div>

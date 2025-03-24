@@ -52,7 +52,8 @@ export async function TeamsList({}: TeamsListProps) {
             </CardContent>
             <CardFooter className="py-2 pt-0">
               <span className="text-sm text-gray-500">
-                {team.players.length} players
+                {team.players.length}{' '}
+                {`player${team.players.length > 1 ? 's' : ''}`}
               </span>
             </CardFooter>
           </Card>
