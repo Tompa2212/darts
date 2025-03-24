@@ -10,9 +10,9 @@ import { Heading } from '@/components/ui/heading';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SearchXIcon } from 'lucide-react';
 
 function ResumeMatchList() {
   const [games, setGames] = useState(gameSaver.getSavedGames());
@@ -56,7 +56,7 @@ function ResumeMatchList() {
             We couldn&apos;t find any games for the team {`"${teamSearch}"`}
           </p>
         </div>
-        <Icon
+        <SearchXIcon
           name="SearchX"
           className="h-20 w-20 mx-auto stroke-muted-foreground"
         />

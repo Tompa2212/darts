@@ -81,6 +81,7 @@ export async function getUserPlayedGames(): Promise<UserPlayedGamesDto[]> {
   noStore();
 
   const sessionUser = await getUser();
+
   if (!sessionUser) {
     redirect('/login');
   }

@@ -72,7 +72,13 @@ export function ZeroOneGameConfig({
                 <SelectField
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  trigger={<SelectValue placeholder="Select game type" />}
+                  inForm
+                  trigger={
+                    <SelectValue
+                      className="w-full"
+                      placeholder="Select game type"
+                    />
+                  }
                   options={gameModes.map((mode) => ({
                     value: mode,
                     label: mode
@@ -140,7 +146,7 @@ export function ZeroOneGameConfig({
             control={form.control}
             name="doubleOut"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-3 space-y-0 rounded-md border p-4 shadow">
+              <FormItem className="flex items-center space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
                 <FormControl>
                   <Checkbox
                     checked={field.value}

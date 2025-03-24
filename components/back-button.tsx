@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button, ButtonProps } from './ui/button';
 import { useRouter } from 'next/navigation';
-import { Icon } from './ui/icon';
+import { MoveLeftIcon } from 'lucide-react';
 
 export const BackButton = (props: ButtonProps) => {
   const router = useRouter();
@@ -15,7 +15,7 @@ export const BackButton = (props: ButtonProps) => {
       }}
       {...props}
     >
-      <Icon name="MoveLeft" className="h-4 w-4 mr-2" /> Back
+      <MoveLeftIcon className="h-4 w-4 mr-2" /> Back
     </Button>
   );
 };

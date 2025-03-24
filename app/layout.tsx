@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, 'flex !h-screen flex-col')}>
+      <body className={clsx(inter.className, 'flex h-screen! flex-col')}>
         <Providers>
           <Navbar />
           {children}

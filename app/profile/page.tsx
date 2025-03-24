@@ -1,19 +1,19 @@
 import { getUserProfileData } from '@/data/user-profile';
 import React, { Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Icon } from '@/components/ui/icon';
 import UserGamesList, { UserGamesListSkeleton } from './user-games';
 import { Heading } from '@/components/ui/heading';
 import { ProfileTabs } from './profile-tabs';
+import { BarChart3Icon } from 'lucide-react';
 
 export default async function ProfilePage({
-  searchParams = {}
+  searchParams
 }: {
   params: { slug: string };
-  searchParams?: { activeTab?: string };
+  searchParams: Promise<{ activeTab?: string }>;
 }) {
   const user = await getUserProfileData();
-  const { activeTab = 'games' } = searchParams;
+  const { activeTab = 'games' } = await searchParams;
 
   return (
     <main className="container py-4 space-y-6 max-w-6xl">
@@ -30,7 +30,10 @@ export default async function ProfilePage({
             Games
           </TabsTrigger>
           <TabsTrigger value="stats" className="flex-1">
-            <Icon className="w-4 h-4 mr-1 stroke-green-600" name="BarChart3" />
+            <BarChart3Icon
+              className="w-4 h-4 mr-1 stroke-green-600"
+              name="BarChart3"
+            />
             Stats
           </TabsTrigger>
         </TabsList>

@@ -15,12 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import { Icon } from '../ui/icon';
 import UserAvatar from './user-avatar';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { SignOutMenuItem } from '../sign-out-menu-item';
 import { SessionUser } from '@/auth';
+import { BarChart3Icon, SettingsIcon, UserIcon } from 'lucide-react';
 
 export default function NavDesktop({ user }: { user: SessionUser }) {
   return (
@@ -32,7 +32,7 @@ export default function NavDesktop({ user }: { user: SessionUser }) {
               Play
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="p-2 w-[300px]">
+              <ul className="w-[300px]">
                 <ListItem href="/play/cricket" title="Cricket">
                   Be the first player to close all the numbers and have most
                   points.
@@ -71,7 +71,7 @@ export default function NavDesktop({ user }: { user: SessionUser }) {
           <DropdownMenuItem asChild>
             <Link
               href="/profile"
-              className="flex flex-col !items-start justify-start space-y-1 leading-none"
+              className="flex flex-col items-start! justify-start space-y-1 leading-none"
             >
               {user.username ? (
                 <p className="font-medium text-base">{user.username}</p>
@@ -86,20 +86,20 @@ export default function NavDesktop({ user }: { user: SessionUser }) {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/profile">
-              <Icon name="User" className="w-4 h-4 mr-2" />
+              <UserIcon name="User" className="w-4 h-4 mr-2" />
               Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/profile?activeTab=stats">
-              <Icon name="BarChart3" className="w-4 h-4 mr-2" />
+              <BarChart3Icon name="BarChart3" className="w-4 h-4 mr-2" />
               Stats
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/settings">
-              <Icon name="Settings" className="w-4 h-4 mr-2" />
+              <SettingsIcon name="Settings" className="w-4 h-4 mr-2" />
               Settings
             </Link>
           </DropdownMenuItem>
@@ -120,7 +120,7 @@ const ListItem = React.forwardRef<
         <Link
           ref={ref}
           className={cn(
-            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
             className
           )}
           {...props}

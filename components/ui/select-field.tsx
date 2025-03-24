@@ -15,10 +15,11 @@ const SelectField = ({
   ...props
 }: SelectFieldProps) => {
   const Container = inForm ? FormControl : React.Fragment;
+
   return (
     <Select {...props}>
       <Container>
-        <SelectTrigger>{trigger}</SelectTrigger>
+        <SelectTrigger className="w-full">{trigger}</SelectTrigger>
       </Container>
       <SelectContent>
         {options.map((option) => (

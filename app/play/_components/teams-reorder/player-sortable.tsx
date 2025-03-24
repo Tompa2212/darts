@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { GripVerticalIcon } from 'lucide-react';
 
 type Props = {
   player: {
@@ -54,7 +54,7 @@ export default function PlayerSortable({ player }: Props) {
       <div className="flex items-center justify-between touch-none">
         {player.name}
         <Button size="icon" variant="ghost" className="touch-none">
-          <Icon name="GripVertical" className="h-4 w-4" />
+          <GripVerticalIcon className="h-4 w-4" />
         </Button>
       </div>
     </li>

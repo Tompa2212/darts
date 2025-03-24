@@ -9,9 +9,10 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import { Icon } from '@/components/ui/icon';
+
 import { CricketGameType } from '@/packages/cricket-game';
 import Link from 'next/link';
+import { XIcon } from 'lucide-react';
 
 type ResumeCricketMatchProps = {
   game: CricketGameType;
@@ -33,7 +34,7 @@ function ResumeCricketMatch({ game, onDeleteGame }: ResumeCricketMatchProps) {
                 onDeleteGame(game.id);
               }}
             >
-              <Icon name="X" className="stroke-red-500" />
+              <XIcon className="stroke-red-500" />
             </Button>
           </div>
           <CardDescription>Numbers: {game.numbers.join(', ')}</CardDescription>

@@ -2,8 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { AvatarProps } from '@radix-ui/react-avatar';
 import { Avatar, AvatarFallback } from '../ui/avatar';
-import { Icon } from '../ui/icon';
 import { User } from '@/types/user';
+import { UserIcon } from 'lucide-react';
 
 type UserAvatarProps = {
   user: Pick<User, 'name' | 'image'>;
@@ -24,7 +24,7 @@ const UserAvatar = ({ user: { name, image }, ...props }: UserAvatarProps) => {
       ) : (
         <AvatarFallback>
           <span className="sr-only">{name}</span>
-          <Icon name="User" className="w-6 h-6" />
+          <UserIcon className="w-6 h-6" />
         </AvatarFallback>
       )}
     </Avatar>

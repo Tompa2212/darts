@@ -1,4 +1,3 @@
-import { SessionUser } from '@/auth';
 import React from 'react';
 import {
   Drawer,
@@ -7,7 +6,6 @@ import {
   DrawerTrigger,
   DrawerTitle
 } from '../ui/drawer';
-import { Icon } from '../ui/icon';
 import { Button, buttonVariants } from '../ui/button';
 import { Heading } from '../ui/heading';
 import { Separator } from '../ui/separator';
@@ -16,7 +14,14 @@ import { cn } from '@/lib/utils';
 import { signout } from '@/actions/signout';
 import { usePathname } from 'next/navigation';
 import { DartIcon } from '../ui/icons/dart-icon';
-import { BarChart3Icon, PlayIcon, UsersIcon } from 'lucide-react';
+import {
+  BarChart3Icon,
+  MenuIcon,
+  PlayIcon,
+  SettingsIcon,
+  UsersIcon,
+  XIcon
+} from 'lucide-react';
 import Image from 'next/image';
 import logo from '@/public/logo-no-background.svg';
 
@@ -68,7 +73,7 @@ export default function NavMobile() {
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger>
-        <Icon name="Menu" className="h-6 w-6" />
+        <MenuIcon name="Menu" className="h-6 w-6" />
       </DrawerTrigger>
       <DrawerContent className="h-full w-[85%] rounded-none" hideDrawerHandle>
         <DrawerHeader className="text-left p-2">
@@ -82,7 +87,7 @@ export default function NavMobile() {
               className="flex items-center text-base"
               onClick={() => setOpen(false)}
             >
-              <Icon name="X" className="w-8 h-8" />
+              <XIcon name="X" className="w-8 h-8" />
             </Button>
           </DrawerTitle>
         </DrawerHeader>
@@ -113,7 +118,7 @@ export default function NavMobile() {
               className={createLinkClasses(pathname, '/settings')}
               onClick={() => setOpen(false)}
             >
-              <Icon
+              <SettingsIcon
                 name="Settings"
                 className="w-4 h-4 mr-2 stroke-muted-foreground"
               />
@@ -128,7 +133,7 @@ export default function NavMobile() {
                 signout();
               }}
             >
-              <Icon
+              <SettingsIcon
                 name="LogOut"
                 className="w-4 h-4 mr-2 stroke-muted-foreground"
               />

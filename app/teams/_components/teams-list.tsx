@@ -8,9 +8,9 @@ import {
   CardHeader
 } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import { Icon } from '@/components/ui/icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getUserTeams } from '@/data/teams';
+import { XIcon } from 'lucide-react';
 import React from 'react';
 
 type TeamsListProps = {};
@@ -27,7 +27,7 @@ export async function TeamsList({}: TeamsListProps) {
         {teams.map((team) => (
           <Card
             key={team.name}
-            className="[&>*]:px-3 flex flex-col flex-1 basis-[350px] md:max-w-md"
+            className="*:px-3 flex flex-col flex-1 basis-[350px] md:max-w-md"
           >
             <CardHeader className="pt-2 pb-2 flex flex-row items-center justify-between">
               <h2 className="text-lg font-bold">{team.name}</h2>
@@ -39,7 +39,7 @@ export async function TeamsList({}: TeamsListProps) {
                   title={`delete team ${team.name}`}
                 >
                   <span className="sr-only">delete team ${team.name}</span>
-                  <Icon name="X" className="stroke-red-500" />
+                  <XIcon className="stroke-red-500 size-6" />
                 </Button>
               </form>
             </CardHeader>

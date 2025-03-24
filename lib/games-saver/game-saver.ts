@@ -22,11 +22,6 @@ type StorageSavedGame =
 
 type SavedGameType = (typeof SAVED_GAME_TYPES)[number];
 
-type SavedCricketGameTypeMap = {
-  cricket: CricketGameType;
-  '01': ZeroOneGameType;
-};
-
 function savedGameMapper({ type, game }: StorageSavedGame) {
   if (type === '01') {
     return { type, game };

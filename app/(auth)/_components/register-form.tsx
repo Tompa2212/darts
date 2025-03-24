@@ -27,7 +27,7 @@ export const RegisterForm = () => {
             variant="outline"
             onClick={onSignIn}
           >
-            <GoogleIcon name="Chrome" className="h-5 w-5" />
+            <GoogleIcon className="h-5 w-5" />
           </Button>
         </div>
       </div>

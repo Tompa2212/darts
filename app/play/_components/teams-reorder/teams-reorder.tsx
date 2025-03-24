@@ -7,10 +7,10 @@ import {
 } from '@/components/ui/drawer';
 
 import React from 'react';
-import { Icon } from '@/components/ui/icon';
 import PlayersReorder from './players-reorder';
 import { ConfigTeam, ConfigTeamPlayer } from '@/types/client/game-config';
 import RenderIf from '@/components/render-if';
+import { MoveDownIcon, MoveUpIcon } from 'lucide-react';
 
 type TeamsReorderProps = {
   teams: ConfigTeam[];
@@ -92,7 +92,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
                       size="icon"
                       variant="ghost"
                     >
-                      <Icon className="h-4 w-4" name="MoveDown" />
+                      <MoveDownIcon className="h-4 w-4" name="MoveDown" />
                     </Button>
                     <Button
                       onClick={() => handleMoveUp(team.id)}
@@ -100,7 +100,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
                       size="icon"
                       variant="ghost"
                     >
-                      <Icon className="h-4 w-4" name="MoveUp" />
+                      <MoveUpIcon className="h-4 w-4" name="MoveUp" />
                     </Button>
                   </div>
                 </div>

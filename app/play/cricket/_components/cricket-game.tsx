@@ -5,10 +5,10 @@ import { useCricketGame } from '../use-cricket-game';
 import { ScoresTable } from './scores-table';
 import PlayControls from './play-controls';
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { CricketGameInit } from '@/types/client/cricket';
 import FinishedGameDialog from './finished-game-dialog';
 import CricketGameInfo from './cricket-game-info';
+import { RedoIcon, UndoIcon } from 'lucide-react';
 
 type CricketGameProps = CricketGameInit;
 
@@ -40,7 +40,7 @@ export const CricketGame = (props: CricketGameProps) => {
               onClick={() => dispatcher({ type: 'UNDO_TURN' })}
               disabled={!canUndo}
             >
-              <Icon name="Undo" className="h-6 w-6" />
+              <UndoIcon className="h-6 w-6" />
             </Button>
             <Button
               onClick={() => dispatcher({ type: 'REDO_TURN' })}
@@ -48,7 +48,7 @@ export const CricketGame = (props: CricketGameProps) => {
               size="icon"
               disabled={!canRedo}
             >
-              <Icon name="Redo" className="h-6 w-6" />
+              <RedoIcon className="h-6 w-6" />
             </Button>
           </div>
         </div>

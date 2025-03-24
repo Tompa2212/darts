@@ -10,8 +10,8 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import { Icon } from '@/components/ui/icon';
 import Link from 'next/link';
+import { XIcon } from 'lucide-react';
 
 type ResumeZeroOneMatchProps = {
   game: ZeroOneGameType;
@@ -36,7 +36,7 @@ const ResumeZeroOneMatch = ({
                 onDeleteGame(game.id);
               }}
             >
-              <Icon name="X" className="stroke-red-500" />
+              <XIcon name="X" className="stroke-red-500" />
             </Button>
           </div>
           <CardDescription>Type: {game.type}</CardDescription>

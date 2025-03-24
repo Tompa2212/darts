@@ -130,6 +130,35 @@ export const cricket_game_player_stats = pgTable(
   })
 );
 
+export const zero_one_game_player_stats = pgTable(
+  'zero_one_game_player_stats',
+  {
+    gameId: uuid('game_id')
+      .notNull()
+      .references(() => game.id, { onDelete: 'cascade' }),
+    teamId: uuid('team_id').references(() => teams.id, {
+      onDelete: 'set null'
+    }),
+    playerId: uuid('player_id').notNull(),
+    startingScore: integer('starting_score').notNull(),
+    endScore: integer('end_score').notNull(),
+    totalScore: integer('total_score').notNull(),
+    turnsTaken: integer('turns_taken').notNull(),
+    dartsThrown: integer('darts_thrown').notNull(),
+    averageScorePerTurn: doublePrecision('average_score_per_turn').notNull(),
+    highestScoreInSingleTurn: integer('highest_score_in_single_turn').notNull(),
+    checkoutPercentage: doublePrecision('checkout_percentage').notNull(),
+    thrownDarts: jsonb('thrown_darts').array().notNull()
+  },
+  (stats) => ({
+    gamePlayerTeamIdx: uniqueIndex('game_player_team_idx').on(
+      stats.teamId,
+      stats.playerId,
+      stats.gameId
+    )
+  })
+);
+
 export const userRelations = relations(users, ({ many }) => ({
   teams: many(teams),
   games: many(game)

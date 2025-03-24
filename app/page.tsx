@@ -14,7 +14,7 @@ export default function Home() {
           Welcome to Darts Hub, a simple app to keep track of your darts games.
         </p>
       </header>
-      <main className="container p-2 sm:p-4 grid sm:grid-cols-2 gap-4 items-stretch [&>*]:self-stretch">
+      <main className="container p-2 sm:p-4 grid sm:grid-cols-2 gap-4 items-stretch *:self-stretch">
         <Link href="/play">
           <Card className="h-full cursor-pointer transition-colors hover:bg-zinc-50">
             <CardHeader className="p-4 sm:p-4">

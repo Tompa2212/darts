@@ -5,7 +5,7 @@ import React from 'react';
 
 export const GameSelector = () => {
   return (
-    <div className="grid sm:grid-cols-2 gap-4 items-stretch [&>*]:self-stretch">
+    <div className="grid sm:grid-cols-2 gap-4 items-stretch *:self-stretch">
       <Link href="/play/cricket">
         <Card className="h-full hover:bg-zinc-50 transition-colors">
           <CardHeader className="sm:p-4">

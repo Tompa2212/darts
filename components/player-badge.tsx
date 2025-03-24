@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge, BadgeProps } from './ui/badge';
 import { UserPlayer } from '@/types/player';
 import { BasePlayer } from '@/packages/cricket-game/types';
-import { Icon } from './ui/icon';
+import { BadgeCheckIcon } from 'lucide-react';
 
 type PlayerBadgeProps = {
   player: BasePlayer | UserPlayer;
@@ -32,7 +32,7 @@ const PlayerBadge = ({
     >
       {playerName}{' '}
       {isRegisteredUser ? (
-        <Icon name="BadgeCheck" className="h-4 w-4 ml-2" />
+        <BadgeCheckIcon name="BadgeCheck" className="h-4 w-4 ml-2" />
       ) : null}
     </Badge>
   );

@@ -2,11 +2,11 @@ import { ZeroOneGameInit } from '@/types/client/zero-one';
 import React from 'react';
 import { useZeroOneGame } from '../use-zero-one-game';
 import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { PlayControls } from './play-controls';
 import ScoresTable from './scores-table';
 import FinishedGameDialog from './finished-dialog';
 import { Badge } from '@/components/ui/badge';
+import { RedoIcon, UndoIcon } from 'lucide-react';
 
 const multiplierLabelMap = {
   1: '',
@@ -53,7 +53,7 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
               onClick={undoTurn}
               disabled={!canUndo}
             >
-              <Icon name="Undo" className="w-6 h-6" />
+              <UndoIcon name="Undo" className="w-6 h-6" />
             </Button>
             <Button
               onClick={redoTurn}
@@ -61,7 +61,7 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
               size="icon"
               disabled={!canRedo}
             >
-              <Icon name="Redo" className="w-6 h-6" />
+              <RedoIcon name="Redo" className="w-6 h-6" />
             </Button>
           </div>
         </div>

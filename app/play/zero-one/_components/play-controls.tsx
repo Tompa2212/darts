@@ -1,8 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Button, ButtonProps } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 import { ZeroOneGameType } from '@/packages/zero-one';
+import { DeleteIcon } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -68,7 +68,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
           disabled={!score}
           aria-label="Undo last throw"
         >
-          <Icon name="Delete" className="w-6 h-6" />
+          <DeleteIcon name="Delete" className="w-6 h-6" />
         </ControlBtn>
         <ControlBtn onClick={handleEnterScore}>Enter</ControlBtn>
       </div>

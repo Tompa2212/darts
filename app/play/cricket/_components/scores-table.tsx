@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Icon } from '@/components/ui/icon';
 import { CrossedIcon } from '@/components/ui/icons/CrossedIcon';
 import { cn } from '@/lib/utils';
 import { CricketGameType } from '@/packages/cricket-game';
 import { TriangleLeftIcon } from '@radix-ui/react-icons';
+import { LocateFixedIcon, SlashIcon } from 'lucide-react';
 
 const getHitCountIcon = (count: number) => {
   if (count === 0) {
@@ -20,14 +20,14 @@ const getHitCountIcon = (count: number) => {
   }
 
   if (count === 1) {
-    return <Icon name="Slash" className="h-6 w-6 stroke-red-300" />;
+    return <SlashIcon className="h-6 w-6 stroke-red-300" />;
   }
 
   if (count === 2) {
     return <CrossedIcon className="h-6 w-6 stroke-red-400 text-red-400" />;
   }
 
-  return <Icon name="LocateFixed" className="h-6 w-6 stroke-red-600" />;
+  return <LocateFixedIcon className="h-6 w-6 stroke-red-600" />;
 };
 
 const getDiffToTeamWithMaxPoints = (game: CricketGameType) => {

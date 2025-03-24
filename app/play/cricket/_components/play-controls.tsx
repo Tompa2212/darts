@@ -1,10 +1,10 @@
 import { Button, ButtonProps } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { Icon } from '@/components/ui/icon';
 import { ThrownNumber } from '@/packages/cricket-game/types';
 import { ThrowDartButton } from './throw-dart-button';
 import { cn } from '@/lib/utils';
 import { CricketGameType } from '@/packages/cricket-game';
+import { DeleteIcon } from 'lucide-react';
 
 const MULTIPLIERS = {
   single: 1,
@@ -91,7 +91,7 @@ const PlayControls = ({
           onClick={onUndoThrow}
           aria-label="Undo last throw"
         >
-          <Icon name="Delete" className="w-6 h-6" />
+          <DeleteIcon className="w-6 h-6" />
         </ControlBtn>
         <ControlBtn onClick={onFinishTurn}>Enter</ControlBtn>
       </div>
