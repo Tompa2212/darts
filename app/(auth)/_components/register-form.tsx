@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { CardWrapper } from './card-wrapper';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export const RegisterForm = () => {
   const router = useRouter();
@@ -13,24 +13,31 @@ export const RegisterForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel="Create an account"
-      backButtonHref="/login"
-      backButtonLabel="Already have an account?"
-    >
-      <div className="space-y-2">
-        <p className="text-zinc-500">Signup through google account</p>
-        <div className="flex items-center w-full gap-x-2">
-          <Button
-            size="lg"
-            className="w-full"
-            variant="outline"
-            onClick={onSignIn}
-          >
-            <GoogleIcon className="h-5 w-5" />
-          </Button>
+    <div className="space-y-6">
+      <p className="text-text-light-secondary">Sign up to start playing</p>
+      <Button className="w-full" size="lg" variant="outline" onClick={onSignIn}>
+        <GoogleIcon className="h-5 w-5 mr-2" />
+        Continue with Google
+      </Button>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-zinc-200" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-white px-2 text-text-light-secondary">Or</span>
         </div>
       </div>
-    </CardWrapper>
+
+      <div className="text-center text-sm text-text-light-secondary">
+        Already have an account?{' '}
+        <Link
+          href="/login"
+          className="text-primary-500 hover:text-primary-600 font-medium"
+        >
+          Sign in
+        </Link>
+      </div>
+    </div>
   );
 };

@@ -13,9 +13,7 @@ import { getUserTeams } from '@/data/teams';
 import { XIcon } from 'lucide-react';
 import React from 'react';
 
-type TeamsListProps = {};
-
-export async function TeamsList({}: TeamsListProps) {
+export async function TeamsList() {
   const teams = await getUserTeams();
 
   return (
@@ -44,6 +42,8 @@ export async function TeamsList({}: TeamsListProps) {
               </form>
             </CardHeader>
             <CardContent className="pt-0 pb-2 flex-1">
+              {JSON.stringify(team.gameTeams, null, 2)}
+              <p>{team.playedGames}</p>
               <div className="flex flex-wrap gap-2">
                 {team.players.map((p) => (
                   <PlayerBadge key={p.userId || p.name} player={p} />

@@ -34,7 +34,9 @@ export function ChangeUsernameForm({ user }: { user: SessionUser }) {
         <form action={action} className="space-y-4">
           <div>
             <Input type="hidden" name="userId" defaultValue={user.id} />
-            <Label htmlFor="change-username">Username</Label>
+            <Label className="mb-2" htmlFor="change-username">
+              Username
+            </Label>
             <Input
               name="username"
               id="change-username"
