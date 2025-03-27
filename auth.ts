@@ -25,7 +25,7 @@ export const lucia = new Lucia(adapter, {
   }
 });
 
-export type SessionUser = Omit<User, 'auth0Id'>;
+export type SessionUser = Omit<User, 'auth0Id' | 'status'>;
 
 declare module 'lucia' {
   interface Register {

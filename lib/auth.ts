@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { lucia } from '@/auth';
+import { lucia, SessionUser } from '@/auth';
 import { cookies } from 'next/headers';
 
 export const getUser = cache(async () => {
@@ -34,5 +34,6 @@ export const getUser = cache(async () => {
   } catch {
     // Next.js throws error when attempting to set cookies when rendering page
   }
+
   return user;
 });
