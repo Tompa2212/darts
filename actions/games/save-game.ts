@@ -1,10 +1,14 @@
 'use server';
 import db from '@/db/drizzle';
-import { game, cricket_game_player_stats, game_teams } from '@/db/schema';
+import {
+  cricketGame,
+  cricketGamePlayerStats,
+  cricketGameTeam
+} from '@/db/schema';
 import { getUser } from '@/lib/auth';
 import { TeamWithScore } from '@/packages/cricket-game/types';
 import { saveCricketGameSchema } from '@/schema/save-game.schema';
-import { NewGame } from '@/types/game';
+import { NewCricketGame } from '@/types/game';
 import { NewGamePlayerStats } from '@/types/player';
 import { NewGameTeam } from '@/types/team';
 import { PgTransaction } from 'drizzle-orm/pg-core';
@@ -42,15 +46,18 @@ function getPlayerStats(team: TeamWithScore, playerName: string) {
   return playerStats;
 }
 
-async function insertGame(tx: PgTransaction<any, any, any>, data: NewGame) {
-  return (await tx.insert(game).values(data).returning()).at(0);
+async function insertGame(
+  tx: PgTransaction<any, any, any>,
+  data: NewCricketGame
+) {
+  return (await tx.insert(cricketGame).values(data).returning()).at(0);
 }
 
 async function insertGameTeams(
   tx: PgTransaction<any, any, any>,
   data: NewGameTeam[]
 ) {
-  return tx.insert(game_teams).values(data).returning();
+  return tx.insert(cricketGameTeam).values(data).returning();
 }
 
 async function insertGamePlayerStats(
@@ -61,7 +68,7 @@ async function insertGamePlayerStats(
     return;
   }
 
-  return tx.insert(cricket_game_player_stats).values(data).returning();
+  return tx.insert(cricketGamePlayerStats).values(data).returning();
 }
 
 export type InsertCricketGameData = z.infer<typeof saveCricketGameSchema>;

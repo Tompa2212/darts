@@ -16,9 +16,11 @@ export async function deleteTeam(id: string) {
     }
 
     await db
-      .delete(teams)
+      .update(teams)
+      .set({ status: 'deleted' })
       .where(and(eq(teams.id, id), eq(teams.userId, user.id)));
   } catch (error) {
+    console.log(error);
     return {
       error: 'Unable to delete team'
     };

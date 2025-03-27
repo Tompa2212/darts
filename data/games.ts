@@ -1,5 +1,5 @@
 import db from '@/db/drizzle';
-import { game, game_teams, teams, players } from '@/db/schema';
+import { cricketGame, cricketGameTeam, teams, players } from '@/db/schema';
 import { getUser } from '@/lib/auth';
 import { desc, eq, or } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -8,17 +8,18 @@ import { redirect } from 'next/navigation';
 async function getUserGames(userId: string) {
   const userGames = (
     await db
-      .selectDistinct({ gameId: game.id })
-      .from(game)
-      .innerJoin(game_teams, eq(game.id, game_teams.gameId))
-      .innerJoin(teams, eq(game_teams.teamId, teams.id))
-      .innerJoin(players, eq(teams.id, players.teamId))
-      .where(or(eq(players.userId, userId), eq(game.creator, userId)))
+      .selectDistinct({ gameId: cricketGame.id })
+      .from(cricketGame)
+      .innerJoin(cricketGameTeam, eq(cricketGame.id, cricketGameTeam.gameId))
+      .leftJoin(players, eq(cricketGameTeam.teamId, players.teamId))
+      .where(or(eq(players.userId, userId), eq(cricketGame.creator, userId)))
   ).map((row) => row.gameId);
 
-  return await db.query.game.findMany({
+  console.log(userGames);
+
+  return await db.query.cricketGame.findMany({
     where: (game, { inArray }) => inArray(game.id, userGames),
-    orderBy: [desc(game.createdAt)],
+    orderBy: [desc(cricketGame.createdAt)],
     with: {
       winner: {
         columns: {
