@@ -3,7 +3,6 @@
 import { lucia } from '@/auth';
 import { validateRequest } from '@/lib/validate-request';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 export async function signout() {
   const { session } = await validateRequest();
@@ -22,6 +21,4 @@ export async function signout() {
     sessionCookie.value,
     sessionCookie.attributes
   );
-
-  return redirect('/login');
 }
