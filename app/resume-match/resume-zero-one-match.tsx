@@ -2,13 +2,7 @@ import { ZeroOneGameType } from '@/packages/zero-one';
 import React from 'react';
 import PlayerBadge from '@/components/player-badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import Link from 'next/link';
 import { XIcon } from 'lucide-react';
@@ -18,15 +12,12 @@ type ResumeZeroOneMatchProps = {
   onDeleteGame: (gameId: string) => void;
 };
 
-const ResumeZeroOneMatch = ({
-  game,
-  onDeleteGame
-}: ResumeZeroOneMatchProps) => {
+const ResumeZeroOneMatch = ({ game, onDeleteGame }: ResumeZeroOneMatchProps) => {
   return (
     <Link href={`/play/zero-one?gameId=${game.id}`} className="h-full">
       <Card className="h-full">
         <CardHeader className="p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <CardTitle>01 Game</CardTitle>
             <Button
               size="icon"
@@ -36,7 +27,7 @@ const ResumeZeroOneMatch = ({
                 onDeleteGame(game.id);
               }}
             >
-              <XIcon name="X" className="stroke-red-500 size-6" />
+              <XIcon name="X" className="size-6 stroke-red-500" />
             </Button>
           </div>
           <CardDescription>Type: {game.type}</CardDescription>
@@ -47,8 +38,7 @@ const ResumeZeroOneMatch = ({
             {game.teams.map((team) => (
               <li key={team.name} className="mb-2 py-1">
                 <p className="mb-2">
-                  <span className="italic text-zinc-500">{team.name}</span>,{' '}
-                  {team.points} points
+                  <span className="text-zinc-500 italic">{team.name}</span>, {team.points} points
                 </p>
                 <div className="space-x-2">
                   {team.players.map((player) => (

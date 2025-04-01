@@ -11,11 +11,7 @@ type TeamsSelectorProps = {
   value: ConfigTeam[];
 };
 
-export function TeamsSelector({
-  onChange,
-  value,
-  ...rest
-}: TeamsSelectorProps) {
+export function TeamsSelector({ onChange, value, ...rest }: TeamsSelectorProps) {
   const allTeams = useUserTeams();
 
   return (

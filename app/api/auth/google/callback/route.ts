@@ -23,32 +23,20 @@ export async function GET(request: Request): Promise<Response> {
 
   cleanGoogleCookies();
 
-  if (
-    !code ||
-    !state ||
-    !storedState ||
-    !codeVerifier ||
-    state !== storedState
-  ) {
+  if (!code || !state || !storedState || !codeVerifier || state !== storedState) {
     return new Response(null, {
       status: StatusCodes.BAD_REQUEST
     });
   }
 
   try {
-    const tokens: GoogleTokens = await google.validateAuthorizationCode(
-      code,
-      codeVerifier
-    );
+    const tokens: GoogleTokens = await google.validateAuthorizationCode(code, codeVerifier);
 
-    const response = await fetch(
-      'https://openidconnect.googleapis.com/v1/userinfo',
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.accessToken}`
-        }
+    const response = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`
       }
-    );
+    });
 
     if (!response.ok) {
       return new Response(null, {
@@ -61,6 +49,15 @@ export async function GET(request: Request): Promise<Response> {
     const { sub, email, name, email_verified, picture } = data;
 
     const existingUser = await getUserByAuth0Id(sub);
+
+    if (existingUser && existingUser.status !== 'active') {
+      return new Response(null, {
+        status: StatusCodes.FORBIDDEN,
+        headers: {
+          Location: '/auth/account-disabled'
+        }
+      });
+    }
 
     if (existingUser) {
       await createAndAttachSessionCookie(existingUser);
@@ -91,10 +88,7 @@ export async function GET(request: Request): Promise<Response> {
     });
   } catch (e) {
     console.log(e);
-    if (
-      e instanceof OAuth2RequestError &&
-      e.message === 'bad_verification_code'
-    ) {
+    if (e instanceof OAuth2RequestError && e.message === 'bad_verification_code') {
       // invalid code
       return new Response(null, {
         status: StatusCodes.BAD_REQUEST

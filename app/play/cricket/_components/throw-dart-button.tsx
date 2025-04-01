@@ -31,7 +31,7 @@ export const ThrowDartButton = ({
       size="lg"
       className={cn(
         className,
-        'h-12 hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground duration-75'
+        'hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground h-12 duration-75'
       )}
       onClick={() => onThrowDart(number)}
       disabled={disabled}

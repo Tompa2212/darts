@@ -62,21 +62,14 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button
-          disabled={!teams.length}
-          type="button"
-          variant="outline"
-          size="sm"
-        >
+        <Button disabled={!teams.length} type="button" variant="outline" size="sm">
           Edit Order
         </Button>
       </DrawerTrigger>
 
       <DrawerContent className="p-4">
         <DrawerHeader className="px-0">
-          <DrawerTitle className="text-lg font-semibold">
-            Reorder Teams
-          </DrawerTitle>
+          <DrawerTitle className="text-lg font-semibold">Reorder Teams</DrawerTitle>
         </DrawerHeader>
         <ul className="space-y-4">
           {teams.map((team, idx) => {
@@ -86,8 +79,8 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
 
             return (
               <React.Fragment key={team.id}>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold text-lg">{team.name}</span>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-lg font-semibold">{team.name}</span>
                   <div className="space-x-1">
                     <Button
                       onClick={() => handleMoveDown(team.id)}

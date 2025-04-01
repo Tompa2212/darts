@@ -3,6 +3,7 @@ import { Badge, BadgeProps } from './ui/badge';
 import { UserPlayer } from '@/types/player';
 import { BasePlayer } from '@/packages/cricket-game/types';
 import { BadgeCheckIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type PlayerBadgeProps = {
   player: BasePlayer | UserPlayer;
@@ -11,6 +12,7 @@ type PlayerBadgeProps = {
 const PlayerBadge = ({
   player,
   variant = 'secondary',
+  className,
   ...badgeProps
 }: PlayerBadgeProps) => {
   let isRegisteredUser: boolean = false;
@@ -25,15 +27,9 @@ const PlayerBadge = ({
   }
 
   return (
-    <Badge
-      variant={variant}
-      {...badgeProps}
-      className="inline-flex items-center"
-    >
+    <Badge variant={variant} {...badgeProps} className={cn('inline-flex items-center', className)}>
       {playerName}{' '}
-      {isRegisteredUser ? (
-        <BadgeCheckIcon name="BadgeCheck" className="h-4 w-4 ml-2" />
-      ) : null}
+      {isRegisteredUser ? <BadgeCheckIcon name="BadgeCheck" className="ml-2 h-4 w-4" /> : null}
     </Badge>
   );
 };

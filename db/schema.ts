@@ -68,11 +68,7 @@ export const players = pgTable(
   },
   (player) => [
     index('players_team_idx').on(player.teamId),
-    uniqueIndex('players_team_id_name_idx').on(
-      player.teamId,
-      player.userId,
-      player.name
-    )
+    uniqueIndex('players_team_id_name_idx').on(player.teamId, player.userId, player.name)
   ]
 );
 
@@ -194,31 +190,25 @@ export const playersRelations = relations(players, ({ one }) => ({
   })
 }));
 
-export const cricketGamesRelations = relations(
-  cricketGame,
-  ({ one, many }) => ({
-    user: one(users, {
-      fields: [cricketGame.creator],
-      references: [users.id]
-    }),
-    gameTeams: many(cricketGameTeam),
-    winner: one(teams, {
-      fields: [cricketGame.winner],
-      references: [teams.id]
-    })
+export const cricketGamesRelations = relations(cricketGame, ({ one, many }) => ({
+  user: one(users, {
+    fields: [cricketGame.creator],
+    references: [users.id]
+  }),
+  gameTeams: many(cricketGameTeam),
+  winner: one(teams, {
+    fields: [cricketGame.winner],
+    references: [teams.id]
   })
-);
+}));
 
-export const cricketGameTeamsRelations = relations(
-  cricketGameTeam,
-  ({ one }) => ({
-    game: one(cricketGame, {
-      fields: [cricketGameTeam.gameId],
-      references: [cricketGame.id]
-    }),
-    team: one(teams, {
-      fields: [cricketGameTeam.teamId],
-      references: [teams.id]
-    })
+export const cricketGameTeamsRelations = relations(cricketGameTeam, ({ one }) => ({
+  game: one(cricketGame, {
+    fields: [cricketGameTeam.gameId],
+    references: [cricketGame.id]
+  }),
+  team: one(teams, {
+    fields: [cricketGameTeam.teamId],
+    references: [teams.id]
   })
-);
+}));

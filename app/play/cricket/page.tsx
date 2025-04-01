@@ -7,10 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
 const SavedCricketGame = dynamic(
-  () =>
-    import('./_components/saved-cricket-game').then(
-      (mod) => mod.SavedCricketGame
-    ),
+  () => import('./_components/saved-cricket-game').then((mod) => mod.SavedCricketGame),
   {
     ssr: false,
     loading: () => <div>Loading...</div>

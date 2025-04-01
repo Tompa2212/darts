@@ -55,13 +55,11 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
     [saveGame, removeGame]
   );
 
-  const { canUndo, canRedo, currentTeam, teamsOutshotCombinations } =
-    zeroOneGame.current;
+  const { canUndo, canRedo, currentTeam, teamsOutshotCombinations } = zeroOneGame.current;
 
   const undoTurn = () => dispatcher({ type: 'UNDO_TURN' });
   const redoTurn = () => dispatcher({ type: 'REDO_TURN' });
-  const enterScore = (score: number) =>
-    dispatcher({ type: 'ENTER_SCORE', payload: score });
+  const enterScore = (score: number) => dispatcher({ type: 'ENTER_SCORE', payload: score });
   const replayGame = () => dispatcher({ type: 'REPLAY_GAME' });
 
   return {

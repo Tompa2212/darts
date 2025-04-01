@@ -44,9 +44,7 @@ function PlayersReorder({ players, onPlayersReorder }: PlayersReorderProps) {
       const oldIndex = players.findIndex(
         (p) => p.id === activePlayerId || p.name === activePlayerId
       );
-      const newIndex = players.findIndex(
-        (p) => p.id === overPlayerId || p.name === overPlayerId
-      );
+      const newIndex = players.findIndex((p) => p.id === overPlayerId || p.name === overPlayerId);
 
       onPlayersReorder(arrayMove(players, oldIndex, newIndex));
     }
@@ -58,15 +56,8 @@ function PlayersReorder({ players, onPlayersReorder }: PlayersReorderProps) {
   }));
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={uniqueIdentifierPlayers}
-        strategy={verticalListSortingStrategy}
-      >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={uniqueIdentifierPlayers} strategy={verticalListSortingStrategy}>
         <ul>
           {uniqueIdentifierPlayers.map((player) => (
             <PlayerSortable key={player.id} player={player} />

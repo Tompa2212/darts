@@ -59,10 +59,7 @@ export function ZeroOneGameConfig({
         <Heading>Create Zero One Match</Heading>
       </header>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-lg space-y-4 w-full"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-lg space-y-4">
           <FormField
             control={form.control}
             name="type"
@@ -73,12 +70,7 @@ export function ZeroOneGameConfig({
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   inForm
-                  trigger={
-                    <SelectValue
-                      className="w-full"
-                      placeholder="Select game type"
-                    />
-                  }
+                  trigger={<SelectValue className="w-full" placeholder="Select game type" />}
                   options={gameModes.map((mode) => ({
                     value: mode,
                     label: mode
@@ -96,9 +88,7 @@ export function ZeroOneGameConfig({
               <FormItem>
                 <FormLabel>Sets</FormLabel>
                 <Input {...field} defaultValue={field.value} type="number" />
-                <FormDescription>
-                  First team to win number of sets
-                </FormDescription>
+                <FormDescription>First team to win number of sets</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -131,9 +121,7 @@ export function ZeroOneGameConfig({
                 <div className="flex items-center gap-2 text-sm">
                   <TeamsReorder teams={value} onReorder={onChange} />
                   <Link
-                    className={cn(
-                      buttonVariants({ variant: 'ghost', size: 'sm' })
-                    )}
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
                     href="/teams"
                   >
                     Create New Teams
@@ -146,19 +134,17 @@ export function ZeroOneGameConfig({
             control={form.control}
             name="doubleOut"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
+              <FormItem className="flex items-center space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="w-7 h-7"
+                    className="h-7 w-7"
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>Double Out</FormLabel>
-                  <FormDescription>
-                    Player must finish on a double
-                  </FormDescription>
+                  <FormDescription>Player must finish on a double</FormDescription>
                 </div>
               </FormItem>
             )}

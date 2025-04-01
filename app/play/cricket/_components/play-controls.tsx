@@ -21,15 +21,8 @@ type PlayControlsProps = {
   onUndoThrow: () => void;
 };
 
-const PlayControls = ({
-  game,
-  onThrowDart,
-  onFinishTurn,
-  onUndoThrow
-}: PlayControlsProps) => {
-  const [multiplier, setMultiplier] = useState<MultiplierValue>(
-    MULTIPLIERS.single
-  );
+const PlayControls = ({ game, onThrowDart, onFinishTurn, onUndoThrow }: PlayControlsProps) => {
+  const [multiplier, setMultiplier] = useState<MultiplierValue>(MULTIPLIERS.single);
 
   const handleThrowDart = (number: number) => {
     onThrowDart({ number, multiplier });
@@ -50,9 +43,9 @@ const PlayControls = ({
 
   return (
     <div>
-      <div className="flex gap-1 sm:gap-3 mb-2">
+      <div className="mb-2 flex gap-1 sm:gap-3">
         <Button
-          className="flex-1 sm:flex-initial min-w-[150px] h-10"
+          className="h-10 min-w-[150px] flex-1 sm:flex-initial"
           size="lg"
           variant={multiplier === MULTIPLIERS.double ? 'success' : 'outline'}
           onClick={() => onMultiplierToggle(MULTIPLIERS.double)}
@@ -61,11 +54,9 @@ const PlayControls = ({
           Double
         </Button>
         <Button
-          className="flex-1 sm:flex-initial min-w-[150px] h-10"
+          className="h-10 min-w-[150px] flex-1 sm:flex-initial"
           size="lg"
-          variant={
-            multiplier === MULTIPLIERS.triple ? 'destructive' : 'outline'
-          }
+          variant={multiplier === MULTIPLIERS.triple ? 'destructive' : 'outline'}
           onClick={() => onMultiplierToggle(MULTIPLIERS.triple)}
           disabled={isMultiplierDisabled}
         >
@@ -80,10 +71,7 @@ const PlayControls = ({
             onThrowDart={handleThrowDart}
             game={game}
             multiplier={multiplier}
-            className={cn(
-              arr.length - 1 === idx &&
-                'col-start-2 col-end-3 row-start-3 row-end-4'
-            )}
+            className={cn(arr.length - 1 === idx && 'col-start-2 col-end-3 row-start-3 row-end-4')}
           />
         ))}
         <ControlBtn
@@ -106,7 +94,7 @@ function ControlBtn({ children, onClick, className, ...rest }: ButtonProps) {
     <Button
       variant="outline"
       className={cn(
-        'h-12 hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground duration-75',
+        'hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground h-12 duration-75',
         className
       )}
       size="lg"

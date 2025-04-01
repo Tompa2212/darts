@@ -63,8 +63,7 @@ export async function addTeam(values: AddTeamData) {
   }
 
   const existingTeam = await db.query.teams.findFirst({
-    where: (team, { eq, and }) =>
-      and(eq(team.userId, user.id), eq(team.name, name))
+    where: (team, { eq, and }) => and(eq(team.userId, user.id), eq(team.name, name))
   });
 
   if (existingTeam) {
@@ -74,9 +73,7 @@ export async function addTeam(values: AddTeamData) {
   }
 
   const created = await db.transaction(async (tx) => {
-    const added = (
-      await tx.insert(teams).values({ name, userId: user.id }).returning()
-    ).at(0);
+    const added = (await tx.insert(teams).values({ name, userId: user.id }).returning()).at(0);
 
     if (added === undefined) {
       tx.rollback();

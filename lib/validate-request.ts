@@ -3,8 +3,7 @@ import { cookies } from 'next/headers';
 import 'server-only';
 
 export const validateRequest = async () => {
-  const sessionId =
-    (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
+  const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value ?? null;
 
   if (!sessionId) {
     return {
@@ -18,19 +17,11 @@ export const validateRequest = async () => {
   try {
     if (result.session && result.session.fresh) {
       const sessionCookie = lucia.createSessionCookie(result.session.id);
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+      (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
     }
     if (!result.session) {
       const sessionCookie = lucia.createBlankSessionCookie();
-      (await cookies()).set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+      (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
     }
   } catch {}
 

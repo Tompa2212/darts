@@ -27,17 +27,13 @@ describe('ZeroOneGame Validator Tests', () => {
   const zeroOneGame = new ZeroOneGame(gameSetup);
 
   test('should not allow score out of allowed range', () => {
-    expect(ZeroOneGameValidator.isValidScore(181, zeroOneGame.game)).toBe(
-      false
-    );
+    expect(ZeroOneGameValidator.isValidScore(181, zeroOneGame.game)).toBe(false);
     expect(ZeroOneGameValidator.isValidScore(-1, zeroOneGame.game)).toBe(false);
   });
 
   test('it should not allow throwing 3 dart impossible numbers', () => {
     for (const num of [163, 166, 169, 172, 173, 175, 176, 178, 179]) {
-      expect(ZeroOneGameValidator.isValidScore(num, zeroOneGame.game)).toBe(
-        false
-      );
+      expect(ZeroOneGameValidator.isValidScore(num, zeroOneGame.game)).toBe(false);
     }
   });
 

@@ -18,8 +18,7 @@ export class CricketStatisticGenerator {
     stats.totalPoints += game.currentTurnPoints;
     stats.pointsPerRound = stats.totalPoints / stats.playedTurns;
 
-    const playerStats =
-      stats.players[currentPlayer.name] ?? this.getInitialPlayerStats();
+    const playerStats = stats.players[currentPlayer.name] ?? this.getInitialPlayerStats();
 
     this.calculatePlayerStats(playerStats, game);
 
@@ -28,10 +27,7 @@ export class CricketStatisticGenerator {
     currentTeam.stats = stats;
   }
 
-  private calculatePlayerStats(
-    playerStats: PlayerDartsStats[string],
-    game: CricketGameType
-  ) {
+  private calculatePlayerStats(playerStats: PlayerDartsStats[string], game: CricketGameType) {
     playerStats.thrownDarts.push(...game.thrownDarts);
     playerStats.playedTurns++;
     playerStats.singles += this.getDartsMultiplierCount(game.thrownDarts, 1);
@@ -39,12 +35,8 @@ export class CricketStatisticGenerator {
     playerStats.triples += this.getDartsMultiplierCount(game.thrownDarts, 3);
     playerStats.misses += this.MAX_THROWS - game.thrownDarts.length;
 
-    playerStats.totalMarks += game.thrownDarts.reduce(
-      (acc, dart) => acc + dart.multiplier,
-      0
-    );
-    playerStats.marksPerRound =
-      playerStats.totalMarks / playerStats.playedTurns;
+    playerStats.totalMarks += game.thrownDarts.reduce((acc, dart) => acc + dart.multiplier, 0);
+    playerStats.marksPerRound = playerStats.totalMarks / playerStats.playedTurns;
 
     const totalThrows = playerStats.thrownDarts.length + playerStats.misses;
 

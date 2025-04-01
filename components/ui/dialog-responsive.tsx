@@ -83,13 +83,11 @@ export function DialogResponsiveContent({
   const { isDesktop } = useDialogResponsiceContext();
 
   return isDesktop ? (
-    <DialogContent className={twMerge(className, 'flex flex-col max-h-[90vh]')}>
+    <DialogContent className={twMerge(className, 'flex max-h-[90vh] flex-col')}>
       {children}
     </DialogContent>
   ) : (
-    <DrawerContent className={twMerge(className, 'max-h-[90vh] px-4')}>
-      {children}
-    </DrawerContent>
+    <DrawerContent className={twMerge(className, 'max-h-[90vh] px-4')}>{children}</DrawerContent>
   );
 }
 
@@ -99,11 +97,7 @@ type DialogResponsiveContextProps = {
   isDesktop: boolean;
 };
 
-export function DialogResponsive({
-  children,
-  open,
-  onOpenChange
-}: DialogResponsiveProps) {
+export function DialogResponsive({ children, open, onOpenChange }: DialogResponsiveProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const isDesktop = useIsDesktop();
 
@@ -128,15 +122,12 @@ export function DialogResponsive({
   );
 }
 
-const dialogResponsiveContext =
-  React.createContext<DialogResponsiveContextProps | null>(null);
+const dialogResponsiveContext = React.createContext<DialogResponsiveContextProps | null>(null);
 
 const useDialogResponsiceContext = () => {
   const context = React.useContext(dialogResponsiveContext);
   if (!context) {
-    throw new Error(
-      'DialogResponsiveContext must be used within a DialogResponsiveProvider'
-    );
+    throw new Error('DialogResponsiveContext must be used within a DialogResponsiveProvider');
   }
 
   return context;

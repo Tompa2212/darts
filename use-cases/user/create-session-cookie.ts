@@ -12,9 +12,5 @@ export async function createAndAttachSessionCookie(user: User) {
 
   const sessionCookie = lucia.createSessionCookie(session.id);
 
-  (await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
+  (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 }

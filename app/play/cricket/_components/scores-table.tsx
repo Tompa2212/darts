@@ -69,7 +69,7 @@ export const ScoresTable = ({ game }: { game: CricketGameType }) => {
           const isTeamPlaying = currentTeam.name === team.name;
           return (
             <TableRow key={team.name} className="h-12">
-              <TableCell title={team.name} className="p-0 w-14 min-w-14">
+              <TableCell title={team.name} className="w-14 min-w-14 p-0">
                 <div className="grid grid-cols-[1fr_auto] items-center p-0 sm:w-full">
                   <span
                     className={cn('text-overflow-ellipsis', {
@@ -78,16 +78,11 @@ export const ScoresTable = ({ game }: { game: CricketGameType }) => {
                   >
                     {team.name}
                   </span>
-                  {isTeamPlaying ? (
-                    <TriangleLeftIcon className="w-4 h-4" />
-                  ) : null}
+                  {isTeamPlaying ? <TriangleLeftIcon className="h-4 w-4" /> : null}
                 </div>
               </TableCell>
               {game.numbers.map((num) => (
-                <TableCell
-                  key={num}
-                  className="w-10 min-w-10 text-center sm:min-w-20 p-0"
-                >
+                <TableCell key={num} className="w-10 min-w-10 p-0 text-center sm:min-w-20">
                   <div className="grid max-w-full items-center justify-center">
                     {getHitCountIcon(team.hitCount[num])}
                   </div>
@@ -105,10 +100,7 @@ export const ScoresTable = ({ game }: { game: CricketGameType }) => {
           <TableCell className="p-0 font-semibold">Diff.</TableCell>
           <TableCell
             colSpan={8}
-            className={cn(
-              pointsDiff > 0 && 'text-green-500',
-              pointsDiff < 0 && 'text-red-500'
-            )}
+            className={cn(pointsDiff > 0 && 'text-green-500', pointsDiff < 0 && 'text-red-500')}
           >
             {pointsDiff}
           </TableCell>

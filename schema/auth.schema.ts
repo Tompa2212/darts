@@ -9,10 +9,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   email: z.string().email({ message: 'Email is required' }),
   password: z.string().min(6, 'Minimum 6 characters required'),
-  username: z
-    .string()
-    .min(1, 'Username is required')
-    .max(32, 'Maximum 32 characters allowed')
+  username: z.string().min(1, 'Username is required').max(32, 'Maximum 32 characters allowed')
 });
 
 export const resetSchema = z.object({

@@ -8,8 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { SavedZeroOneGame } from './_components/saved-zero-one-game';
 
 export default function PlayZeroOnePage() {
-  const [gameConfig, setGameConfig] =
-    React.useState<ZeroOneGameConfigType | null>(null);
+  const [gameConfig, setGameConfig] = React.useState<ZeroOneGameConfigType | null>(null);
 
   const searchParams = useSearchParams();
   const gameId = searchParams.get('gameId');

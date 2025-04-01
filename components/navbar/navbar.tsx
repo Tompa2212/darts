@@ -26,9 +26,9 @@ export function Navbar() {
   });
 
   return (
-    <nav className="shrink-0 flex flex-col bg-zinc-50 shadow-md h-[var(--navbar-height)]">
-      <div className="flex-1 container flex items-center gap-4 sm:gap-6 py-2">
-        <Link href="/" className="flex gap-2 sm:gap-4 items-center">
+    <nav className="flex h-[var(--navbar-height)] shrink-0 flex-col bg-zinc-50 shadow-md">
+      <div className="container flex flex-1 items-center gap-4 py-2 sm:gap-6">
+        <Link href="/" className="flex items-center gap-2 sm:gap-4">
           <Image src={logo} alt="Bullseye Buddy logo" className="w-40" />
         </Link>
         <div className="flex flex-1 justify-end">
@@ -39,7 +39,7 @@ export function Navbar() {
           ) : (
             <div className="ml-auto">
               <Link href="/login" className={buttonVariants({ size: 'sm' })}>
-                <LogInIcon className="h-4 w-4 mr-2" />
+                <LogInIcon className="mr-2 h-4 w-4" />
                 Login
               </Link>
             </div>

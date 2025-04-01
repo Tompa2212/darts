@@ -44,7 +44,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
     <div>
       <Badge
         className={cn(
-          'mb-4 rounded-xl text-2xl justify-center w-32 h-14',
+          'mb-4 h-14 w-32 justify-center rounded-xl text-2xl',
           isWritingScore && 'bg-green-700'
         )}
       >
@@ -54,20 +54,13 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
         {nums.map((num, idx, arr) => (
           <ControlBtn
             key={num}
-            className={cn(
-              arr.length - 1 === idx &&
-                'col-start-2 col-end-3 row-start-4 row-end-5'
-            )}
+            className={cn(arr.length - 1 === idx && 'col-start-2 col-end-3 row-start-4 row-end-5')}
             onClick={() => handleNumClick(num)}
           >
             {num}
           </ControlBtn>
         ))}
-        <ControlBtn
-          onClick={handleDeleteNum}
-          disabled={!score}
-          aria-label="Undo last throw"
-        >
+        <ControlBtn onClick={handleDeleteNum} disabled={!score} aria-label="Undo last throw">
           <DeleteIcon name="Delete" className="size-6" />
         </ControlBtn>
         <ControlBtn onClick={handleEnterScore}>Enter</ControlBtn>
@@ -81,7 +74,7 @@ function ControlBtn({ children, onClick, className, ...rest }: ButtonProps) {
     <Button
       variant="outline"
       className={cn(
-        'h-12 hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground duration-75',
+        'hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground h-12 duration-75',
         className
       )}
       size="lg"

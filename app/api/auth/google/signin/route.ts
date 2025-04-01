@@ -32,8 +32,7 @@ export async function GET(req: NextRequest) {
 
   if (callbackUrl) {
     // only allow relative URLs
-    const validCallbackUrl =
-      callbackUrl.startsWith('/') && !callbackUrl.includes('..');
+    const validCallbackUrl = callbackUrl.startsWith('/') && !callbackUrl.includes('..');
 
     if (validCallbackUrl) {
       (await cookies()).set('app_callback_url', callbackUrl, {

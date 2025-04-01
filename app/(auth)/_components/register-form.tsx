@@ -16,7 +16,7 @@ export const RegisterForm = () => {
     <div className="space-y-6">
       <p className="text-text-light-secondary">Sign up to start playing</p>
       <Button className="w-full" size="lg" variant="outline" onClick={onSignIn}>
-        <GoogleIcon className="h-5 w-5 mr-2" />
+        <GoogleIcon className="mr-2 h-5 w-5" />
         Continue with Google
       </Button>
 
@@ -25,16 +25,13 @@ export const RegisterForm = () => {
           <span className="w-full border-t border-zinc-200" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-text-light-secondary">Or</span>
+          <span className="text-text-light-secondary bg-white px-2">Or</span>
         </div>
       </div>
 
-      <div className="text-center text-sm text-text-light-secondary">
+      <div className="text-text-light-secondary text-center text-sm">
         Already have an account?{' '}
-        <Link
-          href="/login"
-          className="text-primary-500 hover:text-primary-600 font-medium"
-        >
+        <Link href="/login" className="text-primary-500 hover:text-primary-600 font-medium">
           Sign in
         </Link>
       </div>

@@ -92,8 +92,7 @@ export class CricketGame {
     };
 
     newState.thrownDarts.push(thrownDart);
-    newState.currentTurnPoints =
-      newState.currentTurnPoints + (team.points - teamPointsBeforeThrow);
+    newState.currentTurnPoints = newState.currentTurnPoints + (team.points - teamPointsBeforeThrow);
 
     this._game = newState;
   }
@@ -140,12 +139,8 @@ export class CricketGame {
     const playedTurns = game.currentRoundTurns;
 
     const nextPlayer = this.roundRobin(round - 1, playedTurns - 1, game.teams);
-    const nextTeamIdx = teams.findIndex((t) =>
-      t.players.find((p) => p.name === nextPlayer.name)
-    );
-    const nextPlayerIdx = teams[nextTeamIdx].players.findIndex(
-      (p) => p.name === nextPlayer.name
-    );
+    const nextTeamIdx = teams.findIndex((t) => t.players.find((p) => p.name === nextPlayer.name));
+    const nextPlayerIdx = teams[nextTeamIdx].players.findIndex((p) => p.name === nextPlayer.name);
 
     return [nextTeamIdx, nextPlayerIdx];
   }
@@ -171,8 +166,7 @@ export class CricketGame {
     const team = this.getCurrentTeam(newState);
     const teamPointsBeforeUndo = team.points;
 
-    const { number: lastDart = 0, multiplier = 0 } =
-      newState.thrownDarts.pop() || {};
+    const { number: lastDart = 0, multiplier = 0 } = newState.thrownDarts.pop() || {};
     const points = lastDart * multiplier;
 
     if (lastDart) {
@@ -188,10 +182,7 @@ export class CricketGame {
       }
     }
 
-    newState.currentTurnPoints = Math.max(
-      team.points - teamPointsBeforeUndo,
-      0
-    );
+    newState.currentTurnPoints = Math.max(team.points - teamPointsBeforeUndo, 0);
 
     this._game = newState;
   }

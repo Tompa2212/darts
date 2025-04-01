@@ -13,10 +13,7 @@ type FinishedGameDialogProps = {
   onReplayGame: () => void;
 };
 
-export default function FinishedGameDialog({
-  game,
-  onReplayGame
-}: FinishedGameDialogProps) {
+export default function FinishedGameDialog({ game, onReplayGame }: FinishedGameDialogProps) {
   const [open, setOpen] = React.useState<boolean | undefined>(undefined);
 
   if (!game.isFinished) {

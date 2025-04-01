@@ -40,9 +40,7 @@ function ResumeMatchList() {
 
   const filteredGames = games.filter(({ game }) => {
     const search = teamSearch || '';
-    return game.teams.some((team) =>
-      team.name.toLowerCase().includes(search.toLowerCase())
-    );
+    return game.teams.some((team) => team.name.toLowerCase().includes(search.toLowerCase()));
   });
 
   let emptyMessage: React.ReactNode | null = null;
@@ -56,10 +54,7 @@ function ResumeMatchList() {
             We couldn&apos;t find any games for the team {`"${teamSearch}"`}
           </p>
         </div>
-        <SearchXIcon
-          name="SearchX"
-          className="h-20 w-20 mx-auto stroke-muted-foreground"
-        />
+        <SearchXIcon name="SearchX" className="stroke-muted-foreground mx-auto h-20 w-20" />
       </>
     ) : (
       <>
@@ -92,12 +87,9 @@ function ResumeMatchList() {
         />
       </div>
       {emptyMessage ? (
-        <div className="text-center mt-[6vh] sm:mt-[17vh]">{emptyMessage}</div>
+        <div className="mt-[6vh] text-center sm:mt-[17vh]">{emptyMessage}</div>
       ) : (
-        <motion.div
-          layout
-          className="grid sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 gap-4"
-        >
+        <motion.div layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           <AnimatePresence>
             {filteredGames.map((savedGame) => (
               <ResumeMatchCard
@@ -117,11 +109,11 @@ export default ResumeMatchList;
 
 export const ResumeMatchListSkeleton = () => {
   return (
-    <div className="grid md:grid-cols-2 2xl:grid-cols-3 gap-6">
+    <div className="grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
       {[...Array(3)].map((_, i) => (
         <div key={i} className="flex flex-col space-y-3">
           <Skeleton className="h-[205px] w-full rounded-xl" />
-          <div className="space-y-2 w-full">
+          <div className="w-full space-y-2">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-full" />
           </div>

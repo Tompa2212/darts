@@ -8,10 +8,7 @@ describe('outshot caluclator tests', () => {
       });
 
       for (let combination of combinations) {
-        const sum = combination.reduce(
-          (acc, dart) => acc + dart.value * dart.multiplier,
-          0
-        );
+        const sum = combination.reduce((acc, dart) => acc + dart.value * dart.multiplier, 0);
 
         expect(sum).toBe(num);
         expect(combination.at(-1)?.multiplier).toBe(2);

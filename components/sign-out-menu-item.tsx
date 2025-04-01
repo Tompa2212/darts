@@ -19,7 +19,7 @@ export const SignOutMenuItem = () => {
 
   return (
     <DropdownMenuItem onSelect={handleSignOut} className="cursor-pointer">
-      <LogOutIcon name="LogOut" className="w-4 h-4 mr-2" />
+      <LogOutIcon name="LogOut" className="mr-2 h-4 w-4" />
       <span>Sign Out</span>
     </DropdownMenuItem>
   );

@@ -11,11 +11,7 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import clsx from 'clsx';
 import { Drawer, DrawerContent, DrawerTrigger } from './drawer';
@@ -66,13 +62,10 @@ export function MultiSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={clsx(
-            'w-full justify-between',
-            selected.length > 1 ? 'h-auto p-2' : 'h-9 p-4'
-          )}
+          className={clsx('w-full justify-between', selected.length > 1 ? 'h-auto p-2' : 'h-9 p-4')}
           onClick={() => setOpen(!open)}
         >
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex flex-wrap gap-1">
             {selected.length > 0
               ? selected.map((item, idx) => (
                   <Badge
@@ -86,7 +79,7 @@ export function MultiSelect({
                   >
                     {options.find((option) => item === option.value)?.label}
                     <a
-                      className="ml-1 ring-offset-background rounded-full outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      className="ring-offset-background focus:ring-ring ml-1 rounded-full outline-hidden focus:ring-2 focus:ring-offset-2"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           handleUnselect(item);
@@ -98,7 +91,7 @@ export function MultiSelect({
                       }}
                       onClick={() => handleUnselect(item)}
                     >
-                      <Cross2Icon className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                      <Cross2Icon className="text-muted-foreground hover:text-foreground h-3 w-3" />
                     </a>
                   </Badge>
                 ))
@@ -110,7 +103,7 @@ export function MultiSelect({
       <Content
         className={cn(
           'min-w-[var(--radix-popover-trigger-width)] p-0',
-          !isDesktop && 'pb-2 min-h-56'
+          !isDesktop && 'min-h-56 pb-2'
         )}
       >
         <OptionsList
@@ -142,20 +135,12 @@ type OptionsListProps = {
   onChange: (value: string) => void;
 } & MultiselectAndOptionListProps;
 
-function OptionsList({
-  selected,
-  options,
-  onChange,
-  noResultsRender,
-  onSearch
-}: OptionsListProps) {
+function OptionsList({ selected, options, onChange, noResultsRender, onSearch }: OptionsListProps) {
   return (
     <Command>
       <CommandInput onValueChange={onSearch} placeholder="Search..." />
       <CommandList>
-        <CommandEmpty>
-          {noResultsRender ? noResultsRender() : 'No results found.'}
-        </CommandEmpty>
+        <CommandEmpty>{noResultsRender ? noResultsRender() : 'No results found.'}</CommandEmpty>
         <CommandGroup>
           {options.map((option) => (
             <CommandItem

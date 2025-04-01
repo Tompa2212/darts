@@ -8,12 +8,7 @@ type SelectFieldProps = {
   inForm?: boolean;
 } & React.ComponentPropsWithoutRef<typeof Select>;
 
-const SelectField = ({
-  options,
-  trigger,
-  inForm = false,
-  ...props
-}: SelectFieldProps) => {
+const SelectField = ({ options, trigger, inForm = false, ...props }: SelectFieldProps) => {
   const Container = inForm ? FormControl : React.Fragment;
 
   return (

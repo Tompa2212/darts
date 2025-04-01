@@ -18,9 +18,7 @@ type ConfiguredZeroOneGameType = {
   doubleOut: boolean;
 };
 
-export type ZeroOneGameTypeParams =
-  | ConfiguredZeroOneGameType
-  | { game: ZeroOneGameType };
+export type ZeroOneGameTypeParams = ConfiguredZeroOneGameType | { game: ZeroOneGameType };
 
 export class ZeroOneGame {
   private _game: ZeroOneGameType;
@@ -47,8 +45,7 @@ export class ZeroOneGame {
   get teamsOutshotCombinations() {
     const data = this._game.teams.reduce((acc, team) => {
       const savedPoints = this._teamOutshotCombinations[team.id]?.points;
-      const savedCombinations =
-        this._teamOutshotCombinations[team.id]?.combinations;
+      const savedCombinations = this._teamOutshotCombinations[team.id]?.combinations;
 
       acc[team.id] = {
         points: team.points,
@@ -130,22 +127,18 @@ export class ZeroOneGame {
   }
 
   private getPlayerTurn(game: ZeroOneGameType) {
-    const { currentRound, roundTurnsPlayed, currentSet, currentLeg, teams } =
-      game;
+    const { currentRound, roundTurnsPlayed, currentSet, currentLeg, teams } = game;
 
     let orderedTeams = this.orderTeamsByTurn(currentSet - 1, teams);
     orderedTeams = this.orderTeamsByTurn(currentLeg - 1, orderedTeams);
 
-    const totalTurnsPlayed =
-      (currentRound - 1) * teams.length + roundTurnsPlayed;
+    const totalTurnsPlayed = (currentRound - 1) * teams.length + roundTurnsPlayed;
 
     return this.getStartingTeamAndPlayerIdx(totalTurnsPlayed - 1, orderedTeams);
   }
 
   private checkIfGameFinished() {
-    const anyTeamWon = this._game.teams.some(
-      (team) => team.sets === this._game.sets
-    );
+    const anyTeamWon = this._game.teams.some((team) => team.sets === this._game.sets);
 
     return anyTeamWon;
   }
@@ -205,11 +198,7 @@ export class ZeroOneGame {
     this._game = newGame;
   }
 
-  private getStartingSetLegPlayer(
-    set: number,
-    leg: number,
-    teams: TeamWithScore[]
-  ) {
+  private getStartingSetLegPlayer(set: number, leg: number, teams: TeamWithScore[]) {
     set = set - 1;
     leg = leg - 1;
 
@@ -222,8 +211,10 @@ export class ZeroOneGame {
     const orderedTeams = [];
 
     for (let i = 0; i < teams.length; i++) {
-      const [startedSetTeamIdx, startedSetPlayerIdx] =
-        this.getStartingTeamAndPlayerIdx(turn + i, teams);
+      const [startedSetTeamIdx, startedSetPlayerIdx] = this.getStartingTeamAndPlayerIdx(
+        turn + i,
+        teams
+      );
       const team = structuredClone(teams[startedSetTeamIdx]);
 
       team.players = [
@@ -306,13 +297,7 @@ export class ZeroOneGame {
     });
   }
 
-  private createGame({
-    teams,
-    type,
-    legs,
-    sets,
-    doubleOut
-  }: ConfiguredZeroOneGameType) {
+  private createGame({ teams, type, legs, sets, doubleOut }: ConfiguredZeroOneGameType) {
     const teamsWithScore = teams.map((team) => ({
       ...team,
       points: parseInt(type),

@@ -9,17 +9,9 @@ type ResumeMatchCardProps = {
   onDeleteGame: (gameId: string) => void;
 };
 
-export default function ResumeMatchCard({
-  savedGame,
-  onDeleteGame
-}: ResumeMatchCardProps) {
+export default function ResumeMatchCard({ savedGame, onDeleteGame }: ResumeMatchCardProps) {
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      initial={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
-      layout
-    >
+    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} exit={{ opacity: 0 }} layout>
       {savedGame.type === 'cricket' ? (
         <ResumeCricketMatch game={savedGame.game} onDeleteGame={onDeleteGame} />
       ) : (

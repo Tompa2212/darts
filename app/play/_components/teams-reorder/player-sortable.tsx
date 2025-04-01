@@ -13,14 +13,9 @@ type Props = {
 };
 
 export default function PlayerSortable({ player }: Props) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({ id: player.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: player.id
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -32,8 +27,8 @@ export default function PlayerSortable({ player }: Props) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        'touch-none rounded-sm text-muted-foreground p-1',
-        isDragging && 'shadow-md bg-muted text-primary'
+        'text-muted-foreground touch-none rounded-sm p-1',
+        isDragging && 'bg-muted text-primary shadow-md'
       )}
       onPointerDown={(e) => {
         e.stopPropagation();
@@ -51,7 +46,7 @@ export default function PlayerSortable({ player }: Props) {
       }}
       {...attributes}
     >
-      <div className="flex items-center justify-between touch-none">
+      <div className="flex touch-none items-center justify-between">
         {player.name}
         <Button size="icon" variant="ghost" className="touch-none">
           <GripVerticalIcon className="h-4 w-4" />

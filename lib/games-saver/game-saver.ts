@@ -56,8 +56,7 @@ export type SavedGame =
 function saveGame({ type, game }: SavedGame) {
   const gameDto = type === '01' ? game : cricketGameToSavedGame(game);
 
-  let currectCricketGames =
-    storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || [];
+  let currectCricketGames = storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || [];
 
   currectCricketGames = [
     { type, game: gameDto } as StorageSavedGame,
@@ -68,9 +67,9 @@ function saveGame({ type, game }: SavedGame) {
 }
 
 function getSavedGames() {
-  return (
-    storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || []
-  ).map(savedGameMapper) as SavedGame[];
+  return (storage.getValue<Array<StorageSavedGame>>(LOCAL_STORAGE_KEY) || []).map(
+    savedGameMapper
+  ) as SavedGame[];
 }
 
 function getGame(id: string) {
@@ -88,24 +87,16 @@ function removeGame(id: string) {
     return;
   }
 
-  storage.setValue(
-    LOCAL_STORAGE_KEY,
-    JSON.stringify(allGames.filter((g) => g.game.id !== id))
-  );
+  storage.setValue(LOCAL_STORAGE_KEY, JSON.stringify(allGames.filter((g) => g.game.id !== id)));
 }
 
-function getGameByIdAndType(
-  id: string,
-  type: 'cricket'
-): CricketGameType | null;
+function getGameByIdAndType(id: string, type: 'cricket'): CricketGameType | null;
 function getGameByIdAndType(id: string, type: '01'): ZeroOneGameType | null;
 function getGameByIdAndType(
   id: string,
   type: SavedGameType
 ): CricketGameType | ZeroOneGameType | null {
-  let savedGame = getSavedGames().find(
-    (g) => g.game.id === id && g.type === type
-  )?.game;
+  let savedGame = getSavedGames().find((g) => g.game.id === id && g.type === type)?.game;
 
   if (!savedGame) {
     return null;

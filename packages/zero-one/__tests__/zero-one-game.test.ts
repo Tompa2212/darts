@@ -36,9 +36,7 @@ describe('ZeroOneGame', () => {
   test('should create a new game with correct default values', () => {
     expect(zeroOneGame.game.teams.length).toBe(2);
     expect(zeroOneGame.game.currentTeam.id).toBe(zeroOneGame.game.teams[0].id);
-    expect(zeroOneGame.game.currentPlayer.id).toBe(
-      zeroOneGame.game.currentTeam.players[0].id
-    );
+    expect(zeroOneGame.game.currentPlayer.id).toBe(zeroOneGame.game.currentTeam.players[0].id);
     expect(zeroOneGame.game.currentRound).toBe(1);
     expect(zeroOneGame.game.currentSet).toBe(1);
     expect(zeroOneGame.game.currentLeg).toBe(1);

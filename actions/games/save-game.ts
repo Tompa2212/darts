@@ -1,10 +1,6 @@
 'use server';
 import db from '@/db/drizzle';
-import {
-  cricketGame,
-  cricketGamePlayerStats,
-  cricketGameTeam
-} from '@/db/schema';
+import { cricketGame, cricketGamePlayerStats, cricketGameTeam } from '@/db/schema';
 import { getUser } from '@/lib/auth';
 import { TeamWithScore } from '@/packages/cricket-game/types';
 import { saveCricketGameSchema } from '@/schema/save-game.schema';
@@ -46,24 +42,15 @@ function getPlayerStats(team: TeamWithScore, playerName: string) {
   return playerStats;
 }
 
-async function insertGame(
-  tx: PgTransaction<any, any, any>,
-  data: NewCricketGame
-) {
+async function insertGame(tx: PgTransaction<any, any, any>, data: NewCricketGame) {
   return (await tx.insert(cricketGame).values(data).returning()).at(0);
 }
 
-async function insertGameTeams(
-  tx: PgTransaction<any, any, any>,
-  data: NewGameTeam[]
-) {
+async function insertGameTeams(tx: PgTransaction<any, any, any>, data: NewGameTeam[]) {
   return tx.insert(cricketGameTeam).values(data).returning();
 }
 
-async function insertGamePlayerStats(
-  tx: PgTransaction<any, any, any>,
-  data: NewGamePlayerStats[]
-) {
+async function insertGamePlayerStats(tx: PgTransaction<any, any, any>, data: NewGamePlayerStats[]) {
   if (!data.length) {
     return;
   }
@@ -73,10 +60,7 @@ async function insertGamePlayerStats(
 
 export type InsertCricketGameData = z.infer<typeof saveCricketGameSchema>;
 
-export default async function saveGame(
-  newGame: InsertCricketGameData,
-  gameMode: 'cricket'
-) {
+export default async function saveGame(newGame: InsertCricketGameData, gameMode: 'cricket') {
   const user = await getUser();
 
   if (!user) {
@@ -93,8 +77,7 @@ export default async function saveGame(
     };
   }
 
-  const { winner, maxRounds, currentRound, numbers, ...gameData } =
-    validatedData.data;
+  const { winner, maxRounds, currentRound, numbers, ...gameData } = validatedData.data;
 
   return await db.transaction(async (tx) => {
     try {

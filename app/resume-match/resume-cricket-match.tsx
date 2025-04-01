@@ -1,13 +1,7 @@
 import React from 'react';
 import PlayerBadge from '@/components/player-badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 
 import { CricketGameType } from '@/packages/cricket-game';
@@ -24,7 +18,7 @@ function ResumeCricketMatch({ game, onDeleteGame }: ResumeCricketMatchProps) {
     <Link href={`/play/cricket?gameId=${game.id}`} className="h-full">
       <Card className="h-full">
         <CardHeader className="p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <CardTitle>Cricket Game</CardTitle>
             <Button
               size="icon"
@@ -34,7 +28,7 @@ function ResumeCricketMatch({ game, onDeleteGame }: ResumeCricketMatchProps) {
                 onDeleteGame(game.id);
               }}
             >
-              <XIcon className="stroke-red-500 size-6" />
+              <XIcon className="size-6 stroke-red-500" />
             </Button>
           </div>
           <CardDescription>Numbers: {game.numbers.join(', ')}</CardDescription>
@@ -45,8 +39,7 @@ function ResumeCricketMatch({ game, onDeleteGame }: ResumeCricketMatchProps) {
             {game.teams.map((team) => (
               <li key={team.name} className="mb-2 py-1">
                 <p className="mb-2">
-                  <span className="italic text-zinc-500">{team.name}</span>,{' '}
-                  {team.points} points
+                  <span className="text-zinc-500 italic">{team.name}</span>, {team.points} points
                 </p>
                 <div className="space-x-2">
                   {team.players.map((player) => (

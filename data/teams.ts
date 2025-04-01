@@ -1,9 +1,9 @@
 'use server';
 
 import db from '@/db/drizzle';
-import { players, teams, users } from '@/db/schema';
+import { cricketGame, cricketGameTeam, teams } from '@/db/schema';
 import { getUser } from '@/lib/auth';
-import { eq, getTableColumns, sql } from 'drizzle-orm';
+import { and, eq, getTableColumns, sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const getUserTeams = async () => {
@@ -14,28 +14,11 @@ export const getUserTeams = async () => {
     return [];
   }
 
-  const newQuery = await db
-    .select({
-      ...getTableColumns(teams),
-      players: sql`json_agg(${players})`,
-      playedGames: sql`1`
-    })
-    .from(teams)
-    .innerJoin(players, eq(teams.id, players.teamId))
-    .leftJoin(users, eq(players.userId, users.id))
-    .groupBy(teams.id);
-
-  console.log(JSON.stringify(newQuery, null, 2));
-
-  return await db.query.teams.findMany({
-    where: (teams, { eq, and }) =>
-      and(eq(teams.userId, user.id), eq(teams.status, 'active')),
+  // Use a single query with optimized subqueries
+  const userTeams = await db.query.teams.findMany({
+    where: (teams, { eq, and }) => and(eq(teams.userId, user.id), eq(teams.status, 'active')),
     with: {
-      gameTeams: {},
       players: {
-        extras: {
-          id: sql<string>`${players.userId}`.as('id')
-        },
         with: {
           user: {
             columns: {
@@ -46,11 +29,45 @@ export const getUserTeams = async () => {
           }
         }
       }
-    },
-    extras: {
-      playedGames: sql<number>`json_array_length("teams_gameTeams"."data")`.as(
-        'played_games'
-      )
     }
+  });
+
+  const teamIds = userTeams.map((team) => team.id);
+
+  if (teamIds.length === 0) {
+    return [];
+  }
+
+  const gameStats = await db.execute(sql`
+    SELECT 
+      t.id as team_id,
+      (
+        SELECT COUNT(*) 
+        FROM (
+          SELECT game_id FROM ${cricketGameTeam} WHERE ${cricketGameTeam.teamId} = t.id
+          UNION ALL
+          SELECT game_id FROM "zero_one_game_player_stats" WHERE "zero_one_game_player_stats"."team_id" = t.id
+        ) AS combined_games
+      ) as played_games,
+      (
+        SELECT COUNT(*) 
+        FROM ${cricketGame}
+        WHERE ${cricketGame.winner} = t.id
+      ) as won_games
+    FROM ${teams} t
+    WHERE t.id IN (${sql.join(teamIds, sql.raw(','))})
+  `);
+
+  // Map the stats to each team
+  return userTeams.map((team) => {
+    const stats = gameStats.rows.find((stat) => stat.team_id === team.id) || {
+      played_games: 0,
+      won_games: 0
+    };
+    return {
+      ...team,
+      playedGames: Number(stats.played_games),
+      wonGames: Number(stats.won_games)
+    };
   });
 };

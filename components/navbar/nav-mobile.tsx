@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTrigger,
-  DrawerTitle
-} from '../ui/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTrigger, DrawerTitle } from '../ui/drawer';
 import { Button, buttonVariants } from '../ui/button';
 import { Heading } from '../ui/heading';
 import { Separator } from '../ui/separator';
@@ -77,7 +71,7 @@ export default function NavMobile() {
         <MenuIcon name="Menu" className="size-6" />
       </DrawerTrigger>
       <DrawerContent className="h-full w-[85%] rounded-none" hideDrawerHandle>
-        <DrawerHeader className="text-left p-2">
+        <DrawerHeader className="p-2 text-left">
           <DrawerTitle className="flex items-center justify-between">
             <Heading>
               <Image src={logo} alt="Bullseye Buddy logo" className="w-40" />
@@ -88,7 +82,7 @@ export default function NavMobile() {
               className="flex items-center text-base"
               onClick={() => setOpen(false)}
             >
-              <XIcon name="X" className="w-8 h-8" />
+              <XIcon name="X" className="h-8 w-8" />
             </Button>
           </DrawerTitle>
         </DrawerHeader>
@@ -102,12 +96,7 @@ export default function NavMobile() {
                 className={createLinkClasses(pathname, href)}
                 onClick={() => setOpen(false)}
               >
-                <Icon
-                  className={cn(
-                    'w-4 h-4 mr-2 stroke-muted-foreground',
-                    iconClass
-                  )}
-                />
+                <Icon className={cn('stroke-muted-foreground mr-2 h-4 w-4', iconClass)} />
                 {text}
               </Link>
             ))}
@@ -119,10 +108,7 @@ export default function NavMobile() {
               className={createLinkClasses(pathname, '/settings')}
               onClick={() => setOpen(false)}
             >
-              <SettingsIcon
-                name="Settings"
-                className="w-4 h-4 mr-2 stroke-muted-foreground"
-              />
+              <SettingsIcon name="Settings" className="stroke-muted-foreground mr-2 h-4 w-4" />
               Settings
             </Link>
             <Button
@@ -134,10 +120,7 @@ export default function NavMobile() {
                 signout();
               }}
             >
-              <LogOutIcon
-                name="LogOut"
-                className="w-4 h-4 mr-2 stroke-muted-foreground"
-              />
+              <LogOutIcon name="LogOut" className="stroke-muted-foreground mr-2 h-4 w-4" />
               Signout
             </Button>
           </ul>

@@ -12,11 +12,7 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import clsx from 'clsx';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -66,10 +62,10 @@ export function NumbersSelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={clsx('w-full justify-between', 'min-h-9 h-auto p-2')}
+          className={clsx('w-full justify-between', 'h-auto min-h-9 p-2')}
           onClick={() => setOpen(!open)}
         >
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex flex-wrap gap-1">
             {selected.length > 0
               ? selected.map((item, idx) => (
                   <Badge
@@ -83,7 +79,7 @@ export function NumbersSelector({
                   >
                     {options.find((option) => item === option.value)?.label}
                     <a
-                      className="ml-1 ring-offset-background rounded-full outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      className="ring-offset-background focus:ring-ring ml-1 rounded-full outline-hidden focus:ring-2 focus:ring-offset-2"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           handleUnselect(item);
@@ -95,7 +91,7 @@ export function NumbersSelector({
                       }}
                       onClick={() => handleUnselect(item)}
                     >
-                      <Cross2Icon className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                      <Cross2Icon className="text-muted-foreground hover:text-foreground h-3 w-3" />
                     </a>
                   </Badge>
                 ))
@@ -107,7 +103,7 @@ export function NumbersSelector({
       <Content
         className={cn(
           'min-w-[var(--radix-popover-trigger-width)] p-0',
-          !isDesktop && 'pb-2 min-h-56'
+          !isDesktop && 'min-h-56 pb-2'
         )}
       >
         <OptionsList
@@ -138,24 +134,17 @@ type OptionsListProps = {
   onChange: (value: string) => void;
 } & MultiselectAndOptionListProps;
 
-function OptionsList({
-  selected,
-  options,
-  onChange,
-  noResultsRender
-}: OptionsListProps) {
+function OptionsList({ selected, options, onChange, noResultsRender }: OptionsListProps) {
   return (
     <Command>
       <CommandList>
-        <CommandEmpty>
-          {noResultsRender ? noResultsRender() : 'No results found.'}
-        </CommandEmpty>
+        <CommandEmpty>{noResultsRender ? noResultsRender() : 'No results found.'}</CommandEmpty>
         <CommandGroup>
-          <div className="grid grid-cols-5 gap-1 items-center justify-center">
+          <div className="grid grid-cols-5 items-center justify-center gap-1">
             {options.map((option) => (
               <CommandItem
                 className={cn(
-                  'justify-center h-10',
+                  'h-10 justify-center',
                   selected.includes(option.value) && 'bg-accent'
                 )}
                 key={option.label}

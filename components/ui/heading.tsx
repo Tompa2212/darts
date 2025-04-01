@@ -23,17 +23,9 @@ const headingVariants = cva('font-semibold', {
   }
 });
 
-export const Heading = ({
-  children,
-  Type = 'h1',
-  className,
-  ...rest
-}: HeadingProps) => {
+export const Heading = ({ children, Type = 'h1', className, ...rest }: HeadingProps) => {
   return (
-    <Type
-      className={twMerge(cn(headingVariants({ Type })), className)}
-      {...rest}
-    >
+    <Type className={twMerge(cn(headingVariants({ Type })), className)} {...rest}>
       {children}
     </Type>
   );

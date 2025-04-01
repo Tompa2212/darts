@@ -43,14 +43,7 @@ const getUsersOptions = (users: Array<User | { name: string }>) =>
 export const AddTeamForm = () => {
   const isDesktop = useIsDesktop();
 
-  const {
-    form,
-    inputValue,
-    setInputValue,
-    formMessage,
-    loading,
-    handleSubmit
-  } = useAddTeamForm();
+  const { form, inputValue, setInputValue, formMessage, loading, handleSubmit } = useAddTeamForm();
 
   const { data: users } = useUserSearch(inputValue);
   const userOptions = useMemo(() => getUsersOptions(users || []), [users]);
@@ -87,10 +80,7 @@ export const AddTeamForm = () => {
         </SheetHeader>
         <div>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="space-y-4 mb-4"
-            >
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="mb-4 space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -148,9 +138,7 @@ export const AddTeamForm = () => {
                         />
                       </FormControl>
                       <FormMessage />
-                      <FormDescription>
-                        Search for registered users or add by name.
-                      </FormDescription>
+                      <FormDescription>Search for registered users or add by name.</FormDescription>
                     </FormItem>
                   )}
                 />

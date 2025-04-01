@@ -16,7 +16,7 @@ export default function Error({
 
   return (
     <div className="p-4">
-      <h2 className="text-3xl mb-4">{error.message}</h2>
+      <h2 className="mb-4 text-3xl">{error.message}</h2>
       <Button onClick={() => reset()}>Try again</Button>
     </div>
   );

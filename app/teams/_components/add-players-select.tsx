@@ -21,7 +21,7 @@ function MenuList<
     <components.MenuList {...props}>
       {inputValue.length > 0 ? (
         <div
-          className={cn(optionClasses, 'hover:bg-zinc-100 cursor-pointer')}
+          className={cn(optionClasses, 'cursor-pointer hover:bg-zinc-100')}
           onClick={() => onUnlinkedPlayerAdd(inputValue)}
         >
           <div>Add Player</div>
@@ -78,7 +78,7 @@ export function AddPlayersSelect<
         components={{ MenuList }}
         noOptionsMessage={() => {
           return (
-            <div className="text-zinc-500 text-left">
+            <div className="text-left text-zinc-500">
               {inputValue.length <= 2
                 ? 'Type 3 characters to start searching...'
                 : 'No users found'}

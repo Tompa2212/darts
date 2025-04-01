@@ -13,13 +13,8 @@ const UserAvatar = ({ user: { name, image }, ...props }: UserAvatarProps) => {
   return (
     <Avatar {...props}>
       {image ? (
-        <div className="relative w-full h-full aspect-square">
-          <Image
-            fill
-            src={image}
-            alt="profile picture"
-            referrerPolicy="no-referrer"
-          />
+        <div className="relative aspect-square h-full w-full">
+          <Image fill src={image} alt="profile picture" referrerPolicy="no-referrer" />
         </div>
       ) : (
         <AvatarFallback>

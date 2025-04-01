@@ -21,10 +21,7 @@ const gameSetup: CricketGameInitParams = {
   ]
 };
 
-function throwDarts(
-  game: CricketGame,
-  darts: [number: number, multiplier: number][]
-) {
+function throwDarts(game: CricketGame, darts: [number: number, multiplier: number][]) {
   darts.forEach(([number, multiplier]) => {
     game.throwDart({ number, multiplier });
   });
@@ -109,13 +106,9 @@ describe('Statistic Generator Tests', () => {
 
     cricketGame.nextPlayer();
 
-    expect(
-      cricketGame.game.teams.find((t) => t.id === '1')?.stats?.totalPoints
-    ).toEqual(20 * 3);
+    expect(cricketGame.game.teams.find((t) => t.id === '1')?.stats?.totalPoints).toEqual(20 * 3);
 
-    expect(
-      cricketGame.game.teams.find((t) => t.id === '2')?.stats?.totalPoints
-    ).toEqual(0);
+    expect(cricketGame.game.teams.find((t) => t.id === '2')?.stats?.totalPoints).toEqual(0);
   });
 
   it('Calculates correct marks stats for players', () => {
@@ -188,12 +181,8 @@ describe('Statistic Generator Tests', () => {
 
     const game = cricketGame.game;
 
-    const player1 = game.teams.find((t) => t.id === '1')?.stats?.players[
-      PLAYER_1.name
-    ]!;
-    const player2 = game.teams.find((t) => t.id === '2')?.stats?.players[
-      PLAYER_2.name
-    ]!;
+    const player1 = game.teams.find((t) => t.id === '1')?.stats?.players[PLAYER_1.name]!;
+    const player2 = game.teams.find((t) => t.id === '2')?.stats?.players[PLAYER_2.name]!;
 
     expect(player1.singles).toEqual(0);
     expect(player1.doubles).toEqual(1);

@@ -25,10 +25,7 @@ export function Select<
             'px-3 py-1 border border-zinc-200 text-sm text-black rounded-lg min-h-[40px]! shadow-0 outline-0 hover:border-zinc-200'
           ),
         menuList: (state) =>
-          cn(
-            'mt-2 z-50 border rounded-md',
-            state.selectProps.menuPlacement === 'top' && 'mb-2'
-          ),
+          cn('mt-2 z-50 border rounded-md', state.selectProps.menuPlacement === 'top' && 'mb-2'),
         menuPortal: () => 'z-100!',
         menu: () => cn('b-0'),
         option: ({ isSelected, isFocused, isDisabled }) =>

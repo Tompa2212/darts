@@ -5,12 +5,7 @@ export class CricketGameValidator {
   static canThrowDart(
     game: Pick<
       CricketGameType,
-      | 'isFinished'
-      | 'closedNumbers'
-      | 'thrownDarts'
-      | 'currentRound'
-      | 'maxRounds'
-      | 'numbers'
+      'isFinished' | 'closedNumbers' | 'thrownDarts' | 'currentRound' | 'maxRounds' | 'numbers'
     >,
     { number, multiplier }: ThrownNumber
   ) {

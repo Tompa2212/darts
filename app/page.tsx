@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 
 export default function Home() {
@@ -14,7 +9,7 @@ export default function Home() {
           Welcome to Darts Hub, a simple app to keep track of your darts games.
         </p>
       </header>
-      <main className="container p-2 sm:p-4 grid sm:grid-cols-2 gap-4 items-stretch *:self-stretch">
+      <main className="container grid items-stretch gap-4 p-2 *:self-stretch sm:grid-cols-2 sm:p-4">
         <Link href="/play">
           <Card className="h-full cursor-pointer transition-colors hover:bg-zinc-50">
             <CardHeader className="p-4">
@@ -23,8 +18,8 @@ export default function Home() {
                 <span className="mx-2 inline-block text-2xl">🎯</span>
               </CardTitle>
               <CardDescription>
-                Play a new match and keep track of your scores. Play against a
-                friend, computer or play practice game.
+                Play a new match and keep track of your scores. Play against a friend, computer or
+                play practice game.
               </CardDescription>
             </CardHeader>
           </Card>

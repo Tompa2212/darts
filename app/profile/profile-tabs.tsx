@@ -26,11 +26,7 @@ export function ProfileTabs({
   }
 
   return (
-    <Tabs
-      defaultValue={defaultActive}
-      onValueChange={handleValueChange}
-      orientation="vertical"
-    >
+    <Tabs defaultValue={defaultActive} onValueChange={handleValueChange} orientation="vertical">
       {children}
     </Tabs>
   );

@@ -5,13 +5,7 @@ import { SessionUser } from '@/auth';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent
-} from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -26,9 +20,7 @@ export function ChangeUsernameForm({ user }: { user: SessionUser }) {
     <Card className="py-4">
       <CardHeader>
         <CardTitle>Change Username</CardTitle>
-        <CardDescription>
-          Used to identify you among other players.
-        </CardDescription>
+        <CardDescription>Used to identify you among other players.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <form action={action} className="space-y-4">
@@ -48,10 +40,7 @@ export function ChangeUsernameForm({ user }: { user: SessionUser }) {
             />
             <p
               id="usernameError"
-              className={cn(
-                'text-[0.8rem] text-destructive hidden',
-                hasUsernameError && 'block'
-              )}
+              className={cn('text-destructive hidden text-[0.8rem]', hasUsernameError && 'block')}
             >
               {state?.details?.username?.join(', ')}
             </p>

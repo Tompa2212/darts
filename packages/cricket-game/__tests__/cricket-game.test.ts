@@ -24,10 +24,7 @@ const gameSetup: CricketGameInitParams = {
   ]
 };
 
-function throwDarts(
-  game: CricketGame,
-  darts: [number: number, multiplier: number][]
-) {
+function throwDarts(game: CricketGame, darts: [number: number, multiplier: number][]) {
   darts.forEach(([number, multiplier]) => {
     game.throwDart({ number, multiplier });
   });
@@ -362,9 +359,7 @@ describe('Cricket Game', () => {
     expect(game.winner).toBeDefined();
     expect(game.winner).toBe(game.teams[0]);
 
-    const allNumbersClosedPoints = game.numbers
-      .map((n) => n * 3)
-      .reduce((a, b) => a + b, 0);
+    const allNumbersClosedPoints = game.numbers.map((n) => n * 3).reduce((a, b) => a + b, 0);
 
     expect(game.teams[0].points).toBe(allNumbersClosedPoints + 20 * 3);
     // player 2 didnt close bullseye and had 0 points

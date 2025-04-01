@@ -10,10 +10,7 @@ type RegisterUserParams = Omit<NewUser, 'username'> & {
 function createRandomUsername(name: string | null | undefined, email: string) {
   let username = name ? name : email.split('@')[0];
 
-  username = username
-    .normalize('NFKD')
-    .replace(/[^\w]/g, '')
-    .toLocaleLowerCase();
+  username = username.normalize('NFKD').replace(/[^\w]/g, '').toLocaleLowerCase();
 
   return `${username}#${crypto.randomBytes(4).toString('hex')}`;
 }

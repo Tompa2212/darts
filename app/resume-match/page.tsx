@@ -12,7 +12,7 @@ export default async function ResumeMatchPage() {
   await protectedPage();
 
   return (
-    <div className="container py-4 space-y-4">
+    <div className="container space-y-4 py-4">
       <Heading Type="h1">Resume Saved Match</Heading>
       <Suspense fallback={<ResumeMatchListSkeleton />}>
         <ResumeMatchList />

@@ -3,9 +3,7 @@ import { z } from 'zod';
 
 export const cricketConfigSchema = z
   .object({
-    cricketNumbersOption: z
-      .enum(['standard', 'randomNums', 'customNums'])
-      .default('standard'),
+    cricketNumbersOption: z.enum(['standard', 'randomNums', 'customNums']).default('standard'),
     numbers: z.number().array().length(7, '7 numbers required').optional(),
     teams: z
       .array(
@@ -26,8 +24,7 @@ export const cricketConfigSchema = z
     if (data.cricketNumbersOption === 'customNums' && !data.numbers) {
       return context.addIssue({
         code: z.ZodIssueCode.custom,
-        message:
-          'Custom numbers required when selecting "Custom Numbers" option',
+        message: 'Custom numbers required when selecting "Custom Numbers" option',
         path: ['numbers']
       });
     }

@@ -13,24 +13,17 @@ import { RedoIcon, UndoIcon } from 'lucide-react';
 type CricketGameProps = CricketGameInit;
 
 export const CricketGame = (props: CricketGameProps) => {
-  const { game, canRedo, canUndo, currentTeam, dispatcher } =
-    useCricketGame(props);
+  const { game, canRedo, canUndo, currentTeam, dispatcher } = useCricketGame(props);
 
   return (
     <>
-      <FinishedGameDialog
-        game={game}
-        onReplayGame={() => dispatcher({ type: 'REPLAY_GAME' })}
-      />
-      <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:py-4 sm:px-2 lg:px-0">
+      <FinishedGameDialog game={game} onReplayGame={() => dispatcher({ type: 'REPLAY_GAME' })} />
+      <div className="flex h-full max-w-[1200px] flex-col gap-6 p-1 sm:px-2 sm:py-4 lg:px-0">
         <div className="flex items-center justify-between">
           <div>
-            <p className="max-w-[290px] xs:max-w-full text-lg text-overflow-ellipsis">
-              Playing: <span className="font-semibold">{currentTeam.name}</span>
-              ,{' '}
-              <span className="text-zinc-500 font-semibold">
-                {game.currentPlayer?.name}
-              </span>
+            <p className="xs:max-w-full text-overflow-ellipsis max-w-[290px] text-lg">
+              Playing: <span className="font-semibold">{currentTeam.name}</span>,{' '}
+              <span className="font-semibold text-zinc-500">{game.currentPlayer?.name}</span>
             </p>
           </div>
           <div className="flex gap-1">
@@ -52,7 +45,7 @@ export const CricketGame = (props: CricketGameProps) => {
             </Button>
           </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between lg:justify-normal space-y-4 lg:space-y-8">
+        <div className="flex flex-1 flex-col justify-between space-y-4 lg:justify-normal lg:space-y-8">
           <ScoresTable game={game} />
           <div>
             <CricketGameInfo game={game} />

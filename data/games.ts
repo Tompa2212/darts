@@ -62,18 +62,11 @@ export type UserPlayedGamesDto = UserPlayedGames & {
   userWon: boolean;
 };
 
-function toUserPlayedGameDto(
-  game: UserPlayedGames,
-  userId: string
-): UserPlayedGamesDto {
+function toUserPlayedGameDto(game: UserPlayedGames, userId: string): UserPlayedGamesDto {
   const winnerTeamId = game.winner.id;
-  const winningTeamPlayers = game.gameTeams.find(
-    (gT) => gT.team.id === winnerTeamId
-  )?.team.players;
+  const winningTeamPlayers = game.gameTeams.find((gT) => gT.team.id === winnerTeamId)?.team.players;
 
-  const userWon = !!winningTeamPlayers?.some(
-    (player) => player.userId === userId
-  );
+  const userWon = !!winningTeamPlayers?.some((player) => player.userId === userId);
 
   return { ...game, userWon };
 }

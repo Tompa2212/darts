@@ -15,7 +15,7 @@ export const BackButton = (props: ButtonProps) => {
       }}
       {...props}
     >
-      <MoveLeftIcon className="h-4 w-4 mr-2" /> Back
+      <MoveLeftIcon className="mr-2 h-4 w-4" /> Back
     </Button>
   );
 };

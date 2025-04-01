@@ -1,8 +1,6 @@
 import { Dart } from './types';
 
-const allNums = [
-  20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 25
-];
+const allNums = [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 25];
 
 const allDartsCombinations = allNums.flatMap((num) => {
   if (num === 25) {
@@ -25,10 +23,7 @@ type CheckoutOptions = {
 };
 
 export class OutshotCalculator {
-  public static findOuthsotCombinations(
-    score: number,
-    checkoutOptions?: CheckoutOptions
-  ) {
+  public static findOuthsotCombinations(score: number, checkoutOptions?: CheckoutOptions) {
     let validCheckoutMultipliers = [1, 2, 3];
 
     if (checkoutOptions?.doubleOut) {
@@ -40,14 +35,7 @@ export class OutshotCalculator {
 
     const results: Dart[][] = [];
 
-    this.dfs(
-      allDartsCombinations,
-      score,
-      [],
-      results,
-      validCheckoutMultipliers,
-      checkoutOptions
-    );
+    this.dfs(allDartsCombinations, score, [], results, validCheckoutMultipliers, checkoutOptions);
 
     results.sort((a, b) => a.length - b.length);
     return results;

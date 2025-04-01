@@ -35,8 +35,7 @@ export const CricketGameConfig = ({
     resolver: zodResolver(cricketConfigSchema),
     defaultValues: {
       cricketNumbersOption: 'standard',
-      teams: [],
-      numbers: []
+      teams: []
     }
   });
 
@@ -52,10 +51,7 @@ export const CricketGameConfig = ({
         <Heading>Create Cricket Match</Heading>
       </header>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-lg space-y-6 w-full"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-lg space-y-6">
           <FormField
             control={form.control}
             name="cricketNumbersOption"
@@ -68,27 +64,23 @@ export const CricketGameConfig = ({
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="standard" />
                       </FormControl>
                       <FormLabel className="font-normal">Standard</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="randomNums" />
                       </FormControl>
-                      <FormLabel className="font-normal">
-                        Random Numbers
-                      </FormLabel>
+                      <FormLabel className="font-normal">Random Numbers</FormLabel>
                     </FormItem>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormItem className="flex items-center space-y-0 space-x-3">
                       <FormControl>
                         <RadioGroupItem value="customNums" />
                       </FormControl>
-                      <FormLabel className="font-normal">
-                        Custom Numbers
-                      </FormLabel>
+                      <FormLabel className="font-normal">Custom Numbers</FormLabel>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
@@ -139,9 +131,7 @@ export const CricketGameConfig = ({
                 <div className="flex items-center gap-2 text-sm">
                   <TeamsReorder teams={value} onReorder={onChange} />
                   <Link
-                    className={cn(
-                      buttonVariants({ variant: 'ghost', size: 'sm' })
-                    )}
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
                     href="/teams"
                   >
                     Create New Teams

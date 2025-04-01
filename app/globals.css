@@ -161,7 +161,7 @@
 }
 
 @utility text-overflow-ellipsis {
-  @apply text-ellipsis overflow-hidden whitespace-nowrap;
+  @apply overflow-hidden text-ellipsis whitespace-nowrap;
 }
 
 @layer base {
