@@ -10,7 +10,6 @@ import {
   uniqueIndex,
   boolean,
   primaryKey,
-  numeric,
   doublePrecision
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -69,20 +68,17 @@ export const teams = pgTable(
 export const teamMembers = pgTable(
   'team_members',
   {
-    // Use SERIAL or UUID for the member link ID
-    id: uuid('id').primaryKey(),
+    id: uuid('id').primaryKey().defaultRandom(),
     teamId: uuid('team_id')
       .notNull()
       .references(() => teams.id, { onDelete: 'cascade' }),
     userId: uuid('user_id'),
-    displayName: varchar('display_name', { length: 100 }).notNull(),
-    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow()
-    // Add other member-specific info if needed (e.g., is_captain, status)
+    name: varchar('name', { length: 100 }).notNull()
   },
   (tm) => [
     index('team_members_team_idx').on(tm.teamId),
     index('team_members_user_idx').on(tm.userId),
-    uniqueIndex('team_members_team_user_unique').on(tm.teamId, tm.userId, tm.displayName)
+    uniqueIndex('team_members_team_user_unique').on(tm.teamId, tm.userId, tm.name)
   ]
 );
 
@@ -94,7 +90,7 @@ export const gameStatusEnum = pgEnum('game_status', ['COMPLETED']);
 export const games = pgTable(
   'games',
   {
-    id: uuid('id').primaryKey(),
+    id: uuid('id').primaryKey().defaultRandom(),
     gameMode: gameModeEnum('game_mode').notNull(),
     status: gameStatusEnum('game_status').notNull().default('COMPLETED'),
     creatorUserId: uuid('creator_user_id').references(() => users.id, {
@@ -118,7 +114,8 @@ export const games = pgTable(
 export const gameParticipants = pgTable(
   'game_participants',
   {
-    gameId: integer('game_id')
+    gameId: uuid('game_id')
+      .defaultRandom()
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
     teamId: uuid('team_id')
@@ -135,7 +132,7 @@ export const gameParticipants = pgTable(
 // --- Game Specific Detail Tables ---
 
 export const gamesCricket = pgTable('games_cricket', {
-  gameId: integer('game_id')
+  gameId: uuid('game_id')
     .primaryKey()
     .references(() => games.id, { onDelete: 'cascade' }),
   numbers: integer('numbers').array().notNull(),
@@ -149,15 +146,15 @@ export const gamesCricket = pgTable('games_cricket', {
 export const gameStatsCricketTeam = pgTable(
   'game_stats_cricket_team',
   {
-    gameId: integer('game_id')
+    gameId: uuid('game_id')
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
     teamId: uuid('team_id')
       .notNull()
       .references(() => teams.id, { onDelete: 'cascade' }),
     score: integer('score').notNull().default(0),
-    pointsPerRound: numeric('points_per_round').notNull().default('0'),
-    marksPerRound: numeric('marks_per_round')
+    pointsPerRound: doublePrecision('points_per_round').notNull().default(0),
+    marksPerRound: doublePrecision('marks_per_round')
   },
   (t) => [
     primaryKey({ columns: [t.gameId, t.teamId] }),
@@ -169,12 +166,12 @@ export const gameStatsCricketTeam = pgTable(
 export const gameStatsCricketPlayer = pgTable(
   'game_stats_cricket_player',
   {
-    id: uuid('id').primaryKey(),
-    gameId: integer('game_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    gameId: uuid('game_id')
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
     // Link to the specific team member who achieved these stats
-    teamMemberId: integer('team_member_id')
+    teamMemberId: uuid('team_member_id')
       .notNull()
       .references(() => teamMembers.id, { onDelete: 'cascade' }),
     // Also store teamId for easier querying of all player stats for a team in a game
@@ -185,8 +182,8 @@ export const gameStatsCricketPlayer = pgTable(
     doubles: integer('doubles').default(0).notNull(),
     triples: integer('triples').default(0).notNull(),
     misses: integer('misses').default(0).notNull(),
-    marksPerRound: numeric('marks_per_round'),
-    marksPerDart: numeric('marks_per_dart'),
+    marksPerRound: doublePrecision('marks_per_round'),
+    marksPerDart: doublePrecision('marks_per_dart'),
     totalMarks: integer('total_marks').notNull(),
     playedTurns: integer('played_turns').notNull()
     // If storing raw throws, DO NOT put JSON here. Use a separate game_throws table.
@@ -202,7 +199,7 @@ export const gameStatsCricketPlayer = pgTable(
 );
 
 export const gamesX01 = pgTable('games_x01', {
-  gameId: integer('game_id')
+  gameId: uuid('game_id')
     .primaryKey()
     .references(() => games.id, { onDelete: 'cascade' }),
   startScore: integer('start_score').notNull(), // Clearer name than gameType
@@ -218,8 +215,8 @@ export const gamesX01 = pgTable('games_x01', {
 export const gameX01SetLegResults = pgTable(
   'game_x01_set_leg_results',
   {
-    id: uuid('id').primaryKey(),
-    gameId: integer('game_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    gameId: uuid('game_id')
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
     teamId: uuid('team_id')
@@ -230,7 +227,7 @@ export const gameX01SetLegResults = pgTable(
     startingScore: integer('starting_score').notNull(),
     remainingScore: integer('remaining_score').notNull(),
     dartsThrown: integer('darts_thrown').notNull(),
-    averagePerDart: numeric('average_per_dart'),
+    averagePerDart: doublePrecision('average_per_dart'),
     checkoutType: varchar('checkout_type', { length: 20 }), // e.g., 'double', 'single', 'bull'
     isWon: boolean('is_won').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow()
@@ -269,11 +266,11 @@ export const gameStatsX01Team = pgTable(
 export const gameStatsX01Player = pgTable(
   'game_stats_x01_player',
   {
-    id: uuid('id').primaryKey(),
-    gameId: integer('game_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    gameId: uuid('game_id')
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
-    teamMemberId: integer('team_member_id')
+    teamMemberId: uuid('team_member_id')
       .notNull()
       .references(() => teamMembers.id, { onDelete: 'cascade' }),
     teamId: uuid('team_id')
@@ -284,10 +281,10 @@ export const gameStatsX01Player = pgTable(
     scoreRemaining: integer('score_remaining'), // Score left when game ended for this player
     totalScoreThrown: integer('total_score_thrown').notNull(),
     dartsThrown: integer('darts_thrown').notNull(), // More fundamental than turnsTaken
-    // Use numeric for averages
-    averagePerDart: numeric('average_per_dart'), // (totalScoreThrown / dartsThrown)
-    averagePerTurn: numeric('average_per_turn'), // (totalScoreThrown / (dartsThrown / 3)) - Careful with integer division
-    checkoutPercentage: numeric('checkout_percentage'), // Requires tracking attempts vs hits
+    // Use doublePrecision for averages
+    averagePerDart: doublePrecision('average_per_dart'), // (totalScoreThrown / dartsThrown)
+    averagePerTurn: doublePrecision('average_per_turn'), // (totalScoreThrown / (dartsThrown / 3)) - Careful with integer division
+    checkoutPercentage: doublePrecision('checkout_percentage'), // Requires tracking attempts vs hits
     checkoutsAttempted: integer('checkouts_attempted').default(0),
     checkoutsMade: integer('checkouts_made').default(0),
     highestScore: integer('highest_score'), // Highest single turn score
@@ -311,12 +308,12 @@ export const gameStatsX01Player = pgTable(
 export const gameThrows = pgTable(
   'game_throws',
   {
-    id: uuid('id').primaryKey(),
-    gameId: integer('game_id')
+    id: uuid('id').primaryKey().defaultRandom(),
+    gameId: uuid('game_id')
       .notNull()
       .references(() => games.id, { onDelete: 'cascade' }),
     // Link to the specific team member who threw the dart
-    teamMemberId: integer('team_member_id')
+    teamMemberId: uuid('team_member_id')
       .notNull()
       .references(() => teamMembers.id, { onDelete: 'cascade' }),
     teamId: uuid('team_id')
@@ -356,9 +353,6 @@ export const teamsRelations = relations(teams, ({ one, many }) => ({
     relationName: 'ownedTeams'
   }),
   members: many(teamMembers),
-  gamesParticipated: many(gameParticipants),
-  gamesWon: many(games, { relationName: 'gamesWon' }), // Games where this team is the winner
-  statsCricketTeam: many(gameStatsCricketTeam),
   x01SetLegResults: many(gameX01SetLegResults)
 }));
 
@@ -404,6 +398,13 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
   statsX01Player: many(gameStatsX01Player),
   throws: many(gameThrows), // if using gameThrows table
   x01SetLegResults: many(gameX01SetLegResults)
+}));
+
+export const gamesCricketRelations = relations(gamesCricket, ({ one }) => ({
+  game: one(games, {
+    fields: [gamesCricket.gameId],
+    references: [games.id]
+  })
 }));
 
 export const gameParticipantsRelations = relations(gameParticipants, ({ one }) => ({

@@ -1,8 +1,8 @@
 import { Dart } from './types';
 
-const allNums = [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 25];
+const ALL_NUMS = [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 25];
 
-const allDartsCombinations = allNums.flatMap((num) => {
+const allDartsCombinations = ALL_NUMS.flatMap((num) => {
   if (num === 25) {
     return [
       { value: num, multiplier: 2 },

@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import { LoginForm } from '../_components/login-form';
 import { getUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 
 export default async function LoginPage() {
   const user = await getUser();

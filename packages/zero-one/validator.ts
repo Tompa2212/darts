@@ -19,11 +19,11 @@ export class ZeroOneGameValidator {
 
   static isBust(score: number, game: ZeroOneGameType) {
     if (game.doubleOut) {
-      const remainingScore = game.currentTeam.points - score;
+      const remainingScore = game.currentTeam.score - score;
 
       return remainingScore < 0 || remainingScore === 1;
     }
 
-    return score > game.currentTeam.points;
+    return score > game.currentTeam.score;
   }
 }

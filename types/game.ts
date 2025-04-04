@@ -1,13 +1,14 @@
-import { cricketGame, gameModeEnum } from '@/db/schema';
+import { games, gamesCricket, gamesX01 } from '@/db/test.schema';
 
-export type Game = {
-  id: string;
-  creator: string;
-  winner: string;
-  createdAt: string;
-  playedRounds: number;
-  maxRounds?: number | null;
-  gameMode: (typeof gameModeEnum.enumValues)[number];
-};
+export type Game = typeof games.$inferSelect;
+export type NewGame = typeof games.$inferInsert;
 
-export type NewCricketGame = typeof cricketGame.$inferInsert;
+export type NewCricketGame = NewGame &
+  Omit<typeof gamesCricket.$inferInsert, 'gameId'> & {
+    gameMode: 'cricket';
+  };
+
+export type NewZeroOneGame = NewGame &
+  Omit<typeof gamesX01.$inferInsert, 'gameId'> & {
+    gameMode: 'x01';
+  };

@@ -33,7 +33,7 @@ export default function ScoresTable({ game }: ScoresTableProps) {
               <TableCell className="font-semibold">{team.name}</TableCell>
               {showSets && <TableCell>{team.sets}</TableCell>}
               {showLegs && <TableCell>{team.legs}</TableCell>}
-              <TableCell>{team.points}</TableCell>
+              <TableCell>{team.score}</TableCell>
             </TableRow>
           ))}
         </TableBody>

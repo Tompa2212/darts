@@ -111,6 +111,42 @@ describe('Statistic Generator Tests', () => {
     expect(cricketGame.game.teams.find((t) => t.id === '2')?.stats?.totalPoints).toEqual(0);
   });
 
+  it('Shows correct marks per round for teams', () => {
+    // team 1
+    throwDarts(cricketGame, [
+      [20, 3],
+      [19, 3],
+      [18, 3]
+    ]);
+
+    cricketGame.nextPlayer();
+
+    // team 2
+    throwDarts(cricketGame, [
+      [20, 3],
+      [19, 3],
+      [18, 3]
+    ]);
+
+    cricketGame.nextPlayer();
+
+    // team 1
+    throwDarts(cricketGame, [
+      [17, 3],
+      [16, 3],
+      [15, 3]
+    ]);
+
+    cricketGame.nextPlayer();
+
+    // team 2
+
+    cricketGame.nextPlayer();
+
+    expect(cricketGame.game.teams.find((t) => t.id === '1')?.stats?.marksPerRound).toEqual(9);
+    expect(cricketGame.game.teams.find((t) => t.id === '2')?.stats?.marksPerRound).toEqual(4.5);
+  });
+
   it('Calculates correct marks stats for players', () => {
     // player 1
     throwDarts(cricketGame, [

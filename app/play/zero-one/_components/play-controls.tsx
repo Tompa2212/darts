@@ -37,7 +37,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
     }
   }
 
-  const scoreDisplay = score !== '' ? score : game.currentTeam.points;
+  const scoreDisplay = score !== '' ? score : game.currentTeam.score;
   const isWritingScore = score !== '';
 
   return (

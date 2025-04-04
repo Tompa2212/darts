@@ -16,8 +16,9 @@ export class CricketStatisticGenerator {
 
     stats.playedTurns++;
     stats.totalPoints += game.currentTurnPoints;
+    stats.totalMarks += game.thrownDarts.reduce((acc, dart) => acc + dart.multiplier, 0);
     stats.pointsPerRound = stats.totalPoints / stats.playedTurns;
-
+    stats.marksPerRound = stats.totalMarks / stats.playedTurns;
     const playerStats = stats.players[currentPlayer.name] ?? this.getInitialPlayerStats();
 
     this.calculatePlayerStats(playerStats, game);
@@ -48,7 +49,9 @@ export class CricketStatisticGenerator {
   private getInitialTeamStats = (): TeamsStats => ({
     playedTurns: 0,
     pointsPerRound: 0,
+    marksPerRound: 0,
     totalPoints: 0,
+    totalMarks: 0,
     players: {}
   });
 

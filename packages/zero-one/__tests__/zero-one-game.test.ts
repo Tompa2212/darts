@@ -42,7 +42,7 @@ describe('ZeroOneGame', () => {
     expect(zeroOneGame.game.currentLeg).toBe(1);
 
     for (const team of zeroOneGame.game.teams) {
-      expect(team.points).toBe(301);
+      expect(team.score).toBe(301);
       expect(team.sets).toBe(0);
       expect(team.legs).toBe(0);
     }
@@ -109,10 +109,10 @@ describe('ZeroOneGame', () => {
   });
 
   test('it should correctly store teams points', () => {
-    expect(zeroOneGame.game.teams.find((t) => t.id === '1')?.points).toBe(301);
+    expect(zeroOneGame.game.teams.find((t) => t.id === '1')?.score).toBe(301);
     zeroOneGame.enterScore(100);
 
-    expect(zeroOneGame.game.teams.find((t) => t.id === '1')?.points).toBe(201);
+    expect(zeroOneGame.game.teams.find((t) => t.id === '1')?.score).toBe(201);
   });
 
   test('it should notice when team wins the game', () => {

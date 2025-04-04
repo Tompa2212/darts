@@ -1,9 +1,9 @@
 'use server';
 
 import db from '@/db/drizzle';
-import { cricketGame, cricketGameTeam, teams } from '@/db/schema';
+import { gameParticipants, games, teams } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
-import { and, eq, getTableColumns, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const getUserTeams = async () => {
@@ -16,9 +16,9 @@ export const getUserTeams = async () => {
 
   // Use a single query with optimized subqueries
   const userTeams = await db.query.teams.findMany({
-    where: (teams, { eq, and }) => and(eq(teams.userId, user.id), eq(teams.status, 'active')),
+    where: (teams, { eq, and }) => and(eq(teams.ownerUserId, user.id), eq(teams.status, 'active')),
     with: {
-      players: {
+      members: {
         with: {
           user: {
             columns: {
@@ -44,15 +44,13 @@ export const getUserTeams = async () => {
       (
         SELECT COUNT(*) 
         FROM (
-          SELECT game_id FROM ${cricketGameTeam} WHERE ${cricketGameTeam.teamId} = t.id
-          UNION ALL
-          SELECT game_id FROM "zero_one_game_player_stats" WHERE "zero_one_game_player_stats"."team_id" = t.id
+          SELECT game_id FROM ${gameParticipants} WHERE ${gameParticipants.teamId} = t.id
         ) AS combined_games
       ) as played_games,
       (
         SELECT COUNT(*) 
-        FROM ${cricketGame}
-        WHERE ${cricketGame.winner} = t.id
+        FROM ${games}
+        WHERE ${games.winningTeamId} = t.id
       ) as won_games
     FROM ${teams} t
     WHERE t.id IN (${sql.join(teamIds, sql.raw(','))})
@@ -64,6 +62,7 @@ export const getUserTeams = async () => {
       played_games: 0,
       won_games: 0
     };
+
     return {
       ...team,
       playedGames: Number(stats.played_games),

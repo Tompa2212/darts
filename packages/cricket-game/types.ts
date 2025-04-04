@@ -14,7 +14,7 @@ export type TeamWithScore = Team & {
     [key: string]: number;
   };
   points: number;
-  stats?: TeamsStats;
+  stats: TeamsStats;
 };
 
 export type ThrownNumber = {
@@ -49,6 +49,8 @@ export type Game = {
 export type TeamsStats = {
   playedTurns: number;
   pointsPerRound: number;
+  marksPerRound: number;
+  totalMarks: number;
   totalPoints: number;
   players: PlayerDartsStats;
 };

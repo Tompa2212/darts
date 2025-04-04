@@ -61,7 +61,7 @@ export async function TeamsList() {
               </div>
               <h3 className="mb-2 text-sm font-medium text-slate-500">Team Members</h3>
               <div className="flex flex-wrap gap-2">
-                {team.players.map((p) => (
+                {team.members.map((p) => (
                   <PlayerBadge
                     className="rounded-2xl px-3 py-1.5"
                     key={p.userId || p.name}
@@ -72,7 +72,7 @@ export async function TeamsList() {
             </CardContent>
             <CardFooter className="mt-2 flex items-center justify-between border-t py-2 pt-0">
               <span className="text-sm text-gray-500">
-                {team.players.length} {`player${team.players.length > 1 ? 's' : ''}`}
+                {team.members.length} {`player${team.members.length > 1 ? 's' : ''}`}
               </span>
               <Button variant="outline" size="sm" className="text-xs">
                 View Team

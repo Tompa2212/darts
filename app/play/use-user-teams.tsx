@@ -6,7 +6,10 @@ export const useUserTeams = () => {
     queryKey: ['teams'],
     staleTime: 0,
     queryFn: async () => {
-      return await getUserTeams();
+      return (await getUserTeams()).map(({ playedGames, wonGames, members, ...team }) => ({
+        ...team,
+        players: [...members]
+      }));
     }
   });
 

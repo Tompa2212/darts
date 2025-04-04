@@ -1,7 +1,7 @@
 'use server';
 
 import db from '@/db/drizzle';
-import { teams, players as playersTable } from '@/db/schema';
+import { teams, teamMembers } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
 import { addTeamSchema } from '@/schema/team.schema';
 import { revalidatePath } from 'next/cache';
@@ -13,7 +13,7 @@ function mapToDbPlayer(players: AddTeamData['players'], teamId: string) {
   return players.map((player) => {
     if ('id' in player) {
       return {
-        ...player,
+        id: player.id,
         userId: player.id,
         teamId,
         name: player.username
@@ -63,7 +63,7 @@ export async function addTeam(values: AddTeamData) {
   }
 
   const existingTeam = await db.query.teams.findFirst({
-    where: (team, { eq, and }) => and(eq(team.userId, user.id), eq(team.name, name))
+    where: (team, { eq, and }) => and(eq(team.ownerUserId, user.id), eq(team.name, name))
   });
 
   if (existingTeam) {
@@ -73,14 +73,14 @@ export async function addTeam(values: AddTeamData) {
   }
 
   const created = await db.transaction(async (tx) => {
-    const added = (await tx.insert(teams).values({ name, userId: user.id }).returning()).at(0);
+    const added = (await tx.insert(teams).values({ name, ownerUserId: user.id }).returning()).at(0);
 
     if (added === undefined) {
       tx.rollback();
       return null;
     }
 
-    await tx.insert(playersTable).values(mapToDbPlayer(players, added.id));
+    await tx.insert(teamMembers).values(mapToDbPlayer(players, added.id));
 
     return added;
   });

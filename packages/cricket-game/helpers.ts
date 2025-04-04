@@ -1,13 +1,21 @@
-import { Game } from './types';
+import { Game, TeamsStats } from './types';
 
-export const allNums = [25, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-export const defaultNumbers = [20, 19, 18, 17, 16, 15, 25];
+export const ALL_NUMS = [25, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+export const DEFAULT_NUMBERS = [20, 19, 18, 17, 16, 15, 25];
+export const INITIAL_TEAM_STATS: TeamsStats = {
+  playedTurns: 0,
+  totalPoints: 0,
+  pointsPerRound: 0,
+  marksPerRound: 0,
+  totalMarks: 0,
+  players: {}
+};
 
 export function createRandomNums() {
   const nums = new Set<number>();
 
   while (nums.size < 7) {
-    nums.add(allNums[Math.floor(Math.random() * allNums.length)]);
+    nums.add(ALL_NUMS[Math.floor(Math.random() * ALL_NUMS.length)]);
   }
 
   return Array.from(nums).sort((a, b) => b - a);

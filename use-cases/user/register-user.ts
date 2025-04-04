@@ -1,5 +1,5 @@
 import db from '@/db/drizzle';
-import { users } from '@/db/schema';
+import { users } from '@/db/test.schema';
 import { NewUser } from '@/types/user';
 import crypto from 'node:crypto';
 

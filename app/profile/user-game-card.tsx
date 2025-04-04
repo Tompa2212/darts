@@ -6,7 +6,15 @@ import { cn } from '@/lib/utils';
 import { UserPlayedGamesDto } from '@/data/games';
 
 export function UserGameCard({
-  game: { userWon, winner, gameMode, numbers, playedRounds, gameTeams }
+  game: {
+    userWon,
+    winningTeam,
+    gameMode,
+    detailsCricket,
+    playedRounds,
+    participants,
+    statsCricketTeam
+  }
 }: {
   game: UserPlayedGamesDto;
 }) {
@@ -17,7 +25,7 @@ export function UserGameCard({
           {gameMode}
         </Heading>
         <div className="flex items-end justify-between">
-          <CardDescription>Numbers: {numbers.join(', ')}</CardDescription>
+          <CardDescription>Numbers: {detailsCricket?.numbers.join(', ')}</CardDescription>
           <CardDescription>
             <span className="text-lg">{playedRounds}</span> rounds
           </CardDescription>
@@ -26,21 +34,25 @@ export function UserGameCard({
       <CardContent className="space-y-2 p-4 pt-0">
         <Heading Type="h4">Teams</Heading>
         <ul className="flex flex-wrap items-center gap-x-4">
-          {gameTeams.map(({ team, score, pointsPerRound }) => (
+          {participants.map(({ team }) => (
             <li key={team.name} className="mb-2 py-1">
               <div className="mb-3 space-y-2">
                 <p>
-                  {winner.id === team.id && <span className="mr-1 inline-block">🏆</span>}
+                  {winningTeam?.id === team.id && <span className="mr-1 inline-block">🏆</span>}
                   <span className="font-semibold">{team.name}</span>
                 </p>
                 <p className="text-sm text-zinc-500">
-                  {score} pts, {pointsPerRound.toFixed(2)} per round{' '}
+                  {statsCricketTeam?.find((stat) => stat.teamId === team.id)?.score} pts,{' '}
+                  {statsCricketTeam
+                    ?.find((stat) => stat.teamId === team.id)
+                    ?.pointsPerRound.toFixed(2)}{' '}
+                  per round{' '}
                 </p>
               </div>
               <div className="space-x-2">
-                {team.players.map((player) => (
-                  <PlayerBadge key={player.userId || player.name} player={player}>
-                    {player.name}
+                {team.members.map((member) => (
+                  <PlayerBadge key={member.userId || member.name} player={member}>
+                    {member.name}
                   </PlayerBadge>
                 ))}
               </div>

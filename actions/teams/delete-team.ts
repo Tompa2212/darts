@@ -1,9 +1,9 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import db from '@/db/drizzle';
-import { teams } from '@/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { getUser } from '@/lib/auth';
+import { teams } from '@/db/test.schema';
 
 export async function deleteTeam(id: string) {
   try {
@@ -18,7 +18,7 @@ export async function deleteTeam(id: string) {
     await db
       .update(teams)
       .set({ status: 'deleted' })
-      .where(and(eq(teams.id, id), eq(teams.userId, user.id)));
+      .where(and(eq(teams.id, id), eq(teams.ownerUserId, user.id)));
   } catch (error) {
     console.log(error);
     return {

@@ -1,9 +1,9 @@
 import {
-  allNums,
+  ALL_NUMS,
   checkIsFinished,
   createRandomNums,
   createScores,
-  defaultNumbers
+  DEFAULT_NUMBERS
 } from './helpers';
 import { CricketStatisticGenerator } from './statistic-generator';
 import { Team, TeamWithScore, ThrownNumber } from './types';
@@ -146,11 +146,20 @@ export class CricketGame {
   }
 
   private roundRobin(round: number, turn: number, teams: TeamWithScore[]) {
-    const teamPlayers = structuredClone(teams.map((team) => team.players));
+    // Get all players from all teams
+    const teamPlayers = teams.map((team) => team.players);
     const totalTeams = teamPlayers.length;
-    const currTeamLength = teamPlayers[turn % totalTeams].length;
 
-    return teamPlayers[turn % totalTeams][round % currTeamLength];
+    // Get the current team's players and their count
+    const currentTeamIndex = turn % totalTeams;
+    const currentTeamPlayers = teamPlayers[currentTeamIndex];
+    const playersInTeam = currentTeamPlayers.length;
+
+    // Calculate the player index within the team
+    const playerIndex = round % playersInTeam;
+
+    // Return the selected player
+    return currentTeamPlayers[playerIndex];
   }
 
   undoThrow() {
@@ -251,25 +260,24 @@ export class CricketGame {
     numbers?: number[];
     maxRounds: number;
   }): CricketGameType {
-    if (useRandomNums) {
-      numbers = createRandomNums();
-    } else {
-      numbers = numbers || defaultNumbers;
+    numbers = useRandomNums ? createRandomNums() : numbers || DEFAULT_NUMBERS;
 
-      if (numbers.length !== 7) {
-        throw new Error('Invalid numbers length');
-      }
-
-      numbers.forEach((num) => {
-        if (!allNums.includes(num)) {
-          throw new Error('Invalid number provided: ' + num);
-        }
-      });
+    if (!useRandomNums) {
+      this.validateNumbers(numbers);
     }
+
     const teamsWithScore = teams.map((team) => ({
       ...team,
       hitCount: createScores(numbers),
-      points: 0
+      points: 0,
+      stats: {
+        playedTurns: 0,
+        totalPoints: 0,
+        pointsPerRound: 0,
+        marksPerRound: 0,
+        totalMarks: 0,
+        players: {}
+      }
     }));
 
     const game: CricketGameType = {
@@ -290,6 +298,24 @@ export class CricketGame {
     };
 
     return game;
+  }
+
+  /**
+   * Validates the numbers provided to the game.
+   * Numbers must be darts numbers and there must be 7 of them.
+   * @param numbers - The numbers to validate.
+   * @throws {Error} If the numbers length is not 7 or if any number is not in the ALL_NUMS array.
+   */
+  private validateNumbers(numbers: number[]) {
+    if (numbers.length !== 7) {
+      throw new Error('Invalid numbers length');
+    }
+
+    numbers.forEach((num) => {
+      if (!ALL_NUMS.includes(num)) {
+        throw new Error('Invalid number provided: ' + num);
+      }
+    });
   }
 
   private setWinner(game?: CricketGameType) {

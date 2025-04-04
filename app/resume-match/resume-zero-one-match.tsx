@@ -38,7 +38,7 @@ const ResumeZeroOneMatch = ({ game, onDeleteGame }: ResumeZeroOneMatchProps) => 
             {game.teams.map((team) => (
               <li key={team.name} className="mb-2 py-1">
                 <p className="mb-2">
-                  <span className="text-zinc-500 italic">{team.name}</span>, {team.points} points
+                  <span className="text-zinc-500 italic">{team.name}</span>, {team.score} points
                 </p>
                 <div className="space-x-2">
                   {team.players.map((player) => (

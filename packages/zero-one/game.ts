@@ -1,5 +1,4 @@
 import {
-  Dart,
   Team,
   TeamsOutshotCombinations,
   TeamWithScore,
@@ -44,14 +43,14 @@ export class ZeroOneGame {
 
   get teamsOutshotCombinations() {
     const data = this._game.teams.reduce((acc, team) => {
-      const savedPoints = this._teamOutshotCombinations[team.id]?.points;
+      const savedScore = this._teamOutshotCombinations[team.id]?.score;
       const savedCombinations = this._teamOutshotCombinations[team.id]?.combinations;
 
       acc[team.id] = {
-        points: team.points,
+        score: team.score,
         combinations:
-          team.points !== savedPoints
-            ? OutshotCalculator.findOuthsotCombinations(team.points, {
+          team.score !== savedScore
+            ? OutshotCalculator.findOuthsotCombinations(team.score, {
                 doubleOut: this.game.doubleOut
               }).slice(0, 3)
             : savedCombinations
@@ -88,7 +87,7 @@ export class ZeroOneGame {
       return this.nextPlayer();
     }
 
-    this._game.currentTeam.points -= score;
+    this._game.currentTeam.score -= score;
 
     if (!this.checkIsLegFinished()) {
       return this.nextPlayer();
@@ -158,7 +157,7 @@ export class ZeroOneGame {
   }
 
   private checkIsLegFinished() {
-    return this.getCurrentTeam().points === 0;
+    return this.getCurrentTeam().score === 0;
   }
 
   private finishLeg() {
@@ -275,7 +274,7 @@ export class ZeroOneGame {
         players,
         sets: 0,
         legs: 0,
-        points: parseInt(this._game.type)
+        score: parseInt(this._game.type)
       };
     });
 
@@ -300,7 +299,7 @@ export class ZeroOneGame {
   private createGame({ teams, type, legs, sets, doubleOut }: ConfiguredZeroOneGameType) {
     const teamsWithScore = teams.map((team) => ({
       ...team,
-      points: parseInt(type),
+      score: parseInt(type),
       sets: 0,
       legs: 0
     }));

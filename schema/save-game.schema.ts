@@ -15,32 +15,32 @@ export const saveCricketGameSchema = z.object({
           name: z.string()
         })
       ),
-      stats: z
-        .object({
-          playedTurns: z.number(),
-          pointsPerRound: z.number(),
-          totalPoints: z.number(),
-          players: z.record(
-            z.string(),
-            z.object({
-              thrownDarts: z.array(
-                z.object({
-                  number: z.number(),
-                  multiplier: z.number()
-                })
-              ),
-              singles: z.number(),
-              doubles: z.number(),
-              triples: z.number(),
-              misses: z.number(),
-              playedTurns: z.number(),
-              totalMarks: z.number(),
-              marksPerRound: z.number(),
-              marksPerDart: z.number()
-            })
-          )
-        })
-        .optional()
+      stats: z.object({
+        playedTurns: z.number(),
+        pointsPerRound: z.number(),
+        totalPoints: z.number(),
+        marksPerRound: z.number(),
+        totalMarks: z.number(),
+        players: z.record(
+          z.string(),
+          z.object({
+            thrownDarts: z.array(
+              z.object({
+                number: z.number(),
+                multiplier: z.number()
+              })
+            ),
+            singles: z.number(),
+            doubles: z.number(),
+            triples: z.number(),
+            misses: z.number(),
+            playedTurns: z.number(),
+            totalMarks: z.number(),
+            marksPerRound: z.number(),
+            marksPerDart: z.number()
+          })
+        )
+      })
     })
   )
 });

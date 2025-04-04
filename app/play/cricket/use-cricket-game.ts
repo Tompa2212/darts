@@ -5,7 +5,7 @@ import { CricketGame } from '@/packages/cricket-game/game';
 import { ThrownNumber } from '@/packages/cricket-game/types';
 import { CricketGameInit } from '@/types/client/cricket';
 import { gameSaver } from '@/lib/games-saver/game-saver';
-import saveGameToDb from '@/actions/games/save-game';
+import saveGameToDb from '@/actions/games/save-cricket-game';
 
 type Action =
   | {
@@ -41,7 +41,7 @@ export const useCricketGame = (params: CricketGameInit) => {
 
         const { isFinished, winner } = cricketGame.current.game;
         if (isFinished && winner) {
-          saveGameToDb({ ...cricketGame.current.game, winner }, 'cricket');
+          saveGameToDb({ ...cricketGame.current.game, winner });
           removeGame(cricketGame.current.game.id);
         } else {
           saveGame({ type: 'cricket', game: cricketGame.current.game });

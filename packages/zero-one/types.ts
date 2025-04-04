@@ -1,4 +1,5 @@
 import { gameModes } from '.';
+import { ThrownNumber } from '../cricket-game/types';
 
 export type ZeroOneType = (typeof gameModes)[number];
 
@@ -14,9 +15,24 @@ export type Team = {
 };
 
 export type TeamWithScore = Team & {
-  points: number;
+  score: number;
   sets: number;
   legs: number;
+};
+
+export type TeamsStats = {
+  playedTurns: number;
+  totalScore: number;
+  averageScorePerTurn: number;
+  highestScoreInSingleTurn: number;
+  checkoutPercentage: number;
+  players: PlayerDartsStats;
+};
+
+export type PlayerDartsStats = {
+  [playerName: string]: {
+    thrownDarts: ThrownNumber[];
+  };
 };
 
 export type ZeroOneGameType = {
@@ -45,7 +61,7 @@ export type Dart = {
 
 export type TeamsOutshotCombinations = {
   [teamId: string]: {
-    points: number;
+    score: number;
     combinations: Dart[][];
   };
 };

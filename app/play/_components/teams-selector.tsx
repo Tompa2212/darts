@@ -1,7 +1,6 @@
 import { MultiSelect } from '@/components/ui/multiselect';
 import React from 'react';
 import { useUserTeams } from '../use-user-teams';
-import { UserTeams } from '@/types/team';
 import { ConfigTeam } from '@/types/client/game-config';
 
 type TeamsSelectorProps = {
@@ -26,8 +25,8 @@ export function TeamsSelector({ onChange, value, ...rest }: TeamsSelectorProps) 
         }))}
         onChange={(value) => {
           const newSelectedTeams = value
-            .map((teamName) => allTeams.find((t) => t.name === teamName))
-            .filter(Boolean) as UserTeams[];
+            .map((teamName) => allTeams.find((t) => t.name === teamName)!)
+            .filter(Boolean);
 
           onChange(newSelectedTeams);
         }}

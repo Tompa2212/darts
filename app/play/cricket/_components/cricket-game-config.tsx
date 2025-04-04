@@ -18,7 +18,7 @@ import { cricketConfigSchema } from '@/schema/games-config.schema';
 import { Heading } from '@/components/ui/heading';
 import { MultiSelect } from '@/components/ui/multiselect';
 import Link from 'next/link';
-import { allNums } from '@/packages/cricket-game/helpers';
+import { ALL_NUMS } from '@/packages/cricket-game/helpers';
 import { TeamsSelector } from '../../_components/teams-selector';
 import TeamsReorder from '../../_components/teams-reorder/teams-reorder';
 import { cn } from '@/lib/utils';
@@ -97,7 +97,7 @@ export const CricketGameConfig = ({
                   <FormLabel>Numbers</FormLabel>
                   <NumbersSelector
                     selected={field.value?.map(String) ?? []}
-                    options={allNums.map((num) => ({
+                    options={ALL_NUMS.map((num) => ({
                       label: num.toString(),
                       value: num.toString()
                     }))}

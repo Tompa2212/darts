@@ -1,41 +1,55 @@
 import db from '@/db/drizzle';
-import { cricketGame, cricketGameTeam, teams, players } from '@/db/schema';
+import { games, teams, teamMembers, gameParticipants } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
 import { desc, eq, or } from 'drizzle-orm';
 import { unstable_noStore as noStore } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+type UserPlayedGames = Awaited<ReturnType<typeof getUserGames>>[number];
+
+export type UserPlayedGamesDto = UserPlayedGames & {
+  userWon: boolean;
+};
+
+function toUserPlayedGameDto(game: UserPlayedGames, userId: string): UserPlayedGamesDto {
+  const winnerTeamId = game.winningTeamId;
+  const winningTeamPlayers = game.participants.find((gT) => gT.team.id === winnerTeamId)?.team
+    .members;
+
+  const userWon = !!winningTeamPlayers?.some((player) => player.userId === userId);
+
+  return { ...game, userWon };
+}
+
 async function getUserGames(userId: string) {
   const userGames = (
     await db
-      .selectDistinct({ gameId: cricketGame.id })
-      .from(cricketGame)
-      .innerJoin(cricketGameTeam, eq(cricketGame.id, cricketGameTeam.gameId))
-      .leftJoin(players, eq(cricketGameTeam.teamId, players.teamId))
-      .where(or(eq(players.userId, userId), eq(cricketGame.creator, userId)))
+      .selectDistinct({ gameId: games.id })
+      .from(games)
+      .innerJoin(gameParticipants, eq(games.id, gameParticipants.gameId))
+      .leftJoin(teams, eq(gameParticipants.teamId, teams.id))
+      .leftJoin(teamMembers, eq(teams.id, teamMembers.teamId))
+      .where(or(eq(teamMembers.userId, userId), eq(games.creatorUserId, userId)))
   ).map((row) => row.gameId);
 
-  console.log(userGames);
-
-  return await db.query.cricketGame.findMany({
+  return await db.query.games.findMany({
     where: (game, { inArray }) => inArray(game.id, userGames),
-    orderBy: [desc(cricketGame.createdAt)],
+    orderBy: [desc(games.completedAt)],
     with: {
-      winner: {
+      winningTeam: {
         columns: {
           id: true,
           name: true
         }
       },
-      gameTeams: {
-        columns: {
-          gameId: false,
-          teamId: false
-        },
+      detailsCricket: true,
+      statsCricketTeam: true,
+      detailsX01: true,
+      participants: {
         with: {
           team: {
             with: {
-              players: {
+              members: {
                 columns: {
                   teamId: false
                 },
@@ -54,21 +68,6 @@ async function getUserGames(userId: string) {
       }
     }
   });
-}
-
-type UserPlayedGames = Awaited<ReturnType<typeof getUserGames>>[number];
-
-export type UserPlayedGamesDto = UserPlayedGames & {
-  userWon: boolean;
-};
-
-function toUserPlayedGameDto(game: UserPlayedGames, userId: string): UserPlayedGamesDto {
-  const winnerTeamId = game.winner.id;
-  const winningTeamPlayers = game.gameTeams.find((gT) => gT.team.id === winnerTeamId)?.team.players;
-
-  const userWon = !!winningTeamPlayers?.some((player) => player.userId === userId);
-
-  return { ...game, userWon };
 }
 
 export async function getUserPlayedGames(): Promise<UserPlayedGamesDto[]> {
