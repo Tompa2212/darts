@@ -1,11 +1,14 @@
 import { deleteTeam } from '@/actions/teams/delete-team';
 import PlayerBadge from '@/components/player-badge';
 import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getUserTeams } from '@/data/teams';
+import { cn } from '@/lib/utils';
 import { XIcon } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
 export async function TeamsList() {
@@ -74,9 +77,12 @@ export async function TeamsList() {
               <span className="text-sm text-gray-500">
                 {team.members.length} {`player${team.members.length > 1 ? 's' : ''}`}
               </span>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Link
+                href={`/teams/${team.id}`}
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'text-xs')}
+              >
                 View Team
-              </Button>
+              </Link>
             </CardFooter>
           </Card>
         ))}

@@ -11,7 +11,7 @@ export const configuredGame: ZeroOneGameType = {
         { id: '1', name: 'Player1' },
         { id: '2', name: 'Player2' }
       ],
-      points: 301,
+      score: 301,
       sets: 0,
       legs: 1
     },
@@ -23,7 +23,7 @@ export const configuredGame: ZeroOneGameType = {
         { id: '4', name: 'Player4' },
         { id: '5', name: 'Player5' }
       ],
-      points: 301,
+      score: 301,
       sets: 0,
       legs: 1
     }
@@ -35,7 +35,7 @@ export const configuredGame: ZeroOneGameType = {
       { id: '1', name: 'Player1' },
       { id: '2', name: 'Player2' }
     ],
-    points: 301,
+    score: 301,
     sets: 0,
     legs: 1
   },

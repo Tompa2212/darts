@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { lucia, SessionUser } from '@/auth';
+import { lucia } from '@/auth';
 import { cookies } from 'next/headers';
 
 export const getUser = cache(async () => {

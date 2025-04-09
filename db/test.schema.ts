@@ -83,7 +83,7 @@ export const teamMembers = pgTable(
 );
 
 // Only saving finished games, so status might be less critical, but good practice
-export const gameModeEnum = pgEnum('game_mode', ['cricket', 'zero_one']);
+export const gameModeEnum = pgEnum('game_mode', ['cricket', 'x01']);
 export const gameStatusEnum = pgEnum('game_status', ['COMPLETED']);
 
 /** Base table for all completed games */
@@ -353,7 +353,9 @@ export const teamsRelations = relations(teams, ({ one, many }) => ({
     relationName: 'ownedTeams'
   }),
   members: many(teamMembers),
-  x01SetLegResults: many(gameX01SetLegResults)
+  x01SetLegResults: many(gameX01SetLegResults),
+  statsCricketTeam: many(gameStatsCricketTeam),
+  statsX01Team: many(gameStatsX01Team)
 }));
 
 export const teamMembersRelations = relations(teamMembers, ({ one, many }) => ({
@@ -395,8 +397,9 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
   }),
   statsCricketTeam: many(gameStatsCricketTeam),
   statsCricketPlayer: many(gameStatsCricketPlayer),
+  statsX01Team: many(gameStatsX01Team),
   statsX01Player: many(gameStatsX01Player),
-  throws: many(gameThrows), // if using gameThrows table
+  throws: many(gameThrows),
   x01SetLegResults: many(gameX01SetLegResults)
 }));
 

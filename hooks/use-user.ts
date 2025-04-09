@@ -1,26 +1,23 @@
 'use client';
 
+import { fetchCurrentUser } from '@/api/user.api';
 import { SessionUser } from '@/auth';
 import { useQuery } from '@tanstack/react-query';
 
-export const useUser = () => {
-  const { data, error } = useQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const response = await fetch('/api/auth/session');
-      const json = await response.json();
-
-      if (!response.ok) {
-        throw new Error(json.message);
-      }
-
-      return json.data.user as SessionUser;
-    }
-  });
-
-  if (error) {
+async function queryFn() {
+  try {
+    const data = await fetchCurrentUser();
+    return data.data;
+  } catch {
     return null;
   }
+}
+
+export const useUser = () => {
+  const { data } = useQuery<SessionUser>({
+    queryKey: ['user'],
+    queryFn
+  });
 
   return data;
 };

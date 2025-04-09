@@ -7,23 +7,10 @@ import { buttonVariants } from '../ui/button';
 import logo from '@/public/logo-no-background.svg';
 import Image from 'next/image';
 import { LogInIcon } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchCurrentUser } from '@/api/user.api';
-
-async function queryFn() {
-  try {
-    const data = await fetchCurrentUser();
-    return data.data;
-  } catch {
-    return null;
-  }
-}
+import { useUser } from '@/hooks/use-user';
 
 export function Navbar() {
-  const { data } = useQuery({
-    queryKey: ['user'],
-    queryFn
-  });
+  const data = useUser();
 
   return (
     <nav className="flex h-[var(--navbar-height)] shrink-0 flex-col bg-zinc-50 shadow-md">

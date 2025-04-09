@@ -72,18 +72,20 @@ export default function NavMobile() {
       </DrawerTrigger>
       <DrawerContent className="h-full w-[85%] rounded-none" hideDrawerHandle>
         <DrawerHeader className="p-2 text-left">
-          <DrawerTitle className="flex items-center justify-between">
-            <Heading>
-              <Image src={logo} alt="Bullseye Buddy logo" className="w-40" />
-            </Heading>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="flex items-center text-base"
-              onClick={() => setOpen(false)}
-            >
-              <XIcon name="X" className="h-8 w-8" />
-            </Button>
+          <DrawerTitle className="flex items-center justify-between" asChild>
+            <div>
+              <Heading>
+                <Image src={logo} alt="Bullseye Buddy logo" className="w-40" />
+              </Heading>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex items-center text-base"
+                onClick={() => setOpen(false)}
+              >
+                <XIcon name="X" className="h-8 w-8" />
+              </Button>
+            </div>
           </DrawerTitle>
         </DrawerHeader>
         <div>

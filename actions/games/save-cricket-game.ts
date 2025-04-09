@@ -3,7 +3,6 @@
 import db from '@/db/drizzle';
 import { gameParticipants, gameStatsCricketPlayer, gameStatsCricketTeam } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
-import { gameService } from '@/lib/services/game.service';
 import { TeamsStats } from '@/packages/cricket-game/types';
 import { saveCricketGameSchema } from '@/schema/save-game.schema';
 import { NewCricketGamePlayerStats, NewCricketGameTeamStats } from '@/types/player';
@@ -11,6 +10,7 @@ import { NewGameTeam } from '@/types/team';
 import { PgTransaction } from 'drizzle-orm/pg-core';
 import * as z from 'zod';
 import { getTeamRegisteredPlayers } from './utils';
+import { createCricketGame } from '@/use-cases/game/create-game';
 
 function getPlayerStats(stats: TeamsStats, playerName: string) {
   const playerStats = stats.players[playerName] ?? {
@@ -73,7 +73,7 @@ export default async function saveCricketGame(newGame: InsertCricketGameData) {
 
   return await db.transaction(async (tx) => {
     try {
-      const { game: insertedGame } = await gameService.saveCricketGame(
+      const { game: insertedGame } = await createCricketGame(
         {
           creatorUserId: user.id,
           winningTeamId: winner?.id,
