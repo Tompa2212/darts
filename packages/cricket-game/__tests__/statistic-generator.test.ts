@@ -230,4 +230,36 @@ describe('Statistic Generator Tests', () => {
     expect(player2.triples).toEqual(3);
     expect(player2.misses).toEqual(3);
   });
+
+  it('Calculates correct stats if undo is used', () => {
+    throwDarts(cricketGame, [
+      [20, 3],
+      [20, 3],
+      [18, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    throwDarts(cricketGame, [
+      [19, 3],
+      [19, 3],
+      [18, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    throwDarts(cricketGame, [
+      [17, 3],
+      [17, 3],
+      [16, 3]
+    ]);
+    cricketGame.nextPlayer();
+
+    cricketGame.undoTurn();
+
+    const game = cricketGame.game;
+    const team1 = game.teams.find((t) => t.id === '1');
+    const team2 = game.teams.find((t) => t.id === '2');
+
+    expect(team1?.stats?.totalPoints).toEqual(20 * 3);
+    expect(team2?.stats?.totalPoints).toEqual(19 * 3);
+  });
 });

@@ -110,7 +110,6 @@ export const games = pgTable(
   ]
 );
 
-/** Junction table linking persistent teams participating in a game */
 export const gameParticipants = pgTable(
   'game_participants',
   {
@@ -129,8 +128,6 @@ export const gameParticipants = pgTable(
   ]
 );
 
-// --- Game Specific Detail Tables ---
-
 export const gamesCricket = pgTable('games_cricket', {
   gameId: uuid('game_id')
     .primaryKey()
@@ -139,10 +136,6 @@ export const gamesCricket = pgTable('games_cricket', {
   variant: varchar('variant', { length: 50 }).default('STANDARD') // e.g., CUT_THROAT
 });
 
-// --- Stats Tables (Linked to Game and Team Member) ---
-// Storing aggregated stats since games are only saved when finished.
-
-/** Team-level stats for a completed Cricket game */
 export const gameStatsCricketTeam = pgTable(
   'game_stats_cricket_team',
   {
@@ -300,11 +293,6 @@ export const gameStatsX01Player = pgTable(
   ]
 );
 
-// --- Optional: Raw Throws Table ---
-// Only include this if you need detailed throw-by-throw history for analysis
-// beyond the aggregated stats. If included, calculate stats from this table on save,
-// or remove redundant aggregated fields from stats tables.
-
 export const gameThrows = pgTable(
   'game_throws',
   {
@@ -399,7 +387,6 @@ export const gamesRelations = relations(games, ({ one, many }) => ({
   statsCricketPlayer: many(gameStatsCricketPlayer),
   statsX01Team: many(gameStatsX01Team),
   statsX01Player: many(gameStatsX01Player),
-  throws: many(gameThrows),
   x01SetLegResults: many(gameX01SetLegResults)
 }));
 
@@ -473,7 +460,6 @@ export const gameThrowsRelations = relations(gameThrows, ({ one }) => ({
   team: one(teams, { fields: [gameThrows.teamId], references: [teams.id] })
 }));
 
-// Add relations for the new table
 export const gameX01SetLegResultsRelations = relations(gameX01SetLegResults, ({ one }) => ({
   game: one(games, {
     fields: [gameX01SetLegResults.gameId],

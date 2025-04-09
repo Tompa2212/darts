@@ -98,9 +98,9 @@ export class CricketGame {
   }
 
   nextPlayer() {
-    this.#statisticsGenerator.calculateTeamStats(this._game);
     this.#undoStack.push(structuredClone(this._game));
     this.#redoStack = [];
+    this.#statisticsGenerator.calculateTeamStats(this._game);
     this.__nextPlayer();
   }
 
