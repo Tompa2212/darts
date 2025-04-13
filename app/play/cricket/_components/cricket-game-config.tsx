@@ -16,7 +16,6 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cricketConfigSchema } from '@/schema/games-config.schema';
 import { Heading } from '@/components/ui/heading';
-import { MultiSelect } from '@/components/ui/multiselect';
 import Link from 'next/link';
 import { ALL_NUMS } from '@/packages/cricket-game/helpers';
 import { TeamsSelector } from '../../_components/teams-selector';

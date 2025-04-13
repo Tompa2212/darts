@@ -11,13 +11,7 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: './FixJSDOMEnvironment.ts',
   // Add more setup options before each test is run
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  moduleNameMapper: {
-    // 🧑🏻‍🔧 FIX Problem here
-    // 🧑🏻‍🔧 resolve react module with the next.js inset one.
-    react: 'next/dist/compiled/react/cjs/react.development.js',
-    '^@/(.*)$': '<rootDir>/src/$1'
-  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   modulePathIgnorePatterns: ['__mocks__']
 };
 

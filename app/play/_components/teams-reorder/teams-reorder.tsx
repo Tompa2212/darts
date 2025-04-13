@@ -62,7 +62,13 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button disabled={!teams.length} type="button" variant="outline" size="sm">
+        <Button
+          aria-label="Edit Order"
+          disabled={!teams.length}
+          type="button"
+          variant="outline"
+          size="sm"
+        >
           Edit Order
         </Button>
       </DrawerTrigger>
@@ -87,6 +93,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
                       disabled={!canMoveDown}
                       size="icon"
                       variant="ghost"
+                      aria-label={`Move ${team.name} down`}
                     >
                       <MoveDownIcon className="h-4 w-4" name="MoveDown" />
                     </Button>
@@ -95,6 +102,7 @@ function TeamsReorder({ teams, onReorder }: TeamsReorderProps) {
                       disabled={!canMoveUp}
                       size="icon"
                       variant="ghost"
+                      aria-label={`Move ${team.name} up`}
                     >
                       <MoveUpIcon className="h-4 w-4" name="MoveUp" />
                     </Button>

@@ -9,8 +9,6 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { TeamCricketStats } from './_components/team-cricket-stats';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-
-import * as React from 'react';
 import { StatsChart } from './_components/stats-chart';
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,53 +27,56 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
       </Link>
 
       <header>
-        <Heading Type="h2" className="mb-1 text-3xl">
+        <Heading Type="h2" className="mb-2 text-3xl">
           {team.name}
         </Heading>
-        <p className="text-muted-foreground">Team details and statistics</p>
+        <div className="flex flex-wrap gap-2">
+          {team.members.map((member) => (
+            <PlayerBadge
+              key={member.userId || member.name}
+              player={member}
+              className="rounded-2xl px-3 py-1.5"
+            >
+              {member.name}
+            </PlayerBadge>
+          ))}
+        </div>
       </header>
 
-      <Card className="shadow-md transition-shadow duration-200 hover:shadow-lg">
-        <CardHeader className="border-b pt-4 sm:flex sm:items-center sm:gap-8 [.border-b]:pb-4">
+      <Card className="border-0 shadow-none sm:border sm:shadow-md">
+        <CardHeader className="gap-0 px-0 pt-0 sm:border-b sm:px-6 sm:pt-4 sm:pb-4">
           <Heading Type="h3" className="text-xl">
-            Team Overview
+            Stats Overview
           </Heading>
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-2">
-              {team.members.map((member) => (
-                <PlayerBadge
-                  key={member.userId || member.name}
-                  player={member}
-                  className="rounded-2xl px-3 py-1.5"
-                >
-                  {member.name}
-                </PlayerBadge>
-              ))}
-            </div>
-          </div>
         </CardHeader>
-        <CardContent className="space-y-2 pb-4 sm:grid sm:grid-cols-3 sm:gap-4">
-          <StatsChart
-            title="Overall"
-            playedGames={team.playedGames || 0}
-            wonGames={team.wonGames || 0}
-          />
-          <StatsChart
-            title="Cricket"
-            playedGames={team.playedGamesCricket || 0}
-            wonGames={team.wonGamesCricket || 0}
-          />
-          <StatsChart
-            title="Zero One"
-            playedGames={team.playedGamesX01 || 0}
-            wonGames={team.wonGamesX01 || 0}
-          />
+        <CardContent className="space-y-6 px-0 pb-4 sm:px-6">
+          <div className="sm:grid sm:grid-cols-3 sm:gap-4">
+            <StatsChart
+              title="Overall"
+              playedGames={team.playedGames || 0}
+              wonGames={team.wonGames || 0}
+            />
+            <StatsChart
+              title="Cricket"
+              playedGames={team.playedGamesCricket || 0}
+              wonGames={team.wonGamesCricket || 0}
+            />
+            <StatsChart
+              title="Zero One"
+              playedGames={team.playedGamesX01 || 0}
+              wonGames={team.wonGamesX01 || 0}
+            />
+          </div>
+          <div className="space-y-6">
+            <Heading Type="h3" className="text-xl">
+              Cricket Statistics
+            </Heading>
+            <Suspense fallback={<div>Loading...</div>}>
+              <TeamCricketStats teamId={id} />
+            </Suspense>
+          </div>
         </CardContent>
       </Card>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        <TeamCricketStats teamId={id} />
-      </Suspense>
 
       {/* Recent games section could be added here */}
     </main>
