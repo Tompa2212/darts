@@ -1,5 +1,5 @@
 import { lucia } from '@/auth';
-import { User } from '@/types/user';
+import type { User } from '@/types/user';
 import { cookies } from 'next/headers';
 
 export async function createAndAttachSessionCookie(user: User) {

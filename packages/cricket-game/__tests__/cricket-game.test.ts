@@ -1,5 +1,5 @@
 import CricketGame from '@/packages/cricket-game';
-import { CricketGameInitParams } from '../game';
+import type { CricketGameInitParams } from '../game';
 
 const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
@@ -40,7 +40,7 @@ describe('Cricket Game', () => {
       name: string;
     }[]
   ) {
-    for (let player of expectedOrder) {
+    for (const player of expectedOrder) {
       expect(game.game.currentPlayer).toEqual(player);
       game.nextPlayer();
     }

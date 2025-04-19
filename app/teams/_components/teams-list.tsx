@@ -27,7 +27,11 @@ export async function TeamsList() {
           >
             <CardHeader className="flex flex-row items-center justify-between border-b pt-4 [.border-b]:pb-4">
               <h2 className="text-xl font-bold tracking-tight">{team.name}</h2>
-              <form action={deleteTeam.bind(null, team.id)}>
+              <form
+                action={async () => {
+                  await deleteTeam(team.id);
+                }}
+              >
                 <Button
                   type="submit"
                   variant="ghost"
@@ -97,6 +101,7 @@ export function TeamsListSkeleton() {
       <Heading Type="h3">Teams</Heading>
       <div className="flex flex-wrap gap-6">
         {[...Array(3)].map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <div key={i} className="flex flex-1 basis-[350px] flex-col space-y-3 md:max-w-md">
             <Skeleton className="h-[155px] w-full rounded-xl" />
             <div className="w-full space-y-2">

@@ -1,4 +1,4 @@
-import {
+import type {
   Team,
   TeamsOutshotCombinations,
   TeamWithScore,
@@ -198,12 +198,12 @@ export class ZeroOneGame {
   }
 
   private getStartingSetLegPlayer(set: number, leg: number, teams: TeamWithScore[]) {
-    set = set - 1;
-    leg = leg - 1;
+    const adjustedSet = set - 1;
+    const adjustedLeg = leg - 1;
 
-    const orderedSetTeams = this.orderTeamsByTurn(set, teams);
+    const orderedSetTeams = this.orderTeamsByTurn(adjustedSet, teams);
 
-    return this.getStartingTeamAndPlayerIdx(leg, orderedSetTeams);
+    return this.getStartingTeamAndPlayerIdx(adjustedLeg, orderedSetTeams);
   }
 
   private orderTeamsByTurn(turn: number, teams: TeamWithScore[]) {
@@ -229,7 +229,7 @@ export class ZeroOneGame {
   }
 
   private getStartingTeamAndPlayerIdx(turn: number, teams: TeamWithScore[]) {
-    let teamPlayers = structuredClone(teams.map((team) => team.players));
+    const teamPlayers = structuredClone(teams.map((team) => team.players));
 
     const totalTeams = teamPlayers.length;
     const currTeamLength = teamPlayers[turn % totalTeams].length;
@@ -274,7 +274,7 @@ export class ZeroOneGame {
         players,
         sets: 0,
         legs: 0,
-        score: parseInt(this._game.type)
+        score: Number.parseInt(this._game.type)
       };
     });
 
@@ -299,7 +299,7 @@ export class ZeroOneGame {
   private createGame({ teams, type, legs, sets, doubleOut }: ConfiguredZeroOneGameType) {
     const teamsWithScore = teams.map((team) => ({
       ...team,
-      score: parseInt(type),
+      score: Number.parseInt(type),
       sets: 0,
       legs: 0
     }));

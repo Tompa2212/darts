@@ -1,5 +1,5 @@
 import { CricketGameValidator } from '../validator';
-import { CricketGameInit } from '@/types/client/cricket';
+import type { CricketGameInit } from '@/types/client/cricket';
 import CricketGame from '..';
 
 const PLAYER_1 = { id: '1', name: 'Player1' };

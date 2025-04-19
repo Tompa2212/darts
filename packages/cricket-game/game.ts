@@ -6,10 +6,10 @@ import {
   DEFAULT_NUMBERS
 } from './helpers';
 import { CricketStatisticGenerator } from './statistic-generator';
-import { Team, TeamWithScore, ThrownNumber } from './types';
+import type { Team, TeamWithScore, ThrownNumber } from './types';
 import { CricketGameValidator } from './validator';
 import { v4 as uuidv4 } from 'uuid';
-import { CricketGameType } from '.';
+import type { CricketGameType } from '.';
 
 const CLOSED_HIT_COUNT = 3;
 
@@ -313,7 +313,7 @@ export class CricketGame {
 
     numbers.forEach((num) => {
       if (!ALL_NUMS.includes(num)) {
-        throw new Error('Invalid number provided: ' + num);
+        throw new Error(`Invalid number provided: ${num}`);
       }
     });
   }
@@ -326,7 +326,7 @@ export class CricketGame {
 
       Object.entries(team.hitCount).forEach(([num, hitCount]) => {
         if (hitCount >= CLOSED_HIT_COUNT) {
-          points += parseInt(num) * Math.min(CLOSED_HIT_COUNT, hitCount);
+          points += Number.parseInt(num) * Math.min(CLOSED_HIT_COUNT, hitCount);
         }
       });
 

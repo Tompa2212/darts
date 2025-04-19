@@ -1,5 +1,5 @@
-import { CricketGameType } from '.';
-import { ThrownNumber } from './types';
+import type { CricketGameType } from '.';
+import type { ThrownNumber } from './types';
 
 export class CricketGameValidator {
   static canThrowDart(

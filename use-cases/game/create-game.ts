@@ -1,8 +1,8 @@
 import db from '@/db/drizzle';
 import { games, gamesCricket, gamesX01 } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
-import { NewCricketGame, NewGame, NewZeroOneGame } from '@/types/game';
-import { PgTransaction } from 'drizzle-orm/pg-core';
+import type { NewCricketGame, NewGame, NewZeroOneGame } from '@/types/game';
+import type { PgTransaction } from 'drizzle-orm/pg-core';
 
 const createGame = async (game: NewGame, tx?: PgTransaction<any, any, any>) => {
   const user = await getUser();

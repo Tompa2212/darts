@@ -1,5 +1,5 @@
-import { CricketGameType } from '.';
-import { PlayerDartsStats, TeamsStats, ThrownDart } from './types';
+import type { CricketGameType } from '.';
+import type { PlayerDartsStats, TeamsStats, ThrownDart } from './types';
 
 export class CricketStatisticGenerator {
   private readonly MAX_THROWS = 3;
@@ -12,7 +12,7 @@ export class CricketStatisticGenerator {
     const currentTeam = game.currentTeam;
     const currentPlayer = game.currentPlayer;
 
-    let stats = currentTeam.stats ?? this.getInitialTeamStats();
+    const stats = currentTeam.stats ?? this.getInitialTeamStats();
 
     stats.playedTurns++;
     stats.totalPoints += game.currentTurnPoints;

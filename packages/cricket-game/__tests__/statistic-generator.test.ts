@@ -1,5 +1,5 @@
 import CricketGame from '..';
-import { CricketGameInitParams } from '../game';
+import type { CricketGameInitParams } from '../game';
 
 const PLAYER_1 = { id: '1', name: 'Player1' };
 const PLAYER_2 = { id: '2', name: 'Player2' };
