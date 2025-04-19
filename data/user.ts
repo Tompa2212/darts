@@ -22,7 +22,7 @@ export async function searchUsersByUsername(search: string) {
   try {
     return await db.query.users.findMany({
       where: (users, { like, and, eq }) =>
-        and(eq(users.status, 'active'), like(users.username, search + '%')),
+        and(eq(users.status, 'active'), like(users.username, `${search}%`)),
       columns: {
         emailVerified: false
       }

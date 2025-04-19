@@ -5,7 +5,7 @@ import { teams, teamMembers } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
 import { addTeamSchema } from '@/schema/team.schema';
 import { revalidatePath } from 'next/cache';
-import * as z from 'zod';
+import type * as z from 'zod';
 
 type AddTeamData = z.infer<typeof addTeamSchema>;
 

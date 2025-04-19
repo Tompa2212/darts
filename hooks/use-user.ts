@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchCurrentUser } from '@/api/user.api';
-import { SessionUser } from '@/auth';
+import type { SessionUser } from '@/auth';
 import { useQuery } from '@tanstack/react-query';
 
 async function queryFn() {

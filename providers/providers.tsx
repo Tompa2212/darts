@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import { QueryClient, QueryClientProvider, isServer } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -22,10 +21,13 @@ let browserQueryClient: QueryClient | undefined = undefined;
 function getQueryClient() {
   if (isServer) {
     return makeQueryClient();
-  } else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
   }
+
+  if (!browserQueryClient) {
+    browserQueryClient = makeQueryClient();
+  }
+
+  return browserQueryClient;
 }
 
 const Providers = ({ children }: Props) => {
