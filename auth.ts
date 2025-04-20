@@ -4,6 +4,7 @@ import { Google } from 'arctic';
 import { sessions, users } from './db/test.schema';
 import { Lucia } from 'lucia';
 import type { User } from './types/user';
+import { env } from './config';
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
@@ -35,7 +36,7 @@ declare module 'lucia' {
 }
 
 export const google = new Google(
-  process.env.GOOGLE_CLIENT_ID!,
-  process.env.GOOGLE_CLIENT_SECRET!,
-  process.env.GOOGLE_REDIRECT_URI!
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  env.GOOGLE_REDIRECT_URI
 );

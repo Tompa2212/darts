@@ -1,6 +1,6 @@
 'use server';
 
-import db from '@/db/drizzle';
+import db, { type Transaction } from '@/db/drizzle';
 import { gameParticipants, gameStatsCricketPlayer, gameStatsCricketTeam } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
 import type { TeamsStats } from '@/packages/cricket-game/types';
@@ -11,6 +11,7 @@ import type { PgTransaction } from 'drizzle-orm/pg-core';
 import type * as z from 'zod';
 import { getTeamRegisteredPlayers } from './utils';
 import { createCricketGame } from '@/use-cases/game/create-game';
+import { NeonQueryResultHKT } from 'drizzle-orm/neon-serverless';
 
 function getPlayerStats(stats: TeamsStats, playerName: string) {
   const playerStats = stats.players[playerName] ?? {
@@ -28,14 +29,11 @@ function getPlayerStats(stats: TeamsStats, playerName: string) {
   return playerStats;
 }
 
-async function insertGameTeams(tx: PgTransaction<any, any, any>, data: NewGameTeam[]) {
+async function insertGameTeams(tx: Transaction, data: NewGameTeam[]) {
   return tx.insert(gameParticipants).values(data);
 }
 
-async function insertGamePlayerStats(
-  tx: PgTransaction<any, any, any>,
-  data: NewCricketGamePlayerStats[]
-) {
+async function insertGamePlayerStats(tx: Transaction, data: NewCricketGamePlayerStats[]) {
   if (!data.length) {
     return;
   }
@@ -43,10 +41,7 @@ async function insertGamePlayerStats(
   return tx.insert(gameStatsCricketPlayer).values(data);
 }
 
-async function insertGameTeamStats(
-  tx: PgTransaction<any, any, any>,
-  data: NewCricketGameTeamStats[]
-) {
+async function insertGameTeamStats(tx: Transaction, data: NewCricketGameTeamStats[]) {
   return tx.insert(gameStatsCricketTeam).values(data);
 }
 

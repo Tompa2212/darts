@@ -1,9 +1,11 @@
 import { Pool } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
+import { drizzle, type NeonQueryResultHKT } from 'drizzle-orm/neon-serverless';
 import * as schema from './test.schema';
-import type { Logger } from 'drizzle-orm';
+import type { ExtractTablesWithRelations, Logger } from 'drizzle-orm';
+import { env } from '../config';
+import type { PgTransaction } from 'drizzle-orm/pg-core';
 
-const pool = new Pool({ connectionString: process.env.NEON_DATABASE_URL! });
+const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
@@ -17,3 +19,9 @@ export default db;
 
 // See https://neon.tech/docs/serverless/serverless-driver
 // for more information
+
+export type Transaction = PgTransaction<
+  NeonQueryResultHKT,
+  typeof schema,
+  ExtractTablesWithRelations<typeof schema>
+>;
