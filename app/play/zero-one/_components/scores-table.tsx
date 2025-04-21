@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { ZeroOneGameType } from '@/packages/zero-one';
+import type { ZeroOneGameType } from '@/packages/zero-one';
 import React from 'react';
 
 type ScoresTableProps = {

@@ -84,13 +84,15 @@ export class ZeroOneGame {
     this.saveCurrentGame();
 
     if (ZeroOneGameValidator.isBust(score, this._game)) {
-      return this.nextPlayer();
+      this.nextPlayer();
+      return { error: 'Bust' };
     }
 
     this._game.currentTeam.score -= score;
 
     if (!this.checkIsLegFinished()) {
-      return this.nextPlayer();
+      this.nextPlayer();
+      return { message: 'Score entered' };
     }
 
     this.finishLeg();
@@ -99,6 +101,8 @@ export class ZeroOneGame {
     if (this.checkIfGameFinished()) {
       this.finishGame();
     }
+
+    return { message: 'Score entered' };
   }
 
   private saveCurrentGame() {

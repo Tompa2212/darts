@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input';
 import { gameSaver } from '@/lib/games-saver/game-saver';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ResumeMatchCard from './resume-match-card';
 import { Heading } from '@/components/ui/heading';

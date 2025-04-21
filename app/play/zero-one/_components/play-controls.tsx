@@ -1,14 +1,14 @@
 import { Badge } from '@/components/ui/badge';
-import { Button, ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ZeroOneGameType } from '@/packages/zero-one';
+import type { ZeroOneGameType } from '@/packages/zero-one';
 import { DeleteIcon } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 
 type PlayControlsProps = {
   game: ZeroOneGameType;
-  onEnterScore: (score: number) => { error: string } | void;
+  onEnterScore: (score: number) => { error: string } | { message: string } | undefined;
 };
 
 const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
@@ -28,7 +28,7 @@ export function PlayControls({ game, onEnterScore }: PlayControlsProps) {
     const message = onEnterScore(Number(score));
     if (!message) {
       setScore('');
-    } else if (message.error) {
+    } else if ('error' in message) {
       toast.error(message.error, {
         position: 'top-center',
         description: 'Invalid score was entered. Please try again.',

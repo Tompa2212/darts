@@ -1,6 +1,6 @@
 import { getUserProfileData } from '@/data/user-profile';
 import React, { Suspense } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UserGamesList, { UserGamesListSkeleton } from './user-games';
 import { Heading } from '@/components/ui/heading';
 import { ProfileTabs } from './profile-tabs';

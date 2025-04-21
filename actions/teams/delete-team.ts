@@ -1,29 +1,27 @@
 'use server';
+
 import { revalidatePath } from 'next/cache';
 import db from '@/db/drizzle';
 import { and, eq } from 'drizzle-orm';
 import { getUser } from '@/lib/auth';
 import { teams } from '@/db/test.schema';
 
-export async function deleteTeam(id: string) {
+export async function deleteTeam(formData: FormData) {
+  const teamId = formData.get('teamId') as string;
+
   try {
     const user = await getUser();
 
     if (!user) {
-      return {
-        error: 'Unauthorized'
-      };
+      return;
     }
 
     await db
       .update(teams)
       .set({ status: 'deleted' })
-      .where(and(eq(teams.id, id), eq(teams.ownerUserId, user.id)));
+      .where(and(eq(teams.id, teamId), eq(teams.ownerUserId, user.id)));
   } catch (error) {
     console.log(error);
-    return {
-      error: 'Unable to delete team'
-    };
   }
   revalidatePath('/teams');
 }

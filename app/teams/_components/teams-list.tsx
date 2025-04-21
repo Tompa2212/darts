@@ -27,11 +27,8 @@ export async function TeamsList() {
           >
             <CardHeader className="flex flex-row items-center justify-between border-b pt-4 [.border-b]:pb-4">
               <h2 className="text-xl font-bold tracking-tight">{team.name}</h2>
-              <form
-                action={async () => {
-                  await deleteTeam(team.id);
-                }}
-              >
+              <form action={deleteTeam}>
+                <input type="hidden" name="teamId" value={team.id} />
                 <Button
                   type="submit"
                   variant="ghost"

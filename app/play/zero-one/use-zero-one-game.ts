@@ -2,7 +2,7 @@
 
 import { gameSaver } from '@/lib/games-saver/game-saver';
 import { ZeroOneGame } from '@/packages/zero-one';
-import { ZeroOneGameInit } from '@/types/client/zero-one';
+import type { ZeroOneGameInit } from '@/types/client/zero-one';
 import { useCallback, useRef, useState } from 'react';
 
 type Action =
@@ -31,7 +31,7 @@ export const useZeroOneGame = (params: ZeroOneGameInit) => {
       };
 
       const ref = zeroOneGame.current;
-      let returnValue;
+      let returnValue: { error: string } | { message: string } | undefined = undefined;
 
       switch (action.type) {
         case 'ENTER_SCORE':

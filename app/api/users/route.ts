@@ -1,8 +1,7 @@
-import { getUserTeams } from '@/data/teams';
 import { searchUsersByUsername } from '@/data/user';
 import { getUser } from '@/lib/auth';
 import { StatusCodes } from 'http-status-codes';
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export const GET = async (req: NextRequest) => {
   const user = await getUser();

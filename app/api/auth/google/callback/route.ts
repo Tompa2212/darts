@@ -1,7 +1,7 @@
 import { google } from '@/auth';
 
 import { cookies } from 'next/headers';
-import { GoogleTokens, OAuth2RequestError } from 'arctic';
+import { type GoogleTokens, OAuth2RequestError } from 'arctic';
 import { registerUser } from '@/use-cases/user/register-user';
 import { createAndAttachSessionCookie } from '@/use-cases/user/create-session-cookie';
 import { getUserByAuth0Id } from '@/data/user';

@@ -63,7 +63,8 @@ export async function addTeam(values: AddTeamData) {
   }
 
   const existingTeam = await db.query.teams.findFirst({
-    where: (team, { eq, and }) => and(eq(team.ownerUserId, user.id), eq(team.name, name))
+    where: (team, { eq, and }) =>
+      and(eq(team.status, 'active'), eq(team.ownerUserId, user.id), eq(team.name, name))
   });
 
   if (existingTeam) {

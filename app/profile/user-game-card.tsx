@@ -3,7 +3,7 @@ import PlayerBadge from '@/components/player-badge';
 import { Card, CardHeader, CardDescription, CardContent } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { cn } from '@/lib/utils';
-import { UserPlayedGamesDto } from '@/data/games';
+import type { UserPlayedGamesDto } from '@/data/games';
 
 export function UserGameCard({
   game: {

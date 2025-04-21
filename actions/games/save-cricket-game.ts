@@ -7,11 +7,9 @@ import type { TeamsStats } from '@/packages/cricket-game/types';
 import { saveCricketGameSchema } from '@/schema/save-game.schema';
 import type { NewCricketGamePlayerStats, NewCricketGameTeamStats } from '@/types/player';
 import type { NewGameTeam } from '@/types/team';
-import type { PgTransaction } from 'drizzle-orm/pg-core';
 import type * as z from 'zod';
 import { getTeamRegisteredPlayers } from './utils';
 import { createCricketGame } from '@/use-cases/game/create-game';
-import { NeonQueryResultHKT } from 'drizzle-orm/neon-serverless';
 
 function getPlayerStats(stats: TeamsStats, playerName: string) {
   const playerStats = stats.players[playerName] ?? {

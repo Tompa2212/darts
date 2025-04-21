@@ -5,7 +5,7 @@ import {
   DialogResponsiveHeader,
   DialogResponsiveFooter
 } from '@/components/ui/dialog-responsive';
-import { ZeroOneGameType } from '@/packages/zero-one';
+import type { ZeroOneGameType } from '@/packages/zero-one';
 import React from 'react';
 
 type FinishedGameDialogProps = {

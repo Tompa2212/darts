@@ -1,4 +1,4 @@
-import { ZeroOneGameInit } from '@/types/client/zero-one';
+import type { ZeroOneGameInit } from '@/types/client/zero-one';
 import React from 'react';
 import { useZeroOneGame } from '../use-zero-one-game';
 import { Button } from '@/components/ui/button';
@@ -57,8 +57,12 @@ export function ZeroOneGame(props: ZeroOneGameProps) {
           <div className="mx-auto my-[10%] space-y-4">
             <div>
               <div className="flex flex-wrap gap-2">
-                {currentTeamOutshotCombinations.combinations.map((combination, index) => (
-                  <Badge className="text-base" variant="secondary" key={index}>
+                {currentTeamOutshotCombinations.combinations.map((combination) => (
+                  <Badge
+                    className="text-base"
+                    variant="secondary"
+                    key={combination.toLocaleString()}
+                  >
                     {combination
                       .map(
                         (dart) =>
