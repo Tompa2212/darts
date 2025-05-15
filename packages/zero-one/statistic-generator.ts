@@ -1,4 +1,4 @@
-import { PlayerDartsStats, TeamsStats, ZeroOneGameType } from './types';
+import type { PlayerDartsStats, TeamsStats, ZeroOneGameType } from './types';
 
 export class ZeroOneStatisticGenerator {
   public calculateTeamStats(game: ZeroOneGameType) {

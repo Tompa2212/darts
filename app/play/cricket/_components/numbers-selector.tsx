@@ -8,15 +8,16 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import clsx from 'clsx';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { ChevronDown, XIcon } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export type OptionType = {
   label: string;
@@ -51,26 +52,33 @@ export function NumbersSelector({
     onChange(selected.filter((i) => i !== item));
   };
 
+  const handleClear = () => {
+    onChange([]);
+  };
+
   const Container = isDesktop ? Popover : Drawer;
   const Content = isDesktop ? PopoverContent : DrawerContent;
   const Trigger = isDesktop ? PopoverTrigger : DrawerTrigger;
+
+  const hasSelected = selected.length > 0;
 
   return (
     <Container open={open} onOpenChange={setOpen} {...props}>
       <Trigger asChild>
         <Button
           variant="outline"
+          // biome-ignore lint/a11y/useSemanticElements: <explanation>
           role="combobox"
           aria-expanded={open}
           className={clsx('w-full justify-between', 'h-auto min-h-9 p-2')}
           onClick={() => setOpen(!open)}
         >
           <div className="flex flex-wrap gap-1">
-            {selected.length > 0
-              ? selected.map((item, idx) => (
+            {hasSelected
+              ? selected.map((item) => (
                   <Badge
                     variant="secondary"
-                    key={idx}
+                    key={item}
                     className="mr-1"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -89,6 +97,7 @@ export function NumbersSelector({
                         e.preventDefault();
                         e.stopPropagation();
                       }}
+                      // biome-ignore lint/a11y/useValidAnchor: <explanation>
                       onClick={() => handleUnselect(item)}
                     >
                       <Cross2Icon className="text-muted-foreground hover:text-foreground h-3 w-3" />
@@ -97,7 +106,22 @@ export function NumbersSelector({
                 ))
               : placeholder}
           </div>
-          <CaretSortIcon className="h-4 w-4 shrink-0 opacity-50" />
+          <div className="flex items-center justify-between">
+            <div
+              onClick={(event) => {
+                event.stopPropagation();
+                handleClear();
+              }}
+              onKeyDown={(event) => {
+                event.stopPropagation();
+                handleClear();
+              }}
+            >
+              <XIcon className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+            </div>
+            <Separator orientation="vertical" className="h-full min-h-4" />
+            <ChevronDown className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+          </div>
         </Button>
       </Trigger>
       <Content
@@ -106,6 +130,7 @@ export function NumbersSelector({
           !isDesktop && 'min-h-56 pb-2'
         )}
       >
+        {!isDesktop && <DrawerTitle className="m-2">Select 7 Numbers</DrawerTitle>}
         <OptionsList
           selected={selected}
           options={options}
@@ -144,7 +169,7 @@ function OptionsList({ selected, options, onChange, noResultsRender }: OptionsLi
             {options.map((option) => (
               <CommandItem
                 className={cn(
-                  'h-10 justify-center',
+                  'hover:bg-background hover:text-primary active:bg-accent active:text-accent-foreground h-10 justify-center',
                   selected.includes(option.value) && 'bg-accent'
                 )}
                 key={option.label}

@@ -5,7 +5,7 @@ import { useCricketGame } from '../use-cricket-game';
 import { ScoresTable } from './scores-table';
 import PlayControls from './play-controls';
 import { Button } from '@/components/ui/button';
-import { CricketGameInit } from '@/types/client/cricket';
+import type { CricketGameInit } from '@/types/client/cricket';
 import FinishedGameDialog from './finished-game-dialog';
 import CricketGameInfo from './cricket-game-info';
 import { RedoIcon, UndoIcon } from 'lucide-react';

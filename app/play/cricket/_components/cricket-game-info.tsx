@@ -1,4 +1,4 @@
-import { CricketGameType } from '@/packages/cricket-game';
+import type { CricketGameType } from '@/packages/cricket-game';
 import React from 'react';
 
 type CricketGameInfoProps = {

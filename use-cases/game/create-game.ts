@@ -1,10 +1,9 @@
-import db from '@/db/drizzle';
+import db, { type Transaction } from '@/db/drizzle';
 import { games, gamesCricket, gamesX01 } from '@/db/test.schema';
 import { getUser } from '@/lib/auth';
 import type { NewCricketGame, NewGame, NewZeroOneGame } from '@/types/game';
-import type { PgTransaction } from 'drizzle-orm/pg-core';
 
-const createGame = async (game: NewGame, tx?: PgTransaction<any, any, any>) => {
+const createGame = async (game: NewGame, tx?: Transaction) => {
   const user = await getUser();
   if (!user) {
     throw new Error('User not found');
@@ -16,10 +15,7 @@ const createGame = async (game: NewGame, tx?: PgTransaction<any, any, any>) => {
   return savedGame;
 };
 
-export const createCricketGame = async (
-  game: NewCricketGame,
-  tx?: PgTransaction<any, any, any>
-) => {
+export const createCricketGame = async (game: NewCricketGame, tx?: Transaction) => {
   const user = await getUser();
   if (!user) {
     throw new Error('User not found');
@@ -37,7 +33,7 @@ export const createCricketGame = async (
   return { game: savedGame, cricketGame };
 };
 
-export const createX01Game = async (game: NewZeroOneGame, tx?: PgTransaction<any, any, any>) => {
+export const createX01Game = async (game: NewZeroOneGame, tx?: Transaction) => {
   const user = await getUser();
   if (!user) {
     throw new Error('User not found');

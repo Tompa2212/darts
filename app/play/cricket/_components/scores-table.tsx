@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { CrossedIcon } from '@/components/ui/icons/CrossedIcon';
 import { cn } from '@/lib/utils';
-import { CricketGameType } from '@/packages/cricket-game';
+import type { CricketGameType } from '@/packages/cricket-game';
 import { TriangleLeftIcon } from '@radix-ui/react-icons';
 import { LocateFixedIcon, SlashIcon } from 'lucide-react';
 

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CaretSortIcon, CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -16,6 +16,8 @@ import { Badge } from '@/components/ui/badge';
 import clsx from 'clsx';
 import { Drawer, DrawerContent, DrawerTrigger } from './drawer';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
+import { ChevronDown, XIcon } from 'lucide-react';
+import { Separator } from './separator';
 
 export type OptionType = {
   label: string;
@@ -51,6 +53,10 @@ export function MultiSelect({
     onChange(selected.filter((i) => i !== item));
   };
 
+  const handleClear = () => {
+    onChange([]);
+  };
+
   const Container = isDesktop ? Popover : Drawer;
   const Content = isDesktop ? PopoverContent : DrawerContent;
   const Trigger = isDesktop ? PopoverTrigger : DrawerTrigger;
@@ -60,17 +66,18 @@ export function MultiSelect({
       <Trigger asChild>
         <Button
           variant="outline"
+          // biome-ignore lint/a11y/useSemanticElements: <explanation>
           role="combobox"
           aria-expanded={open}
-          className={clsx('w-full justify-between', selected.length > 1 ? 'h-auto p-2' : 'h-9 p-4')}
+          className={clsx('w-full justify-between', 'h-auto min-h-9 p-2')}
           onClick={() => setOpen(!open)}
         >
           <div className="flex flex-wrap gap-1">
             {selected.length > 0
-              ? selected.map((item, idx) => (
+              ? selected.map((item) => (
                   <Badge
                     variant="secondary"
-                    key={idx}
+                    key={item}
                     className="mr-1"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -97,7 +104,22 @@ export function MultiSelect({
                 ))
               : placeholder}
           </div>
-          <CaretSortIcon className="h-4 w-4 shrink-0 opacity-50" />
+          <div className="flex items-center justify-between">
+            <div
+              onClick={(event) => {
+                event.stopPropagation();
+                handleClear();
+              }}
+              onKeyDown={(event) => {
+                event.stopPropagation();
+                handleClear();
+              }}
+            >
+              <XIcon className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+            </div>
+            <Separator orientation="vertical" className="h-full min-h-4" />
+            <ChevronDown className="text-muted-foreground mx-2 h-4 cursor-pointer" />
+          </div>
         </Button>
       </Trigger>
       <Content

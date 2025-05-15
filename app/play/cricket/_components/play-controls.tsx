@@ -1,9 +1,9 @@
-import { Button, ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { ThrownNumber } from '@/packages/cricket-game/types';
+import type { ThrownNumber } from '@/packages/cricket-game/types';
 import { ThrowDartButton } from './throw-dart-button';
 import { cn } from '@/lib/utils';
-import { CricketGameType } from '@/packages/cricket-game';
+import type { CricketGameType } from '@/packages/cricket-game';
 import { DeleteIcon } from 'lucide-react';
 
 const MULTIPLIERS = {
